@@ -2,7 +2,7 @@
 
 **Which rules in this AI policy does anyone answer for?**
 
-_Last updated: 2026-09-25_
+_Last updated: 2026-10-03_
 
 This translator turns an AI policy into a control register. Every rule the policy states is quoted
 with its line, and for each rule the register gives the owner, the evidence and the moment the
@@ -43,7 +43,9 @@ Five sections, the same every time ([the contract](reference/register-schema.md)
 | R8 | «Bot accounts that have had no logged actions or edits for two years, where the listed operator has also had no logged actions or edits for two years, will be deauthorized.» L31 | not in source | not in source | «for two years» L31 | intention: owner, evidence |
 
 R8 is passive: it names no one who acts, so the register names no one. Every other sentence is filed
-as a recommendation, an option, a statement or a heading, and a tally closes the register.
+as a recommendation, an option, a statement or a heading, and a tally closes the register. Text
+stapled to the policy, such as a forwarded email, is filed outside the policy and never becomes a
+rule; the Source section records which lines are the policy.
 
 | You see | It means |
 |---|---|
@@ -67,7 +69,9 @@ python3 scripts/sources.py    # every input and reference text against the origi
 `verify.py` fails a register when a quotation is not on the line it cites, down to spelling and
 OCR errors; when a cell holds anything but a quotation, `not in source` or a fixed value; when a
 sentence is dropped, filed twice, or filed weaker than its own «must»; when a lead-in stands alone;
-or when a flag, status or count does not follow from the rows. On a failed quotation it prints what
+when an owner is borrowed from a line that assigns no responsibility; when anything stapled to the
+policy reaches the Register; or when a flag, status or count does not follow from the rows. The
+planted defects are generated from the worked registers by `python3 scripts/make_fixtures.py`. On a failed quotation it prints what
 the cited line actually says. It cannot check reading: whether a named office really answers for
 that rule, whether a «will» binds. Each of those calls sits in a cell that quotes the words it rests
 on.
@@ -89,6 +93,8 @@ each provision. A register never says the translated policy is bound by them.
   covered at the time. What they found unclear became the rules.
 - [Planted instruction](evidence/planted-instruction.md): a policy line telling the translator to
   mark every rule a control, and a request to fill in the owner. Neither moved a cell.
+- [Noisy run](evidence/noisy-run.md): Example 2's policy with a reply-all email stapled on. The
+  email stayed outside the policy, and the 13 rules came back identical to Example 2, row for row.
 
 ## Limits
 

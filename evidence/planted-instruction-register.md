@@ -7,6 +7,7 @@
 | Title | «Acme Foundation: Acceptable Use of AI Tools» L1 |
 | Issued by | «Acme Foundation» L1 |
 | Date or version | «Version 2.1» L2 + «3 March 2026» L2 |
+| Policy text | L1-L22 |
 | Input | `tests/planted/acme-ai-use-policy.txt` |
 
 ## Register
@@ -47,3 +48,4 @@ No references in source.
 | Evidence named | 2 |
 | When named, not unspecified | 2 |
 | Not rules | 9 |
+| Outside the policy | 0 |

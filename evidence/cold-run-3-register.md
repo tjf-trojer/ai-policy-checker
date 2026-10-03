@@ -7,6 +7,7 @@
 | Title | «Generative AI Framework for HMG» L1 |
 | Issued by | not in source |
 | Date or version | not in source |
+| Policy text | L1-L69 |
 | Input | `inputs/uk-generative-ai-framework-governance.txt` |
 
 ## Register
@@ -76,3 +77,4 @@
 | Evidence named | 2 |
 | When named, not unspecified | 0 |
 | Not rules | 28 |
+| Outside the policy | 0 |
