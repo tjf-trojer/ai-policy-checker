@@ -8,6 +8,7 @@
 | Title | «Wikipedia:Bot policy» L1 |
 | Issued by | not in source |
 | Date or version | not in source |
+| Policy text | L1-L65 |
 | Input | `inputs/wikipedia-bot-policy.txt` |
 
 ## Register
@@ -23,7 +24,7 @@
 | R7 | «Bot accounts will be marked by a bureaucrat as being in the "bot" user group upon BAG request.» L27 | «will» WILL | «a bureaucrat» L27 | «a bureaucrat» L27 | «the "bot" user group» L27 | «upon BAG request» L27 | control |
 | R8 | «Bot accounts that have had no logged actions or edits for two years, where the listed operator has also had no logged actions or edits for two years, will be deauthorized.» L31 | «will» WILL | not in source | not in source | not in source | «for two years» L31 | intention: owner, evidence |
 | R9 | «Following a one-week notification period on the bots noticeboard, and the operator's talk page, prior task approvals will be considered expired and bot flags will be removed.» L31 | «will» WILL | not in source | not in source | «a one-week notification period on the bots noticeboard, and the operator's talk page» L31 | «Following a one-week notification period» L31 | intention: owner |
-| R10 | «Should the operator return and wish to reactivate the bot, a new request for approval (BRFA) must be completed.» L31 | «must» MUST | «the operator» L31 | «the operator» L31 | «a new request for approval (BRFA)» L31 | not in source | intention: when |
+| R10 | «Should the operator return and wish to reactivate the bot, a new request for approval (BRFA) must be completed.» L31 | «must» MUST | not in source | not in source | «a new request for approval (BRFA)» L31 | not in source | intention: owner, when |
 | R11 | «However, it can be permissible to instead make these edits via a bot account (particularly if necessary due to the actions being privileged), provided the following conditions are met:» L35 + «Disclosure: The identity of the Wikipedia user directing the edit/action must be publicly disclosed, typically by linking the username in the edit summary.» L37 | «must» MUST | not in source | not in source | «the edit summary» L37 | not in source | intention: owner, when |
 | R12 | «However, it can be permissible to instead make these edits via a bot account (particularly if necessary due to the actions being privileged), provided the following conditions are met:» L35 + «Verification: The identity of the Wikipedia user must be reliably verified to the bot in a manner not easily faked, bypassed or avoided.» L39 | «must» MUST | not in source | not in source | not in source | not in source | intention: owner, evidence, when |
 | R13 | «However, it can be permissible to instead make these edits via a bot account (particularly if necessary due to the actions being privileged), provided the following conditions are met:» L35 + «Competence: All users directing a bot must have the required skill and knowledge to ensure their actions are within community consensus.» L41 | «must» MUST | «All users directing a bot» L41 | not in source | not in source | not in source | intention: owner, evidence, when |
@@ -83,7 +84,8 @@
 | Rules | 13 |
 | Controls | 1 |
 | Intentions | 12 |
-| Owner named, not collective | 6 |
+| Owner named, not collective | 5 |
 | Evidence named | 7 |
 | When named, not unspecified | 4 |
 | Not rules | 36 |
+| Outside the policy | 0 |

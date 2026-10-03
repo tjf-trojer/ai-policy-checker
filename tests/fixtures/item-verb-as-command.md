@@ -8,6 +8,7 @@
 | Title | «Accelerating Federal Use of AI through Innovation, Governance, and Public Trust» L12 |
 | Issued by | «EXECUTIVE OFFICE OF THE PRESIDENT» L1 + «OFFlCEOFMANAGEMENTANDBUDGET» L2 + «T HE DIRECTOR» L4 |
 | Date or version | «April 3, 2025» L6 + «M-25-21» L8 |
+| Policy text | L1-L86 |
 | Input | `inputs/omb-m-25-21-section-3.txt` |
 
 ## Register
@@ -109,3 +110,4 @@
 | Evidence named | 12 |
 | When named, not unspecified | 7 |
 | Not rules | 23 |
+| Outside the policy | 0 |

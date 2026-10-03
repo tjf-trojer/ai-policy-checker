@@ -8,6 +8,7 @@
 | Title | «Guidance to civil servants on use of generative AI» L1 |
 | Issued by | not in source |
 | Date or version | not in source |
+| Policy text | L1-L57 |
 | Input | `inputs/uk-civil-service-generative-ai-guidance.txt` |
 
 ## Register
@@ -89,3 +90,4 @@
 | Evidence named | 0 |
 | When named, not unspecified | 1 |
 | Not rules | 39 |
+| Outside the policy | 0 |

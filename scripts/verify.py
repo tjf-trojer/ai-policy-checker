@@ -21,7 +21,10 @@ text. Eight gates run on each register:
             Not-rules quotation, no text is quoted as both, and no lead-in
             (an entry ending in a colon) stands alone unless headings follow it
   scope     Addressee, Evidence and When quote only lines the row's Rule
-            quotes; only Owner may come from another sentence
+            quotes; the Owner quotes those, a lead-in above them or a line
+            with a responsibility word; every quotation sits inside the
+            Policy text unless its entry is filed outside the policy, and
+            an outside block mid-input opens with a seam marker
 
 The word lists are read from reference/lexicon.md on every run.
 
@@ -69,9 +72,10 @@ HEADERS = {
     "Referred elsewhere": ["Reference"],
     "Tally": ["Count", "Value"],
 }
-SOURCE_ROWS = ["Title", "Issued by", "Date or version", "Input"]
+SOURCE_ROWS = ["Title", "Issued by", "Date or version", "Policy text", "Input"]
 TALLY_ROWS = ["Rules", "Controls", "Intentions", "Owner named, not collective",
-              "Evidence named", "When named, not unspecified", "Not rules"]
+              "Evidence named", "When named, not unspecified", "Not rules",
+              "Outside the policy"]
 REGISTER_CLASSES = ["MUST NOT (imperative)", "MUST (imperative)", "MUST NOT", "MUST",
                     "WILL NOT", "WILL"]
 TIER = {"MUST NOT (imperative)": 3, "MUST (imperative)": 3, "MUST NOT": 3, "MUST": 3,
@@ -86,6 +90,8 @@ QRE = re.compile(LQ + r"(.+?)" + RQ + r" L(\d+)(?:-L(\d+))?")
 FORCE_RE = re.compile(LQ + r"(.+?)" + RQ + r" (" +
                       "|".join(re.escape(c) for c in REGISTER_CLASSES) + r")")
 FILED_RE = re.compile(r"(recommendation|optional) " + LQ + r"(.+?)" + RQ)
+OUTSIDE = "outside the policy"
+SPAN_RE = re.compile(r"L(\d+)(?:-L(\d+))?")
 SEPARATOR = re.compile(r"^\|(\s*:?-+:?\s*\|)+\s*$")
 RULE_LINE = re.compile(r"^(-{3,}|\*{3,}|_{3,})$")
 SENT_END = re.compile(r"[.:?!][\"')\]]*\s+")
@@ -184,7 +190,7 @@ def load_lexicon(path):
             secs = md_sections(fh.read())
     except OSError as e:
         raise LexiconError("cannot read %s: %s" % (path, e))
-    for name in ("Force", "Collective owners", "Timing words"):
+    for name in ("Force", "Collective owners", "Timing words", "Policy edges"):
         if name not in secs:
             raise LexiconError("no '## %s' section" % name)
     lex = Lexicon()
@@ -227,6 +233,16 @@ def load_lexicon(path):
         else:
             timing += [w.strip().lower() for w in row[iw].split(",") if w.strip()]
     lex.timing_re = words_re(timing) if timing else None
+
+    edges = secs["Policy edges"]
+    header, body = md_table(edges, "Policy edges", "Seam marker")
+    i = column(header, "Seam marker", "Policy edges")
+    lex.seams = [norm(r[i]).strip("`").strip().lower() for r in body if r[i].strip()]
+    header, body = md_table(edges, "Policy edges", "Responsibility word")
+    i = column(header, "Responsibility word", "Policy edges")
+    lex.responsibility_re = words_re([norm(r[i]).strip().lower() for r in body if r[i].strip()])
+    if not lex.seams:
+        raise LexiconError("the Seam marker table under '## Policy edges' is empty")
     return lex
 
 
@@ -514,6 +530,7 @@ def parse_register(lines, errs):
     reg.all_quotes = []     # (label, Quote) for trace
     reg.cov_quotes = []     # (origin, label, Quote) for coverage
     reg.input_spec = None   # ("path", p) or ("pasted", None)
+    reg.policy_spans = None
 
     sections = {}
     order = []
@@ -594,9 +611,26 @@ def parse_register(lines, errs):
                 continue
             field, entry = cells
             where = "Source %s, line %d" % (field, ln)
-            if field == "Input":
+            if field == "Policy text" and entry == "none":
+                reg.policy_spans = []
+            elif field == "Policy text":
+                spans, bad = [], False
+                for part in entry.split(" + "):
+                    m = SPAN_RE.fullmatch(part.strip())
+                    if not m:
+                        bad = True
+                        break
+                    a = int(m.group(1))
+                    spans.append((a, int(m.group(2)) if m.group(2) else a))
+                if bad or not spans or any(a > b for a, b in spans) or any(
+                        spans[i][1] >= spans[i + 1][0] for i in range(len(spans) - 1)):
+                    errs.append("%s: must be one or more line spans in order, like 'L1-L57' or "
+                                "'L1-L40 + L52-L60', or 'none'; found '%s'" % (where, clip(entry, 40)))
+                else:
+                    reg.policy_spans = spans
+            elif field == "Input":
                 m = re.match(r"^`([^`\s][^`]*)`$", entry)
-                if entry == "pasted":
+                if entry in ("pasted", "`pasted`"):
                     reg.input_spec = ("pasted", None)
                 elif m and not os.path.isabs(m.group(1)) and not m.group(1).startswith("~"):
                     reg.input_spec = ("path", m.group(1))
@@ -670,15 +704,15 @@ def parse_register(lines, errs):
                 for q in r.text.quotes:
                     reg.cov_quotes.append(("notrules", "Not rules row %d" % (k + 1), q))
             m = FILED_RE.fullmatch(filed)
-            if filed in ("statement", "heading"):
+            if filed in ("statement", "heading", OUTSIDE):
                 r.filed = (filed, None)
             elif m and m.group(2).strip():
                 r.filed = (m.group(1), m.group(2))
             else:
                 r.filed = None
                 errs.append("%s Filed as: must be 'recommendation %st%s', 'optional %st%s', "
-                            "'statement' or 'heading'; found '%s'"
-                            % (r.label, LQ, RQ, LQ, RQ, clip(filed, 40)))
+                            "'statement', 'heading' or '%s'; found '%s'"
+                            % (r.label, LQ, RQ, LQ, RQ, OUTSIDE, clip(filed, 40)))
 
     # Referred elsewhere
     t = tables["Referred elsewhere"]
@@ -847,19 +881,39 @@ def check_register(lines, input_override=None):
         res.skip["coverage"] = "a quotation coverage needs failed trace"
     else:
         gate_coverage(reg, lines_in, err["coverage"])
-    gate_scope(reg, traced if lines_in is not None else None, err["scope"])
+    gate_scope(reg, traced if lines_in is not None else None, err["scope"], lines_in)
     return res
 
 
-def gate_scope(reg, traced, errs):
-    """Addressee, Evidence and When cite only lines the row's Rule cites.
+def gate_scope(reg, traced, errs, lines=None):
+    """Addressee, Evidence and When cite only lines the row's Rule cites; the Owner cites the
+    Rule's lines, a lead-in above it, or a line holding a responsibility word; everything sits
+    inside the policy text except entries filed outside it, which sit outside.
     A quotation that failed trace is left to trace."""
+    ok = lambda q: traced is None or traced.get(q.key(), False)
+    if lines is not None:
+        gate_edges(reg, ok, errs, lines)
     for r in reg.rrows:
         if not r.ok or not r.rule.ok:
             continue
         allowed = set()
         for q in r.rule.quotes:
             allowed.update(range(q.start, q.end + 1))
+        first = min(q.start for q in r.rule.quotes)
+        if lines is not None and r.owner.ok and not r.owner.nis:
+            for q in r.owner.quotes:
+                if not ok(q) or q.end > len(lines):
+                    continue
+                span = set(range(q.start, q.end + 1))
+                if span <= allowed:
+                    continue
+                if all((n <= first and lines[n - 1].rstrip().endswith(":"))
+                       or LEX.responsibility_re.search(norm(lines[n - 1]))
+                       for n in span):
+                    continue
+                errs.append("%s Owner: %s cites a line that is neither the Rule's own (%s), a lead-in "
+                            "above it, nor a line with a responsibility word"
+                            % (r.label, q.show(), show_lines(allowed)))
         for name, c in (("Addressee", r.addr), ("Evidence", r.evidence), ("When", r.when)):
             if not c.ok or c.nis:
                 continue
@@ -870,6 +924,49 @@ def gate_scope(reg, traced, errs):
                     errs.append("%s %s: %s cites lines outside the Rule's (%s); only Owner may "
                                 "quote another sentence"
                                 % (r.label, name, q.show(), show_lines(allowed)))
+
+
+def gate_edges(reg, ok, errs, lines):
+    """The Policy text row: spans inside the input; every entry on its side of the edge;
+    an outside block in the middle of the input opens with a seam marker."""
+    if reg.policy_spans is None:
+        return
+    n = len(lines)
+    if reg.policy_spans and reg.policy_spans[-1][1] > n:
+        errs.append("Source Policy text: L%d is past the input's last line (L%d)"
+                    % (reg.policy_spans[-1][1], n))
+        return
+    inside = set()
+    for a, b in reg.policy_spans:
+        inside.update(range(a, b + 1))
+    outside_keys = set()
+    for r in reg.nrows:
+        if r.ok and r.text.ok and r.filed and r.filed[0] == OUTSIDE:
+            for q in r.text.quotes:
+                outside_keys.add(q.key())
+                if ok(q) and set(range(q.start, q.end + 1)) & inside:
+                    errs.append("%s: %s is filed outside the policy but cites the Policy text"
+                                % (r.label, q.show()))
+    for label, q in reg.all_quotes:
+        if q.key() in outside_keys or not ok(q):
+            continue
+        if not set(range(q.start, q.end + 1)) <= inside:
+            errs.append("%s: %s cites a line outside the Policy text" % (label, q.show()))
+    k = 1
+    while k <= n:
+        if k in inside or not lines[k - 1].strip():
+            k += 1
+            continue
+        start = k
+        while k <= n and k not in inside:
+            k += 1
+        end = k - 1
+        touches = all(not lines[j - 1].strip() for j in range(1, start)) or \
+            all(not lines[j - 1].strip() for j in range(end + 1, n + 1))
+        opener = norm(lines[start - 1]).lower()
+        if not touches and not any(s in opener for s in LEX.seams):
+            errs.append("Source Policy text: L%d-L%d lies outside it in the middle of the input, "
+                        "and L%d opens with no seam marker from the lexicon" % (start, end, start))
 
 
 def show_lines(lines):
@@ -965,6 +1062,8 @@ def gate_force(reg, errs):
                             % (r.label, kind, shown, LEX.terms[t][0], kind, " or ".join(want)))
             elif not any(h[2] == t for h in hits):
                 errs.append("%s: %s %s is not in the text as a term of its own" % (r.label, kind, shown))
+        if r.filed and r.filed[0] == OUTSIDE:
+            continue
         for p, e, term in hits:
             forced = LEX.terms[term][2]
             if forced == "yes" or (forced == "opening" and p in sent):
@@ -1058,6 +1157,8 @@ def gate_tally(reg, computed, errs):
     options = {}
     options["Rules"] = [reg.n_rules] if reg.has_register else []
     options["Not rules"] = [reg.n_not] if reg.has_not else []
+    if reg.has_not and all(r.ok for r in reg.nrows):
+        options["Outside the policy"] = [sum(1 for r in reg.nrows if r.filed and r.filed[0] == OUTSIDE)]
     readable = all(r.ok for r in rows)
 
     def count(pred):
@@ -1145,7 +1246,8 @@ def gate_leadins(reg, lines, errs):
         if r.ok and r.text.ok and r.filed and r.filed[0] == "heading":
             heads.update(q.start for q in r.text.quotes)
     entries = [(r.label, r.rule, None) for r in reg.rrows if r.ok and r.rule.ok]
-    entries += [(r.label, r.text, r.filed) for r in reg.nrows if r.ok and r.text.ok]
+    entries += [(r.label, r.text, r.filed) for r in reg.nrows
+                if r.ok and r.text.ok and not (r.filed and r.filed[0] == OUTSIDE)]
     for label, cell, filed in entries:
         if len(cell.quotes) != 1 or (filed and filed[0] == "heading"):
             continue
