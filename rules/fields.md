@@ -1,6 +1,6 @@
 # Fields: the Source, the row, and what the policy points to
 
-_Last updated: 2026-09-25_
+_Last updated: 2026-10-03_
 
 Steps 2, 5 and 6. Every field is a quotation from the input or `not in source`. The columns are
 defined in [`reference/register-schema.md`](../reference/register-schema.md).
@@ -10,7 +10,8 @@ defined in [`reference/register-schema.md`](../reference/register-schema.md).
 Quote the title, the issuer and the date, version or document number where the input prints them.
 One you know but the input does not print is `not in source`. Example 3's issuer is three
 quotations: «EXECUTIVE OFFICE OF THE PRESIDENT» L1 + «OFFlCEOFMANAGEMENTANDBUDGET» L2 + «T HE
-DIRECTOR» L4.
+DIRECTOR» L4. Policy text records the policy's lines as spans ([sentences.md](sentences.md), the
+policy's edges): `L1-L57` for a policy with nothing stapled on.
 
 ## 5. Fill the row
 
@@ -18,14 +19,15 @@ DIRECTOR» L4.
 |---|---|
 | Force | The strongest term as written, and its class ([force.md](force.md)) |
 | Addressee | The party the rule binds, as the rule's own quotations name it. A passive rule with no agent and an imperative name no one: `not in source` |
-| Owner | The party the text makes answerable. Look in the rule and its lead-in first, then in a sentence that assigns responsibility for the same conduct, and cite that sentence's line. An addressee is the owner when it is a named office, not when it is a crowd. The subject of «is responsible for» owns that rule. A lead-in that names a party makes it answerable for everything its item requires, the item's later sentences included. Flag `(collective)` by the lexicon |
+| Owner | The party the text makes answerable (the schema defines it). Look in the rule and its lead-in first. Then in a lead-in above the rule: a lead-in that names a party makes it answerable for everything its item requires, the item's later sentences included. Then in a sentence that assigns responsibility for the same conduct with a responsibility word from the lexicon; cite its line. An addressee is the owner when it is a named office, not when it is a crowd, and a party named only in a condition is no owner of a passive rule. Flag `(collective)` by the lexicon |
 | Evidence | A record or artefact named in the rule's own quotations, lead-in included. Never from another sentence |
 | When | The frequency, date, deadline or triggering event in the rule's own quotations, lead-in included, kept as written. A condition of application is not a When. Flag `(unspecified)` by the lexicon |
-| Status | `control` when Owner is named and not collective, Evidence is named, and When is named and not unspecified; otherwise `intention:` and what is missing, in the order owner, evidence, when |
+| Status | By the schema's rule, from the three cells as written |
 
 | Column | Case | In the examples |
 |---|---|---|
 | Addressee | A passive rule names no one | Example 2, R8 «…will be deauthorized.» |
+| Addressee, Owner | A party named only in a condition is not the agent of a passive rule | Example 2, R10: «Should the operator return…» names the operator; «…must be completed» names no one, so both cells are `not in source` |
 | Addressee | An imperative names no one | Example 1, R1 «Never put…» |
 | Owner | From another sentence that assigns responsibility for the same conduct | Example 2, R3: «its operator» L21, from «The contributions of a bot account remain the responsibility of its operator» |
 | Owner | A named office the rule addresses | Example 3, R5 «the head of each agency» |

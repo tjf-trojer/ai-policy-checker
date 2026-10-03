@@ -1,8 +1,8 @@
 # Lexicon: the word lists a register applies
 
-_Last updated: 2026-09-25_
+_Last updated: 2026-10-03_
 
-Three lists. The translator applies them as written and `scripts/verify.py` reads them from this
+Four lists. The translator applies them as written and `scripts/verify.py` reads them from this
 file. A list that is wrong for one policy is wrong for all of them, and it changes here.
 
 A term matches as whole words, in any case. The longest term wins: `must not` before `must`,
@@ -48,7 +48,8 @@ A term matches as whole words, in any case. The longest term wins: `must not` be
 SHOULD NOT and SHOULD; MAY. A sentence's force is its strongest term, and the strongest term
 decides where it is filed.
 
-**Forced.** `yes`: a sentence holding the term is a rule, wherever the term stands. `opening`: a
+**Forced.** Inside the Policy text only. `yes`: a sentence holding the term is a rule, wherever the
+term stands. `opening`: a
 sentence the term opens, after any list marker, is a rule. Where the term opens a main clause
 («…social media sites, do not input…») it is a force term the translator reads. Anywhere else it is
 an ordinary word: «so long as they do not conflict» holds no force term. `no`: the translator reads
@@ -135,3 +136,35 @@ A When quotation is flagged `(unspecified)` unless it holds at least one of thes
 
 "Regularly", "periodically", "on an ongoing basis" and "as needed" fix no moment anyone could
 check, so they carry the flag.
+
+## Policy edges
+
+Text stapled to a policy is not the policy: a forwarded or replied-to email, a signature, a note to
+a colleague. The register's Policy text row says which lines are the policy. A block of lines
+outside it that sits in the middle of the input, not at its start or end, must open on a line
+holding a seam marker.
+
+| Seam marker |
+|---|
+| from: |
+| sent: |
+| to: |
+| cc: |
+| subject: |
+| original message |
+| forwarded message |
+| wrote: |
+| reply all |
+
+An Owner quoted from a line other than the rule's own and not from a lead-in above it must come from
+a line holding one of these words:
+
+| Responsibility word |
+|---|
+| responsible |
+| responsibility |
+| accountable |
+| accountability |
+| answerable |
+| in charge |
+

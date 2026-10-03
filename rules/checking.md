@@ -1,6 +1,6 @@
 # Checking: the tally, the script, the check by hand
 
-_Last updated: 2026-09-25_
+_Last updated: 2026-10-03_
 
 Step 7. A register is finished when it passes.
 
@@ -23,8 +23,9 @@ of them can see.
 A Claude project has none. Before you deliver:
 
 1. Open each cited line and find the quotation on it, character for character.
-2. Confirm every sentence of the input sits in the Register or in Not rules, never in both, and
-   that no lead-in stands alone.
+2. Confirm every sentence of the input sits in the Register or in Not rules, never in both, that
+   no lead-in stands alone, and that every entry outside the Policy text is filed
+   `outside the policy` and no entry inside it is.
 3. Recount each status and the tally.
 
 Say in your reply that the register was checked by hand, not by the script.

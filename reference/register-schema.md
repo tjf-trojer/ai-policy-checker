@@ -1,6 +1,6 @@
 # The register: the output contract
 
-_Last updated: 2026-09-25_
+_Last updated: 2026-10-03_
 
 Every translation is one register with five sections, in this order, whatever the policy looks
 like. `scripts/verify.py` fails a register that breaks anything on this page.
@@ -14,7 +14,8 @@ like. `scripts/verify.py` fails a register that breaks anything on this page.
 | 5 | `## Tally` | Counts derived from sections 2 and 3 |
 
 Every sentence of the input sits in section 2 or in section 3, never in both. Title lines, headings
-and the omission mark `[...]` sit in section 3, even when section 1 quotes them too.
+and the omission mark `[...]` sit in section 3, even when section 1 quotes them too. A sentence
+outside the Policy text sits in section 3, filed `outside the policy`, whatever its words say.
 
 ## Quotations
 
@@ -29,8 +30,8 @@ and the omission mark `[...]` sit in section 3, even when section 1 quotes them 
 - A field the input does not fill is `not in source`, in lower case, and nothing else.
 
 Everything else in a register is envelope, derived by a rule on this page or in
-[`lexicon.md`](lexicon.md): IDs, force classes, the two flags, statuses, filings, counts, and the
-input's path. The envelope never states a fact about the policy that a quotation does not carry.
+[`lexicon.md`](lexicon.md): IDs, force classes, the two flags, statuses, filings, counts, the
+Policy text spans and the input's path. The envelope never states a fact about the policy that a quotation does not carry.
 
 ## 1. Source
 
@@ -40,8 +41,15 @@ input's path. The envelope never states a fact about the policy that a quotation
 | Title | quotation, or not in source |
 | Issued by | quotation, or not in source |
 | Date or version | quotation(s) of a date, version or document number, or not in source |
-| Input | the input's path from the repository root in backticks, or `pasted` |
+| Policy text | the lines that are the policy, as spans: L1-L57, or L1-L40 + L52-L60, or none |
+| Input | the input's path from the repository root in backticks, or the word pasted |
 ```
+
+**Policy text** marks where the policy ends and anything stapled to it begins: a forwarded or
+replied-to email, a signature, a note to a colleague. Every quotation in the register cites lines
+inside it, except the quotations of entries filed `outside the policy`, which cite lines outside it.
+A block outside it in the middle of the input opens on a line holding a seam marker from the
+lexicon. With nothing stapled on, the Policy text is the whole input.
 
 ## 2. Register
 
@@ -55,7 +63,7 @@ input's path. The envelope never states a fact about the policy that a quotation
 | Rule | quotation(s) | A sentence whose strongest force term files it in the Register ([`lexicon.md`](lexicon.md)). A list item is quoted with its lead-in: `«CAI Os, in coordination with appropriate agency officials, must:» L26 + «J. support agency efforts to track AI spending.» L56` |
 | Force | `«term» CLASS` | The strongest force term in the rule as written, and its class from the lexicon. For an imperative outside the lexicon, its opening verb phrase |
 | Addressee | quotation(s), or `not in source` | Whom the rule binds, as the rule's own quotations name them. An imperative names no one |
-| Owner | quotation(s) with `(collective)` where the lexicon says so, or `not in source` | The role, person or body the text makes answerable for the rule being met: named as responsible or accountable for it, as the one who approves, maintains, reviews, enforces or ensures it, or as a named office the rule is addressed to. It is the only attribute that may come from another sentence, one that assigns responsibility for the same conduct; the quotation then carries that sentence's line. A collective addressee is not an owner by being addressed |
+| Owner | quotation(s) with `(collective)` where the lexicon says so, or `not in source` | The role, person or body the text makes answerable for the rule being met: named as responsible or accountable for it, as the one who approves, maintains, reviews, enforces or ensures it, or as a named office the rule is addressed to. It is the only attribute that may come from another sentence: a lead-in above the rule, or a sentence that assigns responsibility for the same conduct and holds a responsibility word from the lexicon; the quotation then carries that sentence's line. A collective addressee is not an owner by being addressed, and a name in a condition («Should the operator return») is not the agent of a passive rule |
 | Evidence | quotation(s), or `not in source` | An artefact or record the rule's own quotations name that would show the rule was met: a register, inventory, list, log, plan, report, notice, approval, request, flag, page, publication |
 | When | quotation(s) with `(unspecified)` where the lexicon says so, or `not in source` | A frequency, date, deadline or triggering event the rule's own quotations fix for meeting or reviewing it. A condition of application ("when using the tool") is not a When |
 | Status | `control`, or `intention: ` and the missing attributes | `control` when Owner is filled and not collective, Evidence is filled, and When is filled and not unspecified. Otherwise `intention: ` followed by what is missing, in the order `owner, evidence, when` |
@@ -96,9 +104,10 @@ them, and a register never says so either.
 | `optional «term»` | The sentence permits: its strongest binding force term has class MAY |
 | `statement` | The sentence holds no force term, or holds one that does not bind here: a descriptive "will", a conditional "Should the operator return", a "may" of possibility |
 | `heading` | A heading, a title line, or the omission mark `[...]` |
+| `outside the policy` | The sentence lies outside the Policy text |
 
-A sentence holding a forced term ([`lexicon.md`](lexicon.md)) is never filed here, unless it ends
-in a question mark.
+A sentence inside the Policy text that holds a forced term ([`lexicon.md`](lexicon.md)) is never
+filed here, unless it ends in a question mark.
 
 ## 4. Referred elsewhere
 
@@ -121,6 +130,8 @@ section holds the single line `No references in source.`
 | Evidence named | n |
 | When named, not unspecified | n |
 | Not rules | n |
+| Outside the policy | n |
 ```
 
-The rows, their names and their order are fixed. Every value is a count of rows in sections 2 and 3.
+The rows, their names and their order are fixed. Every value is a count of rows in sections 2 and 3;
+Outside the policy counts the Not-rules rows filed that way.
