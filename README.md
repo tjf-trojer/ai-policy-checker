@@ -24,7 +24,7 @@ instructions to:
 Paste a policy's text and say **"Translate this policy."** Any AI policy, usage guideline or
 directive in English or German works; [`inputs/`](inputs/) holds four real ones in each language.
 
-**In Claude Code.** Clone the repository and open it ([`CLAUDE.md`](CLAUDE.md) routes). Save the
+**In Claude Code.** Clone the repository and open it ([`AGENTS.md`](AGENTS.md) is the operating file; `CLAUDE.md` imports it). Save the
 policy as a text file, say "Translate `<file>`", then check the result:
 
 ```bash

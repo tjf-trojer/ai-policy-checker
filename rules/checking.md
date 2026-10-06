@@ -21,7 +21,7 @@ of them can see.
 
 ## Without a shell
 
-A Claude project has none. Before you deliver:
+A chat project (Claude Projects, ChatGPT Projects, a custom GPT) has none. Before you deliver:
 
 1. Confirm the input is in a lexicon's language and the register is written in that language's
    contract words. If no lexicon covers it, deliver the refusal line of [posture.md](posture.md)
