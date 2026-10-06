@@ -55,7 +55,7 @@ marked `[...]` on a line of their own. Wording, spelling and errors are unchange
   «generativen»); before a capital it belongs to the word and stays («KI-» + «Werkzeuge»). Page
   numbers, running heads and footers are removed; footnotes move to the end in order, as in OMB
   M-25-21. A bare section number or list marker on its own line is joined to its text.
-- **Zürich.** The two title lines joined. The margin titles beside the articles («Gegenstand»,
+- **Zürich.** The margin titles beside the articles («Gegenstand»,
   «Registrierung», «a. Zulässige Daten») stand on a line of their own before the article they sit
   beside, because the text layer puts them at the foot of each page.
 - **Appenzell.** The document number, printed in the footer of every page, once at the top. The

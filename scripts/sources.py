@@ -349,8 +349,7 @@ def build_zuerich():
                 (notes if foot else body).extend(l for l in b[4] if not PAGE.match(l))
     paras = paragraphs(body, re.compile(r"^(Art\. \d+|\d (?=[A-ZÄÖÜ])|[a-h]\. |[A-D]\. |STRB)"),
                        re.compile(r"^[a-h]\.$"))
-    return "\n\n".join([paras[0] + " " + paras[1]] + paras[2:] +
-                       paragraphs(notes, re.compile(r"^\d "))) + "\n"
+    return "\n\n".join(paras + paragraphs(notes, re.compile(r"^\d "))) + "\n"
 
 
 def build_st_gallen():
