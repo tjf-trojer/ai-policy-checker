@@ -1,9 +1,11 @@
 # The register: the output contract
 
-_Last updated: 2026-10-03_
+_Last updated: 2026-10-06_
 
 Every translation is one register with five sections, in this order, whatever the policy looks
-like. `scripts/verify.py` fails a register that breaks anything on this page.
+like. `scripts/verify.py` fails a register that breaks anything on this page. An input in a
+language the lexicon does not cover is not translated: it gets the one-line refusal in
+[`rules/posture.md`](../rules/posture.md) instead.
 
 | # | Heading | Holds |
 |---|---|---|

@@ -23,10 +23,12 @@ of them can see.
 
 A Claude project has none. Before you deliver:
 
-1. Open each cited line and find the quotation on it, character for character.
-2. Confirm every sentence of the input sits in the Register or in Not rules, never in both, that
+1. Confirm the input is in the lexicon's language. If it is not, deliver the refusal line of
+   [posture.md](posture.md) and no register.
+2. Open each cited line and find the quotation on it, character for character.
+3. Confirm every sentence of the input sits in the Register or in Not rules, never in both, that
    no lead-in stands alone, and that every entry outside the Policy text is filed
    `outside the policy` and no entry inside it is.
-3. Recount each status and the tally.
+4. Recount each status and the tally.
 
 Say in your reply that the register was checked by hand, not by the script.

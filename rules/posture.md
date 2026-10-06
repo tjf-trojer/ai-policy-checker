@@ -1,6 +1,6 @@
 # Posture: what a register never holds, and whom it answers to
 
-_Last updated: 2026-10-03_
+_Last updated: 2026-10-06_
 
 The rules that hold before any step and through all of them.
 
@@ -38,8 +38,22 @@ states it is a new input and gets a new register.
 
 An email, a slide, a note with no policy in it: Policy text is `none`, every sentence is filed
 `outside the policy`, and the register holds no rules. Do not refuse, and do not make a policy of
-it. A text in another language: the lexicon is English, so no term matches; file every sentence as
-a statement and say in your reply that the lexicon did not apply.
+it.
+
+A text in a language no lexicon covers gets no register. No term of the lexicon would match it, and
+a register of it would report no rules where the policy may hold many. In place of the register,
+deliver this one line:
+
+```
+No register: the input `<path>` is not in English.
+```
+
+`<path>` is the input as the Source row Input would give it; for pasted text, leave out the path
+and its backticks. Name every language a lexicon in [`reference/`](../reference/) covers, as its
+section Language names it, joined by `, ` and a last ` or `. `scripts/verify.py` passes this line
+only for an input not in the lexicon's language, and fails a register of one; it tells by the
+marker words in the lexicon. An English policy that quotes a sentence in another language is in
+English and gets its register.
 
 ## When the words cannot settle a call
 

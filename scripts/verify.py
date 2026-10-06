@@ -2,8 +2,11 @@
 """Check that a register honours reference/register-schema.md against its input.
 
 A register is the set of markdown tables a translation produces from one policy
-text. Eight gates run on each register:
+text. Nine gates run on each register:
 
+  language  the input is in the language the lexicon covers: its marker words
+            make up at least the share the lexicon sets (an input shorter
+            than the lexicon's fewest words is not judged)
   shape     the five sections in order, exact table headers, cell counts, IDs,
             row order, and the form of every cell
   trace     every quotation is in the input, character for character,
@@ -26,6 +29,11 @@ text. Eight gates run on each register:
             Policy text unless its entry is filed outside the policy, and
             an outside block mid-input opens with a seam marker
 
+An input in another language gets no register but the one-line refusal of
+rules/posture.md. A file holding that line is checked by two gates: shape (the
+line has its fixed form and stands alone) and language (the input is not in
+the lexicon's language, and the line names that language).
+
 The word lists are read from the lexicon on every run: the file --lexicon names,
 or reference/lexicon.md in the repository, or, where the repository's layout is
 absent (files uploaded side by side), lexicon.md beside the register, in the
@@ -42,8 +50,9 @@ grants or only describes, whether an opening word is a verb, or whether every
 document the policy names is listed under Referred elsewhere.
 
 Usage:
-  python3 scripts/verify.py                       examples.md, evidence/*register*.md
-                                                  and the fixture self-test
+  python3 scripts/verify.py                       examples.md, evidence/*register*.md,
+                                                  tests/language/*.md and the fixture
+                                                  self-test
   python3 scripts/verify.py PATH.md [--input F]   one file; each "# Example " block
                                                   in it if it has any
   python3 scripts/verify.py --selftest            fixtures in tests/fixtures/ only
@@ -67,7 +76,7 @@ LEXICON = os.path.join(ROOT, "reference", "lexicon.md")
 EXAMPLES = os.path.join(ROOT, "examples.md")
 FIXTURES = os.path.join(ROOT, "tests", "fixtures")
 
-GATES = ["shape", "trace", "force", "flags", "status", "tally", "coverage", "scope"]
+GATES = ["language", "shape", "trace", "force", "flags", "status", "tally", "coverage", "scope"]
 LQ = "\u00ab"
 RQ = "\u00bb"
 NIS = "not in source"
@@ -99,6 +108,11 @@ QUOTE_MAP = {"\u2018": "'", "\u2019": "'", "\u201a": "'", "\u201b": "'",
 QRE = re.compile(LQ + r"(.+?)" + RQ + r" L(\d+)(?:-L(\d+))?")
 FORCE_RE = re.compile(LQ + r"(.+?)" + RQ + r" (" +
                       "|".join(re.escape(c) for c in REGISTER_CLASSES) + r")")
+REFUSAL = "No register:"
+LANGUAGE_NAME = r"[A-Z][\w-]*(?: [A-Z][\w-]*)*"
+REFUSAL_RE = re.compile(r"^No register: the input(?: `([^`\s][^`]*)`)? is not in (%s(?:(?:, | or )%s)*)\.$"
+                        % (LANGUAGE_NAME, LANGUAGE_NAME))
+WORD = re.compile(r"[^\W\d_]+")
 FILED_RE = re.compile(r"(recommendation|optional) " + LQ + r"(.+?)" + RQ)
 OUTSIDE = "outside the policy"
 SPAN_RE = re.compile(r"L(\d+)(?:-L(\d+))?")
@@ -199,10 +213,27 @@ def load_lexicon(path):
             secs = md_sections(fh.read())
     except OSError as e:
         raise LexiconError("cannot read %s: %s" % (path, e))
-    for name in ("Force", "Collective owners", "Timing words", "Policy edges"):
+    for name in ("Language", "Force", "Collective owners", "Timing words", "Policy edges"):
         if name not in secs:
             raise LexiconError("no '## %s' section" % name)
     lex = Lexicon()
+
+    header, body = md_table(secs["Language"], "Language", "Setting")
+    iset, ival = column(header, "Setting", "Language"), column(header, "Value", "Language")
+    settings = dict((r[iset].strip().lower(), r[ival].strip()) for r in body if len(r) > ival)
+    lex.language = settings.get("language", "")
+    share = settings.get("marker share", "").rstrip("%").strip()
+    fewest = settings.get("fewest words", "")
+    if not lex.language or not re.match(r"^\d+(\.\d+)?$", share) or not fewest.isdigit():
+        raise LexiconError("the Setting table under '## Language' needs Language, Marker share "
+                           "(a percentage) and Fewest words (a whole number)")
+    lex.marker_share = float(share) / 100
+    lex.fewest_words = int(fewest)
+    header, body = md_table(secs["Language"], "Language", "Marker word")
+    i = column(header, "Marker word", "Language")
+    lex.markers = set(norm(r[i]).strip("`").strip().lower() for r in body if r[i].strip())
+    if not lex.markers:
+        raise LexiconError("the Marker word table under '## Language' is empty")
 
     header, body = md_table(secs["Force"], "Force", "Term")
     it, ic, ifi, ifo = [column(header, n, "Force") for n in ("Term", "Class", "Filed in", "Forced")]
@@ -862,19 +893,22 @@ def locate(lines, q):
 # ---------------------------------------------------------------- gates
 
 class Result(object):
-    def __init__(self):
-        self.errors = dict((g, []) for g in GATES)
+    def __init__(self, gates=GATES):
+        self.gates = gates
+        self.errors = dict((g, []) for g in gates)
         self.skip = {}
         self.input_shown = "?"
 
     def failing(self):
-        return [g for g in GATES if self.errors[g]]
+        return [g for g in self.gates if self.errors[g]]
 
     def passed(self):
         return not self.failing() and not self.skip
 
 
 def check_register(lines, input_override=None):
+    if any(text.startswith(REFUSAL) for _, text in lines):
+        return check_refusal(lines, input_override)
     res = Result()
     err = res.errors
     reg = parse_register(lines, err["shape"])
@@ -909,7 +943,10 @@ def check_register(lines, input_override=None):
 
     traced = {}
     if lines_in is not None:
+        gate_language(lines_in, err["language"])
         gate_trace(reg, lines_in, err["trace"], traced)
+    else:
+        res.skip["language"] = "no input"
     gate_force(reg, err["force"])
     computed = gate_flags(reg, err["flags"])
     gate_status(reg, computed, err["status"])
@@ -924,6 +961,82 @@ def check_register(lines, input_override=None):
     else:
         gate_coverage(reg, lines_in, err["coverage"])
     gate_scope(reg, traced if lines_in is not None else None, err["scope"], lines_in)
+    return res
+
+
+def language_share(lines):
+    """(marker words, words) in the input."""
+    words = WORD.findall(norm(" ".join(lines)).lower())
+    return sum(1 for w in words if w in LEX.markers), len(words)
+
+
+def show_share(markers, words):
+    return "%d of its %d words (%d%%) are %s marker words from the lexicon" % (
+        markers, words, round(100.0 * markers / words), LEX.language)
+
+
+def gate_language(lines, errs):
+    """The input is in the lexicon's language, unless it is too short to tell."""
+    markers, words = language_share(lines)
+    if words < LEX.fewest_words or markers >= LEX.marker_share * words:
+        return
+    errs.append("the input is not in %s: %s, below the %g%% the lexicon sets. A register of it "
+                "files every sentence as a statement and finds no rules, which says nothing "
+                "about the policy; it gets no register, only the refusal in rules/posture.md"
+                % (LEX.language, show_share(markers, words), 100 * LEX.marker_share))
+
+
+def check_refusal(lines, input_override):
+    """A file holding the one-line refusal: shape and language only."""
+    res = Result(["shape", "language"])
+    err = res.errors
+    found = None
+    for ln, text in lines:
+        s = text.strip()
+        if not s or (s.startswith("<!--") and s.endswith("-->")) or (
+                text.startswith("# ") and not s.startswith("# " + REFUSAL)):
+            continue
+        if found is None and text.startswith(REFUSAL):
+            found = (ln, text.rstrip())
+            continue
+        err["shape"].append("line %d: a refusal is one line and nothing else; found '%s'"
+                            % (ln, clip(s, 50)))
+    if found is None:
+        return res
+    ln, text = found
+    m = REFUSAL_RE.match(text)
+    if not m:
+        err["shape"].append("line %d: the refusal must read 'No register: the input `<path>` is not "
+                            "in %s.' (no path for pasted text); found '%s'"
+                            % (ln, LEX.language, clip(text, 60)))
+        res.skip["language"] = "the refusal's form is broken"
+        return res
+    named, langs = m.group(1), re.split(r", | or ", m.group(2))
+    if LEX.language not in langs:
+        err["language"].append("line %d: the refusal names %s, not %s, the language of the lexicon"
+                               % (ln, " or ".join(langs), LEX.language))
+    res.input_shown = named or "pasted"
+    if input_override:
+        res.input_shown = shown_path(input_override)
+        if named and not any(os.path.realpath(p) == os.path.realpath(input_override)
+                             for p in input_candidates(named)):
+            err["shape"].append("line %d: names %s, but --input is %s" % (ln, named, res.input_shown))
+        path = input_override
+    elif named:
+        path = resolve_input(named)
+    else:
+        err["language"].append("line %d: the input is pasted; give its text with --input" % ln)
+        return res
+    try:
+        lines_in = load_input(path)
+    except (OSError, UnicodeDecodeError) as e:
+        err["language"].append("cannot read the input %s (%s)" % (res.input_shown, e.__class__.__name__))
+        return res
+    markers, words = language_share(lines_in)
+    if words >= LEX.fewest_words and markers >= LEX.marker_share * words:
+        err["language"].append("the input is in %s: %s, at least the %g%% the lexicon sets. It "
+                               "gets a register, not a refusal"
+                               % (LEX.language, show_share(markers, words), 100 * LEX.marker_share))
     return res
 
 
@@ -1354,7 +1467,7 @@ def shown_path(path):
 
 def report(title, res, indent=""):
     print("%s== %s  (input: %s)" % (indent, title, res.input_shown))
-    for g in GATES:
+    for g in res.gates:
         if g in res.skip:
             print("%s  %-9s SKIP (%s)" % (indent, g, res.skip[g]))
         elif res.errors[g]:
@@ -1477,7 +1590,7 @@ def main(argv=None):
         evidence = sorted(glob.glob(os.path.join(ROOT, "evidence", "*register*.md")))
         if not evidence:
             print("-- evidence/: no *register*.md files to check")
-        for path in evidence:
+        for path in evidence + sorted(glob.glob(os.path.join(ROOT, "tests", "language", "*.md"))):
             check_file(path, None, tally)
         fixtures = selftest(args.verbose)
     else:

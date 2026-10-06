@@ -2,11 +2,78 @@
 
 _Last updated: 2026-10-06_
 
-Four sections of lists. The translator applies them as written and `scripts/verify.py` reads them
-from this file, or from the one its `--lexicon` names. A list that is wrong for one policy is wrong for all of them, and it changes here.
+Five sections of lists for one language. The translator applies them as written and
+`scripts/verify.py` reads them from this file, or from the one its `--lexicon` names. A list that is
+wrong for one policy is wrong for all of them, and it changes here. A lexicon for another language
+is a file with the same sections and tables and its own words in them; the register it fills is
+the same.
 
 A term matches as whole words, in any case. The longest term wins: `must not` before `must`,
 `should never` before `should`, `is not permitted` before `permitted`.
+
+## Language
+
+The language these lists are for. An input in another language gets no register, only the refusal
+in [`rules/posture.md`](../rules/posture.md): no term below would match it, and a register of it
+would report no rules where the policy may hold many. `scripts/verify.py` tells the language by the
+marker words below, common words of the language that carry no force: the input is in it when they
+make up at least the marker share of its words. A short quotation in another language inside a
+policy leaves the share where it was. An input of fewer words than the fewest is not judged.
+
+| Setting | Value |
+|---|---|
+| Language | English |
+| Marker share | 10% |
+| Fewest words | 20 |
+
+| Marker word |
+|---|
+| the |
+| of |
+| and |
+| to |
+| is |
+| are |
+| be |
+| been |
+| that |
+| this |
+| these |
+| those |
+| with |
+| for |
+| by |
+| from |
+| not |
+| it |
+| its |
+| which |
+| who |
+| they |
+| their |
+| have |
+| has |
+| should |
+| must |
+| would |
+| can |
+| at |
+| if |
+| there |
+| what |
+| when |
+| than |
+| into |
+| any |
+| such |
+| other |
+| our |
+| your |
+| you |
+| we |
+
+Words that other languages share are left out: «in», «an», «will» and «so» are German too, «a»,
+«on», «or» and «as» French.
 
 ## Force
 

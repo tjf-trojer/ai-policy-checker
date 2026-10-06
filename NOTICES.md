@@ -14,6 +14,7 @@ under their own terms. None of their authors endorses this repository.
 | `inputs/omb-m-25-21-section-3.txt` | Office of Management and Budget, Memorandum M-25-21, "Accelerating Federal Use of AI through Innovation, Governance, and Public Trust", 3 April 2025. <https://www.whitehouse.gov/wp-content/uploads/2025/02/M-25-21-Accelerating-Federal-Use-of-AI-through-Innovation-Governance-and-Public-Trust.pdf>, retrieved 24 September 2026 | Public domain, a work of the United States Government (17 U.S.C. 105) |
 | `inputs/uk-generative-ai-framework-governance.txt` | "Generative AI Framework for HMG", Cabinet Office, Government Digital Service and Central Digital and Data Office, GOV.UK, 18 January 2024, section "Governance". <https://www.gov.uk/government/publications/generative-ai-framework-for-hmg/generative-ai-framework-for-hmg-html>, retrieved 25 September 2026 through the GOV.UK Content API | Open Government Licence v3.0. Contains public sector information licensed under the Open Government Licence v3.0 |
 | `tests/planted/acme-ai-use-policy.txt` | Written for this repository. The organisation and its policy are invented | MIT, like the repository's own files |
+| `tests/language/ki-richtlinie.txt`, `tests/language/politique-ia.txt`, `tests/language/ai-note-with-german-quote.txt` | Written for this repository, in German, French and English. The organisations and their policies are invented | MIT, like the repository's own files |
 | `tests/noisy/wikipedia-bot-policy-stapled-email.txt` | `inputs/wikipedia-bot-policy.txt` with an email appended; the email, its sender and its recipients are invented for this repository | CC BY-SA 4.0 for the Wikipedia text, like its source |
 
 Changes, the same kind for all four: markup converted to plain text, one paragraph or list item
@@ -39,7 +40,8 @@ marked `[...]` on a line of their own. Wording, spelling and errors are unchange
 Example 2 in [`examples.md`](examples.md) quotes the Wikipedia text throughout and is licensed
 CC BY-SA 4.0, like the text it quotes. Each file in `tests/fixtures/` is a copy of one worked
 example with one defect planted by `scripts/make_fixtures.py`, and carries that example's source and
-licence; so does `evidence/noisy-run-register.md`.
+licence; so does `evidence/noisy-run-register.md`. The three fixtures generated from
+`tests/language/` are MIT, like their inputs.
 
 ## Originals, and how to check them
 

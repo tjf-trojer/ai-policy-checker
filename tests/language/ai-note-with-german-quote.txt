@@ -1,0 +1,14 @@
+Acme Foundation: note on AI tools in the Berlin office
+Version 1.0, 2 February 2026
+
+This note applies to every AI tool used in the Foundation's Berlin office.
+
+The Berlin team wrote its own principle in German: „Kein KI-Ergebnis verlässt das Haus ohne menschliche Prüfung.“
+
+That principle stands beside this note and does not replace it.
+
+The office manager must keep a list of approved AI tools and review it every six months.
+
+Staff should ask the office manager before they try a new tool.
+
+Questions about this note go to the office manager.

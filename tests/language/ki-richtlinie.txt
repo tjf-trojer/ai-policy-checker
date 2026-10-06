@@ -1,0 +1,20 @@
+Musterstiftung: Richtlinie zur Nutzung von KI-Werkzeugen
+Version 1.0, verabschiedet vom Stiftungsrat am 2. Februar 2026
+
+1. Zweck
+
+Diese Richtlinie regelt, wie Mitarbeitende KI-Werkzeuge bei der Arbeit nutzen.
+
+2. Regeln
+
+Mitarbeitende dürfen keine Personendaten von Klientinnen und Klienten in ein KI-Werkzeug eingeben, das die Informatik nicht freigegeben hat.
+
+Die Informatik muss das Verzeichnis der freigegebenen KI-Werkzeuge führen und es jedes Quartal überprüfen.
+
+Extern veröffentlichte Texte, die mit KI erstellt wurden, müssen vor der Veröffentlichung von einer benannten Person geprüft werden.
+
+Vorgesetzte sollen ihre Teams einmal im Jahr an diese Richtlinie erinnern.
+
+3. Ausnahmen
+
+Ausnahmen kann die Geschäftsleitung bewilligen.

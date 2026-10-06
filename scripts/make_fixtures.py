@@ -6,8 +6,8 @@
 
 Every fixture keeps its derived fields (status, tally) consistent with the defect, so that it fails
 in exactly the check its first line names; `python3 scripts/verify.py` fails unless it does. The
-fixtures are generated from examples.md and evidence/noisy-run-register.md, never edited by hand:
-change a worked register, then run this again.
+fixtures are generated from examples.md, evidence/noisy-run-register.md and tests/language/, never
+edited by hand: change a worked register or an input, then run this again.
 """
 import argparse
 import os
@@ -58,6 +58,30 @@ def tally(text, **delta):
         text = re.sub(r"(?m)^\| %s \| \d+ \|$" % re.escape(label),
                       "| %s | %d |" % (label, count(text, name) + d), text)
     return text
+
+
+def statements(rel):
+    """A register of a policy in another language as the English lexicon reads it: every line a
+    heading (no closing full stop) or a statement, no rules. Every gate but language passes it."""
+    lines = read(rel).rstrip("\n").split("\n")
+    rows = []
+    for n, line in enumerate(lines, 1):
+        if line.strip():
+            kind = "statement" if re.search(r"[.!?][\"'»“”)\]]*$", line.strip()) else "heading"
+            rows.append("| «%s» L%d | %s |" % (line.strip().replace("|", "\\|"), n, kind))
+    tally_rows = [(TALLY[k], 0) for k in ("rules", "controls", "intentions", "owner", "evidence", "when")]
+    tally_rows += [(TALLY["notrules"], len(rows)), (TALLY["outside"], 0)]
+    return "\n".join([
+        "## Source", "", "| Field | Entry |", "|---|---|",
+        "| Title | «%s» L1 |" % lines[0].strip(), "| Issued by | not in source |",
+        "| Date or version | not in source |", "| Policy text | L1-L%d |" % len(lines),
+        "| Input | `%s` |" % rel, "",
+        "## Register", "", "| ID | Rule | Force | Addressee | Owner | Evidence | When | Status |",
+        "|---|---|---|---|---|---|---|---|", "",
+        "## Not rules", "", "| Text | Filed as |", "|---|---|"] + rows + [
+        "", "## Referred elsewhere", "", "No references in source.", "",
+        "## Tally", "", "| Count | Value |", "|---|---|"] +
+        ["| %s | %d |" % r for r in tally_rows]) + "\n"
 
 
 def fixtures():
@@ -180,6 +204,15 @@ def fixtures():
         last_line = len(read("tests/noisy/wikipedia-bot-policy-stapled-email.txt").rstrip("\n").split("\n"))
         # scope: the Policy text swallows the stapled email
         f["policy-swallows-email"] = ("scope", sub(noisy, span.group(0), "| Policy text | L1-L%d |" % last_line))
+
+    # language: a German policy filed sentence by sentence as statements, and the register finds no rules
+    f["german-policy-as-statements"] = ("language", statements("tests/language/ki-richtlinie.txt"))
+    # language: the same for a French policy that quotes with «…» itself
+    f["french-policy-as-statements"] = ("language", statements("tests/language/politique-ia.txt"))
+    # language: an English policy refused as if it were in another language
+    f["english-policy-refused"] = ("language", sub(
+        read("tests/language/ki-richtlinie-refusal.md"), "`tests/language/ki-richtlinie.txt`",
+        "`tests/language/ai-note-with-german-quote.txt`"))
     return f
 
 

@@ -68,15 +68,15 @@ python3 scripts/sources.py           # every input and reference text against th
 python3 -m unittest discover tests   # the scripts run from outside the repository
 ```
 
-`verify.py` fails a register when a quotation is not on the line it cites, down to spelling and
-OCR errors; when a cell holds anything but a quotation, `not in source` or a fixed value; when a
-sentence is dropped, filed twice, or filed weaker than its own «must»; when a lead-in stands alone;
-when an owner is borrowed from a line that assigns no responsibility; when anything stapled to the
-policy reaches the Register; or when a flag, status or count does not follow from the rows. The
-planted defects are generated from the worked registers by `python3 scripts/make_fixtures.py`. On a failed quotation it prints what
-the cited line actually says. It cannot check reading: whether a named office really answers for
-that rule, whether a «will» binds. Each of those calls sits in a cell that quotes the words it rests
-on.
+`verify.py` fails a register when the input is not in the lexicon's language; when a quotation is
+not on the line it cites, down to spelling and OCR errors; when a cell holds anything but a
+quotation, `not in source` or a fixed value; when a sentence is dropped, filed twice, or filed
+weaker than its own «must»; when a lead-in stands alone; when an owner is borrowed from a line that
+assigns no responsibility; when anything stapled to the policy reaches the Register; or when a flag,
+status or count does not follow from the rows. The planted defects are generated from the worked
+registers by `python3 scripts/make_fixtures.py`. On a failed quotation it prints what the cited line
+actually says. It cannot check reading: whether a named office really answers for that rule, whether
+a «will» binds. Each of those calls sits in a cell that quotes the words it rests on.
 
 ## Why owner, evidence and when
 
@@ -100,7 +100,8 @@ each provision. A register never says the translated policy is bound by them.
 
 ## Limits
 
-- English only; the lexicon is English.
+- English only; the lexicon is English. A policy in another language gets a one-line refusal, not
+  a register that would report no rules, and `verify.py` fails a register of one.
 - It reports the policy, not the organisation: an owner named in a separate procedure is
   `not in source` until that procedure is translated too.
 - The word lists in [`reference/lexicon.md`](reference/lexicon.md) are choices, written down to be

@@ -1,0 +1,22 @@
+Fondation Exemple : politique d'utilisation des outils d'IA
+Version 1.0, adoptée par le conseil de fondation le 2 février 2026
+
+1. Objet
+
+La présente politique fixe la manière dont le personnel utilise les outils d'IA au travail.
+
+2. Règles
+
+Le personnel ne doit saisir aucune donnée personnelle de clientes ou de clients dans un outil d'IA que l'informatique n'a pas approuvé.
+
+L'informatique doit tenir le registre des outils d'IA approuvés et le réviser chaque trimestre.
+
+Tout texte publié à l'extérieur et produit avec l'IA doit être relu par une personne désignée avant sa publication.
+
+Le personnel appelle cette règle « la règle des quatre yeux ».
+
+Les cadres devraient rappeler cette politique à leurs équipes une fois par an.
+
+3. Exceptions
+
+La direction peut accorder des exceptions.

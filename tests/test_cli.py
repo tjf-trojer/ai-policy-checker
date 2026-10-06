@@ -102,6 +102,29 @@ class LexiconByPath(unittest.TestCase):
         self.assertEqual(rc, 0, out)
 
 
+class PastedRefusal(unittest.TestCase):
+    """The refusal of a pasted input is checked against the text given with --input."""
+
+    def check(self, policy):
+        tmp = tempfile.mkdtemp()
+        try:
+            path = os.path.join(tmp, "reply.md")
+            with open(path, "w", encoding="utf-8") as fh:
+                fh.write("No register: the input is not in English.\n")
+            return run([VERIFY, path, "--input", os.path.join(ROOT, policy)], ROOT)
+        finally:
+            shutil.rmtree(tmp)
+
+    def test_german(self):
+        rc, out = self.check("tests/language/ki-richtlinie.txt")
+        self.assertEqual(rc, 0, out)
+
+    def test_english(self):
+        rc, out = self.check("tests/planted/acme-ai-use-policy.txt")
+        self.assertEqual(rc, 1, out)
+        self.assertIn("It gets a register, not a refusal", out)
+
+
 def snapshot(folder):
     out = {}
     for base, _, files in os.walk(folder):
