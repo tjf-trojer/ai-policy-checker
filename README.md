@@ -63,8 +63,9 @@ record and the moment are all in that sentence.
 **Everything at once**, offline, standard-library Python 3.9 or later:
 
 ```bash
-python3 scripts/verify.py     # every register here, then planted defects that must each be caught
-python3 scripts/sources.py    # every input and reference text against the original it came from
+python3 scripts/verify.py            # every register here, then planted defects that must each be caught
+python3 scripts/sources.py           # every input and reference text against the original it came from
+python3 -m unittest discover tests   # the scripts run from outside the repository
 ```
 
 `verify.py` fails a register when a quotation is not on the line it cites, down to spelling and

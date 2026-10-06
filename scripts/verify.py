@@ -42,6 +42,9 @@ Usage:
                                                   in it if it has any
   python3 scripts/verify.py --selftest            fixtures in tests/fixtures/ only
 
+A Source Input path is looked up from the working directory first, then from the
+repository root; --input, when given, must name the same file.
+
 Exit status is 0 only when every register passes and every fixture fails in the
 gate it declares and in no other.
 """
@@ -763,6 +766,16 @@ def row_label(section, k, raw):
 
 # ---------------------------------------------------------------- input
 
+def input_candidates(named):
+    """Where a Source Input path may point: the working directory first, then the repository."""
+    return [os.path.join(os.getcwd(), named), os.path.join(ROOT, named)]
+
+
+def resolve_input(named):
+    cands = input_candidates(named)
+    return next((p for p in cands if os.path.isfile(p)), cands[-1])
+
+
 def load_input(path):
     with open(path, encoding="utf-8-sig") as fh:
         lines = fh.read().split("\n")
@@ -847,12 +860,12 @@ def check_register(lines, input_override=None):
         input_path = input_override
         res.input_shown = shown_path(input_override)
         if reg.input_spec and reg.input_spec[0] == "path":
-            named = os.path.join(ROOT, reg.input_spec[1])
-            if os.path.realpath(named) != os.path.realpath(input_override):
+            want = os.path.realpath(input_override)
+            if not any(os.path.realpath(p) == want for p in input_candidates(reg.input_spec[1])):
                 err["shape"].append("Source Input: names %s, but --input is %s"
                                     % (reg.input_spec[1], res.input_shown))
     elif reg.input_spec and reg.input_spec[0] == "path":
-        input_path = os.path.join(ROOT, reg.input_spec[1])
+        input_path = resolve_input(reg.input_spec[1])
     lines_in = None
     if input_path is not None:
         try:
