@@ -1,9 +1,9 @@
 # Lexicon: the word lists a register applies
 
-_Last updated: 2026-10-03_
+_Last updated: 2026-10-06_
 
-Four lists. The translator applies them as written and `scripts/verify.py` reads them from this
-file. A list that is wrong for one policy is wrong for all of them, and it changes here.
+Four sections of lists. The translator applies them as written and `scripts/verify.py` reads them
+from this file, or from the one its `--lexicon` names. A list that is wrong for one policy is wrong for all of them, and it changes here.
 
 A term matches as whole words, in any case. The longest term wins: `must not` before `must`,
 `should never` before `should`, `is not permitted` before `permitted`.
@@ -60,18 +60,25 @@ the sentence. A descriptive "will" ("These tools will answer your question") and
 class MUST (imperative); `never`, `do not` and `don't` make it MUST NOT (imperative). The Force cell
 quotes the lexicon term where there is one («Never», «Always», «do not»), and otherwise the opening
 verb or verb phrase («be aware», «consider»). An imperative stands at an opening: the start of a
-sentence, after a list marker, or after a comma, semicolon or colon, with at most a joining «and»,
-«but», «or» or «then» between. «Agencies are encouraged to update» holds no imperative. A list item
+sentence, after a list marker, or after a comma, semicolon or colon, with at most one joining word
+from the table below between. «Agencies are encouraged to update» holds no imperative. A list item
 whose opening verb finishes a lead-in that carries a force term of its own («…should be kept up to
 date with the following details:» + «Describe…») takes the lead-in's force. A verb that
 only points the reader somewhere ("Note that", "See") or asks a favour ("please contact") is not
 an instruction, and its sentence is a statement.
 
+| Joining word |
+|---|
+| and |
+| but |
+| or |
+| then |
+
 ## Collective owners
 
 An Owner quotation is flagged `(collective)` when its head is a crowd. Lowercase the quotation and
-cut it before the first cut word below, and before a word ending in `-ing` that directly follows a
-crowd word. The flag is set when what remains equals a crowd entry or ends with one. «users» and
+cut it before the first cut word below, and before a word with a participle ending below (`-ing`)
+that directly follows a crowd word. The flag is set when what remains equals a crowd entry or ends with one. «users» and
 «All users directing a bot» are crowds; «the head of each agency» («the head») and «Agency heads»
 are not.
 
@@ -89,6 +96,10 @@ are not.
 | whose |
 | that |
 | which |
+
+| Participle ending |
+|---|
+| -ing |
 
 | Collective |
 |---|

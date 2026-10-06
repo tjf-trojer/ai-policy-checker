@@ -65,6 +65,43 @@ class InputOutsideTheRepository(unittest.TestCase):
         self.assertIn("names my-policy.txt, but --input is", out)
 
 
+class LexiconByPath(unittest.TestCase):
+    """The word lists come from the lexicon file, wherever it is."""
+
+    def setUp(self):
+        self.tmp = tempfile.mkdtemp()
+
+    def tearDown(self):
+        shutil.rmtree(self.tmp)
+
+    def test_flat_upload(self):
+        """verify.py, lexicon.md, a register and its input side by side, as in a chat sandbox."""
+        for rel in ("scripts/verify.py", "reference/lexicon.md"):
+            shutil.copy(os.path.join(ROOT, rel), self.tmp)
+        shutil.copy(os.path.join(ROOT, "inputs", "wikipedia-bot-policy.txt"),
+                    os.path.join(self.tmp, "my-policy.txt"))
+        with open(os.path.join(self.tmp, "my-register.md"), "w", encoding="utf-8") as fh:
+            fh.write(example(2).replace("`inputs/wikipedia-bot-policy.txt`", "`my-policy.txt`"))
+        rc, out = run(["verify.py", "my-register.md", "--input", "my-policy.txt"], self.tmp)
+        self.assertEqual(rc, 0, out)
+
+    def test_lexicon_option(self):
+        """A lexicon without «users» among its crowds fails Example 1 in flags, and only there."""
+        lex = read("reference/lexicon.md").replace("\n| users |\n", "\n")
+        path = os.path.join(self.tmp, "lexicon.md")
+        with open(path, "w", encoding="utf-8") as fh:
+            fh.write(lex)
+        reg = os.path.join(self.tmp, "example-1.md")
+        with open(reg, "w", encoding="utf-8") as fh:
+            fh.write(example(1))
+        rc, out = run([VERIFY, reg, "--lexicon", path], ROOT)
+        self.assertEqual(rc, 1, out)
+        self.assertRegex(out, r"flags +FAIL")
+        self.assertNotRegex(out, r"(shape|trace|force|status|coverage|scope) +FAIL")
+        rc, out = run([VERIFY, reg], ROOT)
+        self.assertEqual(rc, 0, out)
+
+
 def snapshot(folder):
     out = {}
     for base, _, files in os.walk(folder):

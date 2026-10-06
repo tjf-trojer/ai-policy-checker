@@ -8,7 +8,7 @@ text. Eight gates run on each register:
             row order, and the form of every cell
   trace     every quotation is in the input, character for character,
             starting on the first line it cites and ending on the last
-  force     force terms and classes agree with reference/lexicon.md, an
+  force     force terms and classes agree with the lexicon, an
             imperative stands at an opening and is not an item completing a
             lead-in that has force of its own, no rule is filed below its
             strongest term, and no sentence opened by or holding a forced
@@ -26,7 +26,13 @@ text. Eight gates run on each register:
             Policy text unless its entry is filed outside the policy, and
             an outside block mid-input opens with a seam marker
 
-The word lists are read from reference/lexicon.md on every run.
+The word lists are read from the lexicon on every run: the file --lexicon names,
+or reference/lexicon.md in the repository, or, where the repository's layout is
+absent (files uploaded side by side), lexicon.md beside the register, in the
+working directory or beside this script. Everything that depends on the input's
+language comes from the lexicon; the register's own fixed words (section and
+column names, "not in source", filings, statuses, flags) are the schema's and
+the same for every lexicon.
 
 What it cannot check: it proves the quotations and every field derived from
 them, not that a sentence was read correctly. It cannot tell whether a quoted
@@ -41,6 +47,7 @@ Usage:
   python3 scripts/verify.py PATH.md [--input F]   one file; each "# Example " block
                                                   in it if it has any
   python3 scripts/verify.py --selftest            fixtures in tests/fixtures/ only
+  --lexicon PATH                                  the word lists to apply
 
 A Source Input path is looked up from the working directory first, then from the
 repository root; --input, when given, must name the same file.
@@ -101,7 +108,6 @@ SENT_END = re.compile(r"[.:?!][\"')\]]*\s+")
 MARKER = re.compile(r"(?:#+\s+|[-*\u2022]\s+|\(?[A-Za-z0-9]{1,4}[.)]\s+|[\"'(\[]+)")
 CLAUSE_END = re.compile(r"[.!?](?=[\"')\]]*(?:\s|$))")
 CLAUSE_START = re.compile(r"[,;:][\"')\]]*\s+")
-JOINER = re.compile(r"(?:and|but|or|then)\s+", re.IGNORECASE)
 DIGITS = re.compile(r"(?<![^\W_])[0-9]+(?![^\W_])")
 
 LEX = None
@@ -215,6 +221,13 @@ def load_lexicon(path):
     if not lex.terms:
         raise LexiconError("the Force table holds no terms")
     lex.term_re = words_re(lex.terms)
+    header, body = md_table(secs["Force"], "Force", "Joining word")
+    i = column(header, "Joining word", "Force")
+    joiners = sorted(set(norm(r[i]).strip("`").strip().lower() for r in body if r[i].strip()),
+                     key=len, reverse=True)
+    lex.joiner_re = re.compile(r"(?:" + "|".join(r"\s+".join(re.escape(w) for w in j.split())
+                                                for j in joiners) + r")\s+",
+                               re.IGNORECASE) if joiners else None
 
     coll = secs["Collective owners"]
     header, body = md_table(coll, "Collective owners", "Collective")
@@ -225,6 +238,10 @@ def load_lexicon(path):
     lex.cut_words = set(norm(r[i]).lower().strip() for r in body if r[i].strip())
     if not lex.collective or not lex.cut_words:
         raise LexiconError("the Collective or Cut word table under '## Collective owners' is empty")
+    header, body = md_table(coll, "Collective owners", "Participle ending")
+    i = column(header, "Participle ending", "Collective owners")
+    lex.participle_endings = tuple(norm(r[i]).strip("`").strip().lstrip("-").lower()
+                                   for r in body if r[i].strip("`- "))
 
     header, body = md_table(secs["Timing words"], "Timing words", "Kind")
     ik, iw = column(header, "Kind", "Timing words"), column(header, "Words", "Timing words")
@@ -249,19 +266,31 @@ def load_lexicon(path):
     return lex
 
 
+def find_lexicon(register=None):
+    """reference/lexicon.md in the repository; without that layout, lexicon.md beside the
+    register, in the working directory, or beside this script."""
+    here = os.path.dirname(os.path.abspath(__file__))
+    cands = [LEXICON]
+    if register:
+        cands.append(os.path.join(os.path.dirname(os.path.abspath(register)), "lexicon.md"))
+    cands += [os.path.join(os.getcwd(), "lexicon.md"), os.path.join(here, "lexicon.md")]
+    return next((p for p in cands if os.path.isfile(p)), LEXICON)
+
+
 def ends_in_crowd(phrase):
     return any(phrase == c or phrase.endswith(" " + c) for c in LEX.collective)
 
 
 def owner_head(text):
-    """The Owner quotation cut before its first cut word, and before an -ing word
-    that directly follows a crowd entry."""
+    """The Owner quotation cut before its first cut word, and before a word with a
+    participle ending (English: -ing) that directly follows a crowd entry."""
     kept = []
     for tok in norm(text).lower().split():
         bare = re.sub(r"^\W+|\W+$", "", tok)
         if bare in LEX.cut_words:
             break
-        if bare.endswith("ing") and kept and ends_in_crowd(" ".join(kept)):
+        if LEX.participle_endings and bare.endswith(LEX.participle_endings) and kept \
+                and ends_in_crowd(" ".join(kept)):
             break
         if bare:
             kept.append(bare)
@@ -287,7 +316,7 @@ def scan_terms(text):
 def openings(text, starts):
     """Offsets where a first word begins: (sentence openings, clause openings).
     A sentence opens at a quotation's start or after . : ? ! and any list markers;
-    a clause opens after , ; : with at most one joining and, but, or, then."""
+    a clause opens after , ; : with at most one joining word from the lexicon."""
     sent = set()
     for p in list(starts) + [m.end() for m in SENT_END.finditer(text)]:
         while p < len(text) and text[p].isspace():
@@ -302,7 +331,7 @@ def openings(text, starts):
     clause = set()
     for m in CLAUSE_START.finditer(text):
         clause.add(m.end())
-        j = JOINER.match(text, m.end())
+        j = LEX.joiner_re and LEX.joiner_re.match(text, m.end())
         if j:
             clause.add(j.end())
     return sent, clause
@@ -1411,6 +1440,7 @@ def main(argv=None):
     ap.add_argument("path", nargs="?", help="a register file (or a file of '# Example ' registers)")
     ap.add_argument("--input", help="the input text the register translates (required for 'pasted')")
     ap.add_argument("--selftest", action="store_true", help="run the fixtures in tests/fixtures/ only")
+    ap.add_argument("--lexicon", help="the lexicon to apply (default: reference/lexicon.md)")
     ap.add_argument("-v", "--verbose", action="store_true", help="print each fixture's full report")
     args = ap.parse_args(argv)
     if args.selftest and args.path:
@@ -1420,11 +1450,15 @@ def main(argv=None):
     if args.input and not os.path.isfile(args.input):
         ap.error("--input file not found: %s" % args.input)
 
+    if args.lexicon and not os.path.isfile(args.lexicon):
+        ap.error("--lexicon file not found: %s" % args.lexicon)
+    lexicon = args.lexicon or find_lexicon(args.path)
+
     global LEX
     try:
-        LEX = load_lexicon(LEXICON)
+        LEX = load_lexicon(lexicon)
     except LexiconError as e:
-        print("reference/lexicon.md: %s" % e)
+        print("%s: %s" % (shown_path(lexicon), e))
         return 2
 
     tally = {"checked": 0, "passed": 0, "problems": 0}
