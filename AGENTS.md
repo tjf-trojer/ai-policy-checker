@@ -28,6 +28,21 @@ the import.
 2. Every sentence of the input is filed once, in the Register or in Not rules.
 3. The status is arithmetic. Owner, evidence and when, all three, or it is an intention.
 
+## Permissions
+
+- **Claude Code** reads [`.claude/settings.json`](.claude/settings.json): it allows reading this
+  repository and running `verify.py`, `sources.py` and the unit tests, asks before any edit, write,
+  fetch or search, and denies edits to `reference/` and `inputs/originals/` and `curl` or `wget`.
+  A register is delivered in the conversation or written where you approve it.
+- **Codex** reads [`.codex/config.toml`](.codex/config.toml): `sandbox_mode = "read-only"` and
+  `approval_policy = "on-request"`, so it reads and runs the checker without writing, with the
+  network off, and asks before stepping outside that. Codex loads a project's config only once you
+  trust the project. Untrusted, start it as `codex --sandbox read-only --ask-for-approval on-request`
+  ([sandbox and approvals](https://learn.chatgpt.com/docs/agent-approvals-security)).
+
+Maintaining the repository needs writes: approve them as they come, or start Codex with
+`--sandbox workspace-write`. `sources.py --fetch` needs the network.
+
 ## Layout
 
 - `rules.md` is the index to `rules/`: five files, one job each.

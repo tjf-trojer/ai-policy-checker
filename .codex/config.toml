@@ -1,0 +1,6 @@
+# Codex runs this repository read-only: the translator reads policies other people wrote.
+# Codex loads this file only once the project is trusted, and command-line flags override it.
+# https://learn.chatgpt.com/docs/config-file/config-reference
+# https://learn.chatgpt.com/docs/agent-approvals-security
+sandbox_mode = "read-only"
+approval_policy = "on-request"

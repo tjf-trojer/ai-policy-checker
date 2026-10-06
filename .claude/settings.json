@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(/**)",
+      "Bash(python3 scripts/verify.py:*)",
+      "Bash(python3 scripts/sources.py:*)",
+      "Bash(python3 -m unittest discover:*)"
+    ],
+    "ask": [
+      "Edit",
+      "Write",
+      "NotebookEdit",
+      "WebFetch",
+      "WebSearch"
+    ],
+    "deny": [
+      "Edit(/reference/**)",
+      "Edit(/inputs/originals/**)",
+      "Bash(curl *)",
+      "Bash(wget *)"
+    ]
+  }
+}
