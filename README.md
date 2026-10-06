@@ -13,7 +13,8 @@ date, never grades a rule.
 ## Use it
 
 **In a Claude project.** Add `identity.md`, `rules.md`, the `rules/` folder, `examples.md`,
-`reference/register-schema.md` and `reference/lexicon.md` to the project knowledge. Set the project
+`reference/register-schema.md`, `reference/lexicon.md` and `reference/lexicon-de.md` to the project
+knowledge. Set the project
 instructions to:
 
 > You are the translator in identity.md. Follow rules.md and the files it lists, and produce one
@@ -21,7 +22,7 @@ instructions to:
 > or "not in source".
 
 Paste a policy's text and say **"Translate this policy."** Any AI policy, usage guideline or
-directive in English works; [`inputs/`](inputs/) holds four real ones.
+directive in English or German works; [`inputs/`](inputs/) holds four real ones in each language.
 
 **In Claude Code.** Clone the repository and open it ([`CLAUDE.md`](CLAUDE.md) routes). Save the
 policy as a text file, say "Translate `<file>`", then check the result:
@@ -31,6 +32,26 @@ git clone https://github.com/tjf-trojer/ai-policy-checker
 cd ai-policy-checker
 python3 scripts/verify.py my-register.md --input my-policy.txt
 ```
+
+## Languages: English and German
+
+A German policy gets a German register: the same five sections and the same contract, written in
+the German words of the schema's [contract words](reference/register-schema.md#contract-words)
+(«nicht in der Quelle», `Kontrolle`, `Absicht`), its quotations in the policy's own words.
+[`reference/lexicon-de.md`](reference/lexicon-de.md) holds the German word lists, Swiss «ss» and
+German «ß» alike. A Swiss or German directive often states a duty with no modal («Die Angestellten
+prüfen die Ergebnisse …»); such a sentence is a rule only in a directive and only when an actor and
+its verb open it, and its row says so: `«prüfen» MUSS (Präsens)`
+([rules/force.md](rules/force.md), the present tense). Check a German register the same way;
+`verify.py` picks the lexicon by the register's section names, or takes the one `--lexicon` names:
+
+```bash
+python3 scripts/verify.py mein-register.md --input meine-richtlinie.txt
+python3 scripts/verify.py mein-register.md --input meine-richtlinie.txt --lexicon reference/lexicon-de.md
+```
+
+[Example 4](examples.md) translates the Zürich KI-Richtlinie, [Example 5](examples.md) the St. Gallen
+Leitlinien.
 
 ## What comes back
 
@@ -68,7 +89,7 @@ python3 scripts/sources.py           # every input and reference text against th
 python3 -m unittest discover tests   # the scripts run from outside the repository
 ```
 
-`verify.py` fails a register when the input is not in the lexicon's language; when a quotation is
+`verify.py` fails a register when the input is not in the language of the register's lexicon; when a quotation is
 not on the line it cites, down to spelling and OCR errors; when a cell holds anything but a
 quotation, `not in source` or a fixed value; when a sentence is dropped, filed twice, or filed
 weaker than its own «must»; when a lead-in stands alone; when an owner is borrowed from a line that
@@ -100,8 +121,9 @@ each provision. A register never says the translated policy is bound by them.
 
 ## Limits
 
-- English only; the lexicon is English. A policy in another language gets a one-line refusal, not
-  a register that would report no rules, and `verify.py` fails a register of one.
+- English and German only. A policy in another language gets a one-line refusal, not a register
+  that would report no rules, and `verify.py` fails a register of one. The German rules have not
+  yet been through a fresh session: the cold runs above are English.
 - It reports the policy, not the organisation: an owner named in a separate procedure is
   `not in source` until that procedure is translated too.
 - The word lists in [`reference/lexicon.md`](reference/lexicon.md) are choices, written down to be
