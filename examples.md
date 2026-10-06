@@ -340,9 +340,10 @@ force, and the register files it as `MUSS (Präsens)` so the row shows where the
 two items of Art. 12, a consequence that has the form of a duty. «wird offengelegt» (Art. 11) is
 filed by its «wird». The prohibitions put «nicht» away from «dürfen» («dürfen insbesondere nicht
 verwendet werden für:»), and «Öffentlich nicht zugängliche Daten … können …» (Art. 7) permits: its
-«nicht» negates the adjective. The directive names no record and no moment, and its only owners are
-crowds, so every rule is an intention. The input does not name the city; the issuer stays
-«nicht in der Quelle».
+«nicht» negates the adjective. The directive names no record and no moment. Its one owner is a
+crowd, «Die zuständigen Stellen» (R1), named by its «zuständigen»; «Die Angestellten», whom five
+rules address, stands in no sentence of responsibility and owns none. Every rule is an intention.
+The input does not name the city; the issuer stays «nicht in der Quelle».
 
 ## Quelle
 
@@ -359,8 +360,8 @@ crowds, so every rule is an intention. The input does not name the city; the iss
 | ID | Regel | Verbindlichkeit | Adressat | Verantwortlich | Nachweis | Zeitpunkt | Status |
 |---|---|---|---|---|---|---|---|
 | R1 | «Art. 4 1 Die zuständigen Stellen setzen die Angestellten über diese Richtlinie in Kenntnis.» L25 | «setzen» MUSS (Präsens) | «Die zuständigen Stellen» L25 | «Die zuständigen Stellen» L25 (kollektiv) | nicht in der Quelle | nicht in der Quelle | Absicht: Verantwortlich, Nachweis, Zeitpunkt |
-| R2 | «2 Die Angestellten registrieren sich für die Verwendung der KI-Werkzeuge mit ihrer geschäftlichen E-Mail-Adresse.» L27 | «registrieren» MUSS (Präsens) | «Die Angestellten» L27 | «Die Angestellten» L27 (kollektiv) | nicht in der Quelle | nicht in der Quelle | Absicht: Verantwortlich, Nachweis, Zeitpunkt |
-| R3 | «3 Die Angestellten schränken die Verwertung der Daten und Informationen durch die Anbietenden der KI-Werkzeuge so weit wie möglich ein.» L29 | «schränken» MUSS (Präsens) | «Die Angestellten» L29 | «Die Angestellten» L29 (kollektiv) | nicht in der Quelle | nicht in der Quelle | Absicht: Verantwortlich, Nachweis, Zeitpunkt |
+| R2 | «2 Die Angestellten registrieren sich für die Verwendung der KI-Werkzeuge mit ihrer geschäftlichen E-Mail-Adresse.» L27 | «registrieren» MUSS (Präsens) | «Die Angestellten» L27 | nicht in der Quelle | nicht in der Quelle | nicht in der Quelle | Absicht: Verantwortlich, Nachweis, Zeitpunkt |
+| R3 | «3 Die Angestellten schränken die Verwertung der Daten und Informationen durch die Anbietenden der KI-Werkzeuge so weit wie möglich ein.» L29 | «schränken» MUSS (Präsens) | «Die Angestellten» L29 | nicht in der Quelle | nicht in der Quelle | nicht in der Quelle | Absicht: Verantwortlich, Nachweis, Zeitpunkt |
 | R4 | «Art. 6 1 Die Eingabe von öffentlich nicht zugänglichen Daten und Informationen in KI-Werkzeuge ist verboten.» L41 | «verboten» DARF NICHT | nicht in der Quelle | nicht in der Quelle | nicht in der Quelle | nicht in der Quelle | Absicht: Verantwortlich, Nachweis, Zeitpunkt |
 | R5 | «2 Verboten ist insbesondere die Eingabe von:» L43 + «a. Personendaten gemäss dem Bundesgesetz über den Datenschutz (Datenschutzgesetz, DSG)1 und dem Gesetz über die Information und den Datenschutz (IDG)2;» L45 | «Verboten» DARF NICHT | nicht in der Quelle | nicht in der Quelle | nicht in der Quelle | nicht in der Quelle | Absicht: Verantwortlich, Nachweis, Zeitpunkt |
 | R6 | «2 Verboten ist insbesondere die Eingabe von:» L43 + «b. intern, vertraulich oder streng vertraulich klassifizierten Informationen;» L47 | «Verboten» DARF NICHT | nicht in der Quelle | nicht in der Quelle | nicht in der Quelle | nicht in der Quelle | Absicht: Verantwortlich, Nachweis, Zeitpunkt |
@@ -373,13 +374,13 @@ crowds, so every rule is an intention. The input does not name the city; the iss
 | R13 | «Art. 9 KI-Werkzeuge dürfen insbesondere nicht verwendet werden für:» L79 + «f. die unveränderte Eingabe von Anfragen aus der Bevölkerung, Wirtschaft oder Politik;» L91 | «dürfen» DARF NICHT | nicht in der Quelle | nicht in der Quelle | nicht in der Quelle | nicht in der Quelle | Absicht: Verantwortlich, Nachweis, Zeitpunkt |
 | R14 | «Art. 9 KI-Werkzeuge dürfen insbesondere nicht verwendet werden für:» L79 + «g. die Eingabe von bestehenden Software-Codes zur Fehlerbeseitigung oder Überprüfung, soweit Urheberrechte von Dritten verletzt werden können;» L93 | «dürfen» DARF NICHT | nicht in der Quelle | nicht in der Quelle | nicht in der Quelle | nicht in der Quelle | Absicht: Verantwortlich, Nachweis, Zeitpunkt |
 | R15 | «Art. 9 KI-Werkzeuge dürfen insbesondere nicht verwendet werden für:» L79 + «h. die Weiterverwendung von generativen Ergebnissen ohne inhaltliche Überprüfung.» L95 | «dürfen» DARF NICHT | nicht in der Quelle | nicht in der Quelle | nicht in der Quelle | nicht in der Quelle | Absicht: Verantwortlich, Nachweis, Zeitpunkt |
-| R16 | «Art. 10 Die Angestellten prüfen die Ergebnisse der KI-Werkzeuge auf deren Richtigkeit und Vollständigkeit.» L101 | «prüfen» MUSS (Präsens) | «Die Angestellten» L101 | «Die Angestellten» L101 (kollektiv) | nicht in der Quelle | nicht in der Quelle | Absicht: Verantwortlich, Nachweis, Zeitpunkt |
+| R16 | «Art. 10 Die Angestellten prüfen die Ergebnisse der KI-Werkzeuge auf deren Richtigkeit und Vollständigkeit.» L101 | «prüfen» MUSS (Präsens) | «Die Angestellten» L101 | nicht in der Quelle | nicht in der Quelle | nicht in der Quelle | Absicht: Verantwortlich, Nachweis, Zeitpunkt |
 | R17 | «Art. 11 1 Die Verwendung der Ergebnisse der KI-Werkzeuge wird offengelegt, sofern die Ergebnisse ohne wesentliche Änderungen übernommen werden.» L105 | «wird» WIRD | nicht in der Quelle | nicht in der Quelle | nicht in der Quelle | nicht in der Quelle | Absicht: Verantwortlich, Nachweis, Zeitpunkt |
 | R18 | «2 Ergebnisse dürfen insbesondere nicht verwendet werden, wenn sie:» L107 + «a. erkennbar falsche Informationen enthalten;» L109 | «dürfen» DARF NICHT | nicht in der Quelle | nicht in der Quelle | nicht in der Quelle | nicht in der Quelle | Absicht: Verantwortlich, Nachweis, Zeitpunkt |
 | R19 | «2 Ergebnisse dürfen insbesondere nicht verwendet werden, wenn sie:» L107 + «b. Diskriminierungen und Vorurteile enthalten;» L111 | «dürfen» DARF NICHT | nicht in der Quelle | nicht in der Quelle | nicht in der Quelle | nicht in der Quelle | Absicht: Verantwortlich, Nachweis, Zeitpunkt |
 | R20 | «2 Ergebnisse dürfen insbesondere nicht verwendet werden, wenn sie:» L107 + «c. gegen das Bundesgesetz über das Urheberrecht und verwandte Schutzrechte (Urheberrechtsgesetz, URG)3 verstossen.» L113 | «dürfen» DARF NICHT | nicht in der Quelle | nicht in der Quelle | nicht in der Quelle | nicht in der Quelle | Absicht: Verantwortlich, Nachweis, Zeitpunkt |
-| R21 | «Art. 12 Die Angestellten tragen allfällige haftungsrechtliche und personalrechtliche Folgen für:» L119 + «a. die unzulässige Eingabe von Daten und Informationen;» L121 | «tragen» MUSS (Präsens) | «Die Angestellten» L119 | «Die Angestellten» L119 (kollektiv) | nicht in der Quelle | nicht in der Quelle | Absicht: Verantwortlich, Nachweis, Zeitpunkt |
-| R22 | «Art. 12 Die Angestellten tragen allfällige haftungsrechtliche und personalrechtliche Folgen für:» L119 + «b. die unzulässige Verwendung von Ergebnissen.» L123 | «tragen» MUSS (Präsens) | «Die Angestellten» L119 | «Die Angestellten» L119 (kollektiv) | nicht in der Quelle | nicht in der Quelle | Absicht: Verantwortlich, Nachweis, Zeitpunkt |
+| R21 | «Art. 12 Die Angestellten tragen allfällige haftungsrechtliche und personalrechtliche Folgen für:» L119 + «a. die unzulässige Eingabe von Daten und Informationen;» L121 | «tragen» MUSS (Präsens) | «Die Angestellten» L119 | nicht in der Quelle | nicht in der Quelle | nicht in der Quelle | Absicht: Verantwortlich, Nachweis, Zeitpunkt |
+| R22 | «Art. 12 Die Angestellten tragen allfällige haftungsrechtliche und personalrechtliche Folgen für:» L119 + «b. die unzulässige Verwendung von Ergebnissen.» L123 | «tragen» MUSS (Präsens) | «Die Angestellten» L119 | nicht in der Quelle | nicht in der Quelle | nicht in der Quelle | Absicht: Verantwortlich, Nachweis, Zeitpunkt |
 
 ## Keine Regeln
 

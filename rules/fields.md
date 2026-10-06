@@ -1,6 +1,6 @@
 # Fields: the Source, the row, and what the policy points to
 
-_Last updated: 2026-10-03_
+_Last updated: 2026-10-06_
 
 Steps 2, 5 and 6. Every field is a quotation from the input or `not in source`. The columns are
 defined in [`reference/register-schema.md`](../reference/register-schema.md).
@@ -19,7 +19,7 @@ policy's edges): `L1-L57` for a policy with nothing stapled on.
 |---|---|
 | Force | The strongest term as written, and its class ([force.md](force.md)) |
 | Addressee | The party the rule binds, as the rule's own quotations name it. A passive rule with no agent and an imperative name no one: `not in source` |
-| Owner | The party the text makes answerable (the schema defines it). Look in the rule and its lead-in first. Then in a lead-in above the rule: a lead-in that names a party makes it answerable for everything its item requires, the item's later sentences included. Then in a sentence that assigns responsibility for the same conduct with a responsibility word from the lexicon; cite its line. An addressee is the owner when it is a named office, not when it is a crowd, and a party named only in a condition is no owner of a passive rule. Flag `(collective)` by the lexicon |
+| Owner | The party the text makes answerable (the schema defines it). Look in the rule and its lead-in first. Then in a lead-in above the rule: a lead-in that names a party makes it answerable for everything its item requires, the item's later sentences included. Then in a sentence that assigns responsibility for the same conduct with a responsibility word from the lexicon; cite its line. An addressee is the owner when it is a named office; a crowd is the owner only where the schema's Owner says, and a party named only in a condition is no owner of a passive rule. Flag `(collective)` by the lexicon |
 | Evidence | A record or artefact named in the rule's own quotations, lead-in included. Never from another sentence |
 | When | The frequency, date, deadline or triggering event in the rule's own quotations, lead-in included, kept as written. A condition of application is not a When. Flag `(unspecified)` by the lexicon |
 | Status | By the schema's rule, from the three cells as written |
@@ -32,6 +32,7 @@ policy's edges): `L1-L57` for a policy with nothing stapled on.
 | Owner | From another sentence that assigns responsibility for the same conduct | Example 2, R3: «its operator» L21, from «The contributions of a bot account remain the responsibility of its operator» |
 | Owner | A named office the rule addresses | Example 3, R5 «the head of each agency» |
 | Owner | A crowd made responsible is named and flagged | Example 1, «users» L23 (collective) on every row |
+| Owner | A crowd the rule only addresses is not the owner | Example 3, R1 «agencies» L18; Example 4, R16 «Die Angestellten» L101 |
 | Owner | A lead-in's party owns its item's later sentences | Example 3, R36, R40, R43: «Agency heads» L68 |
 | Evidence | A thing the rule names; a verb is not a record | Example 3, R10: «notify 0MB» names no notice, so `not in source` |
 | Evidence | Never from another sentence | Example 1, R2: the footnote named at L55 is not R2's evidence |

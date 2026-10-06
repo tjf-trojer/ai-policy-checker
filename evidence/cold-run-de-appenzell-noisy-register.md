@@ -1,3 +1,5 @@
+# German cold run, Appenzell with a stapled email, corrected: R7's owner
+
 ## Quelle
 
 | Feld | Eintrag |
@@ -18,7 +20,7 @@
 | R4 | «Werden generative KI-Werkzeuge genutzt, ist bei der Eingabe von Informationen (prompt) auf Folgendes zu achten:» L37 + «▪ Die Eingabe darf keine Personendaten enthalten.» L39 | «darf» DARF NICHT | nicht in der Quelle | nicht in der Quelle | nicht in der Quelle | nicht in der Quelle | Absicht: Verantwortlich, Nachweis, Zeitpunkt |
 | R5 | «Werden generative KI-Werkzeuge genutzt, ist bei der Eingabe von Informationen (prompt) auf Folgendes zu achten:» L37 + «▪ Die Eingabe darf keine als intern oder vertraulich klassifizierten Informationen enthalten.» L41 | «darf» DARF NICHT | nicht in der Quelle | nicht in der Quelle | nicht in der Quelle | nicht in der Quelle | Absicht: Verantwortlich, Nachweis, Zeitpunkt |
 | R6 | «Werden generative KI-Werkzeuge genutzt, ist bei der Eingabe von Informationen (prompt) auf Folgendes zu achten:» L37 + «▪ Die Eingabe darf keine Information enthalten, die einer Organisationseinheit zugeordnet werden kann.» L43 | «darf» DARF NICHT | nicht in der Quelle | nicht in der Quelle | nicht in der Quelle | nicht in der Quelle | Absicht: Verantwortlich, Nachweis, Zeitpunkt |
-| R7 | «Der Mensch trifft die Entscheidungen.» L47 | «trifft» MUSS (Präsens) | «Der Mensch» L47 | «Der Mensch» L47 (kollektiv) | nicht in der Quelle | nicht in der Quelle | Absicht: Verantwortlich, Nachweis, Zeitpunkt |
+| R7 | «Der Mensch trifft die Entscheidungen.» L47 | «trifft» MUSS (Präsens) | «Der Mensch» L47 | nicht in der Quelle | nicht in der Quelle | nicht in der Quelle | Absicht: Verantwortlich, Nachweis, Zeitpunkt |
 | R8 | «Bei der Weiterverwendung der Ergebnisse von generativen KI-Werkzeugen ist daher Folgendes zu beachten:» L49 + «▪ Generierte Texte und die darin enthaltenen Informationen sind kritisch auf Qualität und Korrektheit zu prüfen.» L51 | «zu prüfen» MUSS | nicht in der Quelle | nicht in der Quelle | nicht in der Quelle | nicht in der Quelle | Absicht: Verantwortlich, Nachweis, Zeitpunkt |
 | R9 | «Bei der Weiterverwendung der Ergebnisse von generativen KI-Werkzeugen ist daher Folgendes zu beachten:» L49 + «▪ Um die Richtigkeit eines Ergebnisses sicherzustellen, sollte ein Vergleich mit anderen, zuverlässigen Quellen vorgenommen werden.» L53 | «zu beachten» MUSS | nicht in der Quelle | nicht in der Quelle | nicht in der Quelle | nicht in der Quelle | Absicht: Verantwortlich, Nachweis, Zeitpunkt |
 | R10 | «Bei der Weiterverwendung der Ergebnisse von generativen KI-Werkzeugen ist daher Folgendes zu beachten:» L49 + «▪ Generierte Texte sind sachlich anzupassen und an die jeweils geltenden Schreibweisungen anzugleichen.» L55 | «anzupassen» MUSS | nicht in der Quelle | nicht in der Quelle | nicht in der Quelle | nicht in der Quelle | Absicht: Verantwortlich, Nachweis, Zeitpunkt |

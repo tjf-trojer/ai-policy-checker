@@ -25,7 +25,8 @@ text. Nine gates run on each register:
             (an entry ending in a colon) stands alone unless headings follow it
   scope     Addressee, Evidence and When quote only lines the row's Rule
             quotes; the Owner quotes those, a lead-in above them or a line
-            with a responsibility word; every quotation sits inside the
+            with a responsibility word, and a crowd as Owner stands in a
+            sentence with a responsibility word; every quotation sits inside the
             Policy text unless its entry is filed outside the policy, and
             an outside block mid-input opens with a seam marker
 
@@ -1453,7 +1454,8 @@ def show_languages(names):
 
 def gate_scope(reg, traced, errs, lines=None):
     """Addressee, Evidence and When cite only lines the row's Rule cites; the Owner cites the
-    Rule's lines, a lead-in above it, or a line holding a responsibility word; everything sits
+    Rule's lines, a lead-in above it, or a line holding a responsibility word, and a crowd only from
+    a sentence holding one; everything sits
     inside the policy text except entries filed outside it, which sit outside.
     A quotation that failed trace is left to trace."""
     ok = lambda q: traced is None or traced.get(q.key(), False)
@@ -1470,6 +1472,10 @@ def gate_scope(reg, traced, errs, lines=None):
             for q in r.owner.quotes:
                 if not ok(q) or q.end > len(lines):
                     continue
+                if is_collective(q.norm) and not names_responsible(lines, q):
+                    errs.append("%s %s: %s is a crowd, and the sentence it stands in holds no "
+                                "responsibility word; a crowd the rule only addresses is not its owner"
+                                % (r.label, C.w("Owner"), q.show()))
                 span = set(range(q.start, q.end + 1))
                 if span <= allowed:
                     continue
@@ -1490,6 +1496,28 @@ def gate_scope(reg, traced, errs, lines=None):
                     errs.append("%s %s: %s cites lines outside the Rule's (%s); only Owner may "
                                 "quote another sentence"
                                 % (r.label, name, q.show(), show_lines(allowed)))
+
+
+def names_responsible(lines, q):
+    """True when a sentence the quotation stands in on its lines holds a responsibility word of
+    the lexicon: «users are responsible for …», «Die zuständigen Stellen …». A sentence ends at
+    . ! or ? before a space, except the full stop of an abbreviation of the lexicon. Where the
+    words occur more than once on the lines, one such sentence is enough."""
+    text = norm(" ".join(lines[q.start - 1:q.end]))
+    found = find_all(text, q.norm)
+    if not found:
+        return True     # trace's business
+    skip = set()
+    if LEX.abbrev_re:
+        for m in LEX.abbrev_re.finditer(text):
+            skip.update(range(m.start(), m.end()))
+    ends = [m for m in CLAUSE_END.finditer(text) if m.start() not in skip]
+    for at in found:
+        left = max([m.end() for m in ends if m.end() <= at] or [0])
+        right = min([m.end() for m in ends if m.start() >= at + len(q.norm)] or [len(text)])
+        if LEX.responsibility_re.search(text, left, right):
+            return True
+    return False
 
 
 def gate_edges(reg, ok, errs, lines):

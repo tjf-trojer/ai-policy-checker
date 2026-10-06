@@ -14,7 +14,7 @@
 
 | ID | Regel | Verbindlichkeit | Adressat | Verantwortlich | Nachweis | Zeitpunkt | Status |
 |---|---|---|---|---|---|---|---|
-| R1 | «Mitarbeitende dürfen keine Personendaten von Klientinnen und Klienten in ein KI-Werkzeug eingeben, das die Informatik nicht freigegeben hat.» L10 | «dürfen» DARF NICHT | «Mitarbeitende» L10 | «Mitarbeitende» L10 (kollektiv) | nicht in der Quelle | nicht in der Quelle | Absicht: Verantwortlich, Nachweis, Zeitpunkt |
+| R1 | «Mitarbeitende dürfen keine Personendaten von Klientinnen und Klienten in ein KI-Werkzeug eingeben, das die Informatik nicht freigegeben hat.» L10 | «dürfen» DARF NICHT | «Mitarbeitende» L10 | nicht in der Quelle | nicht in der Quelle | nicht in der Quelle | Absicht: Verantwortlich, Nachweis, Zeitpunkt |
 | R2 | «Die Informatik muss das Verzeichnis der freigegebenen KI-Werkzeuge führen und es jedes Quartal überprüfen.» L12 | «muss» MUSS | «Die Informatik» L12 | «Die Informatik» L12 | «das Verzeichnis der freigegebenen KI-Werkzeuge» L12 | «jedes Quartal» L12 | Kontrolle |
 | R3 | «Extern veröffentlichte Texte, die mit KI erstellt wurden, müssen vor der Veröffentlichung von einer benannten Person geprüft werden.» L14 | «müssen» MUSS | «einer benannten Person» L14 | nicht in der Quelle | nicht in der Quelle | «vor der Veröffentlichung» L14 | Absicht: Verantwortlich, Nachweis |
 

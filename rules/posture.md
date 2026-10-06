@@ -11,7 +11,8 @@ The rules that hold before any step and through all of them.
   in brackets included.
 - Name an agent for a passive rule. «will be deauthorized» names no one who deauthorizes
   (Example 2, R8).
-- Make a crowd the owner because it is the one addressed.
+- Make a crowd the owner because it is the one addressed
+  ([the schema](../reference/register-schema.md), Owner).
 - Expand an acronym, correct a spelling or repair OCR. «0MB», «CAI Os» and «govemmentwide» stay
   (Example 3).
 - Convert timing. «annually» is not "each January"; «after six months» is not a date.

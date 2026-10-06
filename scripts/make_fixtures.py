@@ -201,6 +201,11 @@ def fixtures():
         wp, "| «will» WILL | not in source | not in source | not in source | «for two years» L31 | intention: owner, evidence |",
         "| «will» WILL | not in source | «a bureaucrat» L27 | not in source | «for two years» L31 | intention: evidence |"),
         owner=1))
+    # scope: a crowd the rule only addresses made its owner
+    f["addressed-crowd-as-owner"] = ("scope", sub(
+        omb, "| «agencies» L18 | not in source | not in source | not in source | intention: owner, evidence, when |",
+        "| «agencies» L18 | «agencies» L18 (collective) | not in source | not in source "
+        "| intention: owner, evidence, when |"))
     # scope: a hole cut in the middle of the policy with no seam
     t = sub(wp, "| Policy text | L1-L65 |", "| Policy text | L1-L28 + L30-L65 |")
     t = sub(t, "| «Activity requirements» L29 | heading |", "| «Activity requirements» L29 | outside the policy |")
@@ -249,6 +254,10 @@ def german(zh, sg, f):
                                             "politischen Geschäften;» L81 | «dürfen» MUSS | %s |" % NICHT))
     # force: a duty in the present tense without its (Präsens)
     f["present-tense-unflagged"] = ("force", sub(zh, r16, r16.replace("MUSS (Präsens)", "MUSS")))
+    # scope: a crowd the rule only addresses made its owner
+    f["german-addressed-crowd-as-owner"] = ("scope", sub(
+        zh, r16 + " «Die Angestellten» L101 | %s |" % NICHT,
+        r16 + " «Die Angestellten» L101 | «Die Angestellten» L101 (kollektiv) |"))
     # force: the same duty filed as a statement
     row = next(l for l in zh.split("\n") if l.startswith(r16))
     t = renumber(sub(zh, row + "\n", ""))
