@@ -20,6 +20,11 @@ TALLY = {"rules": "Rules", "controls": "Controls", "intentions": "Intentions",
          "owner": "Owner named, not collective", "evidence": "Evidence named",
          "when": "When named, not unspecified", "notrules": "Not rules",
          "outside": "Outside the policy"}
+ZAEHLUNG = {"rules": "Regeln", "controls": "Kontrollen", "intentions": "Absichten",
+            "owner": "Verantwortlich benannt, nicht kollektiv", "evidence": "Nachweis benannt",
+            "when": "Zeitpunkt benannt, nicht unbestimmt", "notrules": "Keine Regeln",
+            "outside": "Ausserhalb der Richtlinie"}
+NICHT = "nicht in der Quelle"
 
 
 def read(rel):
@@ -29,7 +34,7 @@ def read(rel):
 
 def register(text):
     """The five sections of one register, from its Source heading on."""
-    body = text[text.index("## Source"):]
+    body = text[re.search(r"(?m)^## (Source|Quelle)$", text).start():]
     return body.rstrip("\n-").rstrip() + "\n"
 
 
@@ -48,13 +53,28 @@ def sub(text, old, new):
     return text.replace(old, new, 1)
 
 
+def labels(text):
+    """The tally's row names in the register's language."""
+    return ZAEHLUNG if "## Zählung" in text else TALLY
+
+
 def count(text, name):
-    return int(re.search(r"(?m)^\| %s \| (\d+) \|$" % re.escape(TALLY[name]), text).group(1))
+    return int(re.search(r"(?m)^\| %s \| (\d+) \|$" % re.escape(labels(text)[name]), text).group(1))
+
+
+def renumber(text):
+    """IDs R1, R2, … in the order the rows stand, after a row is added or removed."""
+    n = [0]
+
+    def next_id(m):
+        n[0] += 1
+        return "| R%d |" % n[0]
+    return re.sub(r"(?m)^\| R\d+ \|", next_id, text)
 
 
 def tally(text, **delta):
     for name, d in delta.items():
-        label = TALLY[name]
+        label = labels(text)[name]
         text = re.sub(r"(?m)^\| %s \| \d+ \|$" % re.escape(label),
                       "| %s | %d |" % (label, count(text, name) + d), text)
     return text
@@ -210,20 +230,70 @@ def fixtures():
     # language: the same for a French policy that quotes with «…» itself
     f["french-policy-as-statements"] = ("language", statements("tests/language/politique-ia.txt"))
     # language: an English policy refused as if it were in another language
+    german(ex["4"], ex["5"], f)
     f["english-policy-refused"] = ("language", sub(
         read("tests/language/politique-ia-refusal.md"), "`tests/language/politique-ia.txt`",
         "`tests/language/ai-note-with-german-quote.txt`"))
     return f
 
 
+def german(zh, sg, f):
+    """Defects planted in the German registers of Examples 4 (Zürich) and 5 (St. Gallen)."""
+    art9 = "| «dürfen» DARF NICHT | %s |" % NICHT
+    r16 = ("| R16 | «Art. 10 Die Angestellten prüfen die Ergebnisse der KI-Werkzeuge auf deren Richtigkeit und "
+           "Vollständigkeit.» L101 | «prüfen» MUSS (Präsens) |")
+    # force: a prohibition filed under the class of an obligation
+    f["german-wrong-class"] = ("force", sub(zh, "politischen Geschäften;» L81 " + art9,
+                                            "politischen Geschäften;» L81 | «dürfen» MUSS | %s |" % NICHT))
+    # force: a duty in the present tense without its (Präsens)
+    f["present-tense-unflagged"] = ("force", sub(zh, r16, r16.replace("MUSS (Präsens)", "MUSS")))
+    # force: the same duty filed as a statement
+    row = next(l for l in zh.split("\n") if l.startswith(r16))
+    t = renumber(sub(zh, row + "\n", ""))
+    t = sub(t, "| «Verwendung» L103 | Überschrift |",
+            "| «Art. 10 Die Angestellten prüfen die Ergebnisse der KI-Werkzeuge auf deren Richtigkeit und "
+            "Vollständigkeit.» L101 | Feststellung |\n| «Verwendung» L103 | Überschrift |")
+    f["present-tense-as-statement"] = ("force", tally(t, rules=-1, intentions=-1, notrules=1))
+    # force: a present-tense rule in a policy whose title names no directive
+    f["present-tense-without-directive"] = ("force", sub(
+        zh, "| Titel | «Richtlinie über die Nutzung von generativer künstlicher Intelligenz (KI-Richtlinie)» L1 |",
+        "| Titel | «STRB Nr. 2281 vom 20. August 2025» L3 |"))
+    # trace: an owner the directive never names
+    r4 = "ist verboten.» L41 | «verboten» DARF NICHT | %s | %s | %s | %s | Absicht: Verantwortlich, Nachweis, Zeitpunkt |" % ((NICHT,) * 4)
+    f["german-invented-owner"] = ("trace", tally(sub(zh, r4, r4.replace(
+        "| %s | %s | %s | %s | Absicht: Verantwortlich, Nachweis, Zeitpunkt |" % ((NICHT,) * 4),
+        "| %s | «die Informatikdienste» L41 | %s | %s | Absicht: Nachweis, Zeitpunkt |" % ((NICHT,) * 3))),
+        owner=1))
+    # shape: the marker for an empty field misspelt
+    f["german-marker-misspelt"] = ("shape", sub(zh, "politischen Geschäften;» L81 " + art9,
+                                                "politischen Geschäften;» L81 | «dürfen» DARF NICHT | nicht in Quelle |"))
+    # shape: an English contract word in a German register
+    f["german-register-english-word"] = ("shape", sub(zh, "politischen Geschäften;» L81 " + art9,
+                                                      "politischen Geschäften;» L81 | «dürfen» DARF NICHT | not in source |"))
+    # force: a modal sentence filed as a statement
+    r7 = next(l for l in sg.split("\n") if l.startswith("| R7 | «Es muss geprüft werden"))
+    t = renumber(sub(sg, r7 + "\n", ""))
+    t = sub(t, "| «1 Verabschiedet vom", "| «Es muss geprüft werden, ob ein Text diskriminierend wirkt.» L93 "
+            "| Feststellung |\n| «1 Verabschiedet vom")
+    f["german-modal-as-statement"] = ("force", tally(t, rules=-1, intentions=-1, notrules=1))
+    # scope: the sample prompt filed as a rule of the guidelines
+    prompt = ("«Nenne mir die drei wichtigsten Punkte, die den Kanton St.Gallen als modernen und "
+              "zukunftsgerichteten Kanton beschreiben, und gib eine kurze Erklärung.» L73")
+    t = sub(sg, "| %s | ausserhalb der Richtlinie |\n" % prompt, "")
+    r3 = next(l for l in t.split("\n") if l.startswith("| R3 |"))
+    t = sub(t, r3 + "\n", r3 + "\n| R0 | %s | «Nenne» MUSS (Imperativ) | %s | %s | %s | %s | Absicht: "
+            "Verantwortlich, Nachweis, Zeitpunkt |\n" % ((prompt,) + (NICHT,) * 4))
+    f["sample-prompt-as-rule"] = ("scope", tally(renumber(t), rules=1, intentions=1, notrules=-1, outside=-1))
+
+
 def main(argv=None):
     argparse.ArgumentParser(prog="make_fixtures.py", description=__doc__,
                             formatter_class=argparse.RawDescriptionHelpFormatter).parse_args(argv)
+    made = fixtures()
     os.makedirs(OUT, exist_ok=True)
     for old in os.listdir(OUT):
         if old.endswith(".md"):
             os.remove(os.path.join(OUT, old))
-    made = fixtures()
     for name, (gate, text) in sorted(made.items()):
         with open(os.path.join(OUT, name + ".md"), "w", encoding="utf-8") as fh:
             fh.write("<!-- expect: %s -->\n# Fixture: %s\n\n%s" % (gate, name, text))

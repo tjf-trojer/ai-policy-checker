@@ -72,7 +72,8 @@ Example 2 in [`examples.md`](examples.md) quotes the Wikipedia text throughout a
 CC BY-SA 4.0, like the text it quotes. Each file in `tests/fixtures/` is a copy of one worked
 example with one defect planted by `scripts/make_fixtures.py`, and carries that example's source and
 licence; so does `evidence/noisy-run-register.md`. The three fixtures generated from
-`tests/language/` are MIT, like their inputs.
+`tests/language/` are MIT, like their inputs. Examples 4 and 5 and the fixtures generated from them
+quote the Zürich and St. Gallen texts, which are free of copyright as stated above.
 
 ## Originals, and how to check them
 

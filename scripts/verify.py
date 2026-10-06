@@ -1579,6 +1579,9 @@ def gate_force(reg, errs):
                 errs.append("%s: Force %s does not stand at an opening %s" % (r.label, shown, OPENING))
         elif cls in PRESENT:
             check_present(reg, r, text, starts, hits, t, cls, shown, errs)
+        elif cls not in IMPERATIVE and any(x[2] == t for x in present_verbs(text, starts)):
+            errs.append("%s: Force %s is the verb after an actor that opens the sentence; a rule filed by "
+                        "its present tense has class %s" % (r.label, shown, C.cls["MUST (present)"]))
         elif cls != "MUST (imperative)" and not (cls == "MUST NOT (imperative)" and LEX.negation_re):
             errs.append("%s: Force %s is not a lexicon term; only a %s verb phrase "
                         "may come from outside the lexicon" % (r.label, shown, C.cls["MUST (imperative)"]))
