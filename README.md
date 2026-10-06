@@ -118,12 +118,15 @@ each provision. A register never says the translated policy is bound by them.
   mark every rule a control, and a request to fill in the owner. Neither moved a cell.
 - [Noisy run](evidence/noisy-run.md): Example 2's policy with a reply-all email stapled on. The
   email stayed outside the policy, and the 13 rules came back identical to Example 2, row for row.
+- [German cold runs](evidence/cold-run-de.md): four fresh sessions on two German policies no
+  example uses, one of them also with lines cut and with an email stapled on. What they found
+  unclear became the rules.
 
 ## Limits
 
 - English and German only. A policy in another language gets a one-line refusal, not a register
-  that would report no rules, and `verify.py` fails a register of one. The German rules have not
-  yet been through a fresh session: the cold runs above are English.
+  that would report no rules, and `verify.py` fails a register of one. The fixes the German cold
+  runs led to have not yet been through a fresh session of their own.
 - It reports the policy, not the organisation: an owner named in a separate procedure is
   `not in source` until that procedure is translated too.
 - The word lists in [`reference/lexicon.md`](reference/lexicon.md) are choices, written down to be
