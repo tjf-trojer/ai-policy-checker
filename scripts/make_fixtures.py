@@ -6,8 +6,9 @@
 
 Every fixture keeps its derived fields (status, tally) consistent with the defect, so that it fails
 in exactly the check its first line names; `python3 scripts/verify.py` fails unless it does. The
-fixtures are generated from examples.md, evidence/noisy-run-register.md and tests/language/, never
-edited by hand: change a worked register or an input, then run this again.
+fixtures are generated from examples.md, evidence/noisy-run-register.md, the German cold-run
+registers in evidence/ and tests/language/, never edited by hand: change a worked register or an
+input, then run this again.
 """
 import argparse
 import os
@@ -231,6 +232,7 @@ def fixtures():
     f["french-policy-as-statements"] = ("language", statements("tests/language/politique-ia.txt"))
     # language: an English policy refused as if it were in another language
     german(ex["4"], ex["5"], f)
+    german_cold(f)
     f["english-policy-refused"] = ("language", sub(
         read("tests/language/politique-ia-refusal.md"), "`tests/language/politique-ia.txt`",
         "`tests/language/ai-note-with-german-quote.txt`"))
@@ -284,6 +286,34 @@ def german(zh, sg, f):
     t = sub(t, r3 + "\n", r3 + "\n| R0 | %s | «Nenne» MUSS (Imperativ) | %s | %s | %s | %s | Absicht: "
             "Verantwortlich, Nachweis, Zeitpunkt |\n" % ((prompt,) + (NICHT,) * 4))
     f["sample-prompt-as-rule"] = ("scope", tally(renumber(t), rules=1, intentions=1, notrules=-1, outside=-1))
+
+
+def german_cold(f):
+    """Defects planted in the German cold-run registers: the clause an infinitive with «zu» needs."""
+    az = register(read("evidence/cold-run-de-appenzell-register.md"))
+    da = register(read("evidence/cold-run-de-darmstadt-register.md"))
+    nis4 = " | ".join([NICHT] * 4)
+    # force: «zu beachten» whose «sind» stands before a list of nouns, filed as a statement
+    r16 = next(l for l in az.split("\n") if l.startswith("| R16 |"))
+    quote = r16.split(" | ")[1]
+    t = renumber(sub(az, r16 + "\n", ""))
+    t = sub(t, "| «2.4 Rechtliche Vorgaben» L61 | Überschrift |\n",
+            "| «2.4 Rechtliche Vorgaben» L61 | Überschrift |\n| %s | Feststellung |\n" % quote)
+    f["zu-across-noun-list-as-statement"] = ("force", tally(t, rules=-1, intentions=-1, notrules=1))
+    # force: «zu nutzen» whose «sind» stands before «z. B.», filed as a statement
+    r21 = next(l for l in da.split("\n") if l.startswith("| R21 |"))
+    quote = r21.split(" | ")[1]
+    t = renumber(sub(da, r21 + "\n", ""))
+    t = sub(t, "| «Sofern weitere Daten", "| %s | Feststellung |\n| «Sofern weitere Daten" % quote)
+    f["zu-across-abbreviation-as-statement"] = ("force", tally(t, rules=-1, intentions=-1, notrules=1))
+    # force: an infinitive with «zu» after «ist es,», in a clause with no carrier, filed as a rule
+    goal = ("«Ziel der Meldung ist es, mögliche Auswirkungen soweit möglich zu begrenzen und aus dem "
+            "Vorfall zu lernen.» L83")
+    t = sub(az, "| %s | Feststellung |\n" % goal, "")
+    r23 = next(l for l in t.split("\n") if l.startswith("| R23 |"))
+    t = sub(t, r23 + "\n", r23 + "\n| R24 | %s | «zu begrenzen» MUSS | %s | Absicht: Verantwortlich, "
+            "Nachweis, Zeitpunkt |\n" % (goal, nis4))
+    f["zu-in-clause-without-carrier-as-rule"] = ("force", tally(t, rules=1, intentions=1, notrules=-1))
 
 
 def main(argv=None):
