@@ -314,7 +314,7 @@ def main(argv):
             if not url:
                 continue
             try:
-                req = urllib.request.Request(url, headers={"User-Agent": "intention-or-control sources.py"})
+                req = urllib.request.Request(url, headers={"User-Agent": "ai-policy-checker sources.py"})
                 data = urllib.request.urlopen(req, timeout=60).read()
                 got = hashlib.sha256(data).hexdigest()
                 print("  %s  %s" % ("same" if got == want else "DIFF", url))

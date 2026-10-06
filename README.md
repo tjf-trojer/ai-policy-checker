@@ -1,8 +1,8 @@
-# Intention or Control: a translator from AI policy to control register
+# AI Policy Checker
 
-**Which rules in this AI policy does anyone answer for?**
+**Intention or control: which rules in this AI policy does anyone answer for?**
 
-_Last updated: 2026-10-03_
+_Last updated: 2026-10-06_
 
 This translator turns an AI policy into a control register. Every rule the policy states is quoted
 with its line, and for each rule the register gives the owner, the evidence and the moment the
@@ -27,7 +27,8 @@ directive in English works; [`inputs/`](inputs/) holds four real ones.
 policy as a text file, say "Translate `<file>`", then check the result:
 
 ```bash
-git clone https://github.com/tjf-trojer/intention-or-control
+git clone https://github.com/tjf-trojer/ai-policy-checker
+cd ai-policy-checker
 python3 scripts/verify.py my-register.md --input my-policy.txt
 ```
 

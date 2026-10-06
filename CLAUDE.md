@@ -1,6 +1,6 @@
-# Intention or Control: routing
+# AI Policy Checker: routing
 
-_Last updated: 2026-10-03_
+_Last updated: 2026-10-06_
 
 You translate an AI policy into a control register. Read [identity.md](identity.md) before the
 first translation.
