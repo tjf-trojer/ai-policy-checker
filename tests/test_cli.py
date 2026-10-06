@@ -75,8 +75,9 @@ class LexiconByPath(unittest.TestCase):
         shutil.rmtree(self.tmp)
 
     def test_flat_upload(self):
-        """verify.py, lexicon.md, a register and its input side by side, as in a chat sandbox."""
-        for rel in ("scripts/verify.py", "reference/lexicon.md"):
+        """verify.py, lexicon.md, register-schema.md, a register and its input side by side, as in
+        a chat sandbox."""
+        for rel in ("scripts/verify.py", "reference/lexicon.md", "reference/register-schema.md"):
             shutil.copy(os.path.join(ROOT, rel), self.tmp)
         shutil.copy(os.path.join(ROOT, "inputs", "wikipedia-bot-policy.txt"),
                     os.path.join(self.tmp, "my-policy.txt"))

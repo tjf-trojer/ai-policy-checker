@@ -29,18 +29,23 @@ text. Nine gates run on each register:
             Policy text unless its entry is filed outside the policy, and
             an outside block mid-input opens with a seam marker
 
-An input in another language gets no register but the one-line refusal of
-rules/posture.md. A file holding that line is checked by two gates: shape (the
-line has its fixed form and stands alone) and language (the input is not in
-the lexicon's language, and the line names that language).
+An input in a language no lexicon covers gets no register but the one-line
+refusal of rules/posture.md. A file holding that line is checked by two gates:
+shape (the line has its fixed form and stands alone) and language (the input is
+in no lexicon's language, and the line names every language a lexicon covers).
 
-The word lists are read from the lexicon on every run: the file --lexicon names,
-or reference/lexicon.md in the repository, or, where the repository's layout is
-absent (files uploaded side by side), lexicon.md beside the register, in the
-working directory or beside this script. Everything that depends on the input's
-language comes from the lexicon; the register's own fixed words (section and
-column names, "not in source", filings, statuses, flags) are the schema's and
-the same for every lexicon.
+The word lists are read from the lexicons on every run: the file --lexicon
+names, or reference/lexicon.md in the repository and every lexicon-*.md beside
+it, or, where the repository's layout is absent (files uploaded side by side),
+the same files beside the register, in the working directory or beside this
+script. Everything that depends on the input's language comes from a lexicon.
+The register's own fixed words (section and column names, "not in source",
+filings, statuses, flags, force classes, the refusal) come from the table
+Contract words in reference/register-schema.md, found the same way, in the
+column a lexicon's Language names. Each register is checked in one language:
+the one whose section names its "## " headings use, English on a tie; a
+refusal, in the language it opens with. The language gate then holds the input
+to that language.
 
 What it cannot check: it proves the quotations and every field derived from
 them, not that a sentence was read correctly. It cannot tell whether a quoted
@@ -56,7 +61,8 @@ Usage:
   python3 scripts/verify.py PATH.md [--input F]   one file; each "# Example " block
                                                   in it if it has any
   python3 scripts/verify.py --selftest            fixtures in tests/fixtures/ only
-  --lexicon PATH                                  the word lists to apply
+  --lexicon PATH                                  the one lexicon to apply, instead
+                                                  of choosing by the register's language
 
 A Source Input path is looked up from the working directory first, then from the
 repository root; --input, when given, must name the same file.
@@ -73,6 +79,7 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LEXICON = os.path.join(ROOT, "reference", "lexicon.md")
+SCHEMA = os.path.join(ROOT, "reference", "register-schema.md")
 EXAMPLES = os.path.join(ROOT, "examples.md")
 FIXTURES = os.path.join(ROOT, "tests", "fixtures")
 
@@ -95,9 +102,10 @@ SOURCE_ROWS = ["Title", "Issued by", "Date or version", "Policy text", "Input"]
 TALLY_ROWS = ["Rules", "Controls", "Intentions", "Owner named, not collective",
               "Evidence named", "When named, not unspecified", "Not rules",
               "Outside the policy"]
-REGISTER_CLASSES = ["MUST NOT (imperative)", "MUST (imperative)", "MUST NOT", "MUST",
-                    "WILL NOT", "WILL"]
-TIER = {"MUST NOT (imperative)": 3, "MUST (imperative)": 3, "MUST NOT": 3, "MUST": 3,
+REGISTER_CLASSES = ["MUST NOT (imperative)", "MUST (imperative)", "MUST NOT (present)",
+                    "MUST (present)", "MUST NOT", "MUST", "WILL NOT", "WILL"]
+TIER = {"MUST NOT (imperative)": 3, "MUST (imperative)": 3, "MUST NOT (present)": 3,
+        "MUST (present)": 3, "MUST NOT": 3, "MUST": 3,
         "WILL NOT": 2, "WILL": 2, "SHOULD NOT": 1, "SHOULD": 1, "MAY": 0}
 FILINGS = {"recommendation": ("SHOULD", "SHOULD NOT"), "optional": ("MAY",)}
 ATTRS = ["owner", "evidence", "when"]
@@ -106,15 +114,15 @@ QUOTE_MAP = {"\u2018": "'", "\u2019": "'", "\u201a": "'", "\u201b": "'",
              "\u201c": '"', "\u201d": '"', "\u201e": '"'}
 
 QRE = re.compile(LQ + r"(.+?)" + RQ + r" L(\d+)(?:-L(\d+))?")
-FORCE_RE = re.compile(LQ + r"(.+?)" + RQ + r" (" +
-                      "|".join(re.escape(c) for c in REGISTER_CLASSES) + r")")
-REFUSAL = "No register:"
-LANGUAGE_NAME = r"[A-Z][\w-]*(?: [A-Z][\w-]*)*"
-REFUSAL_RE = re.compile(r"^No register: the input(?: `([^`\s][^`]*)`)? is not in (%s(?:(?:, | or )%s)*)\.$"
-                        % (LANGUAGE_NAME, LANGUAGE_NAME))
+LANGUAGE_NAME = r"[A-Z\u00c0-\u00de][\w-]*(?: [A-Z\u00c0-\u00de][\w-]*)*"
+REFUSAL_FORM = "No register: the input `<path>` is not in <languages>."
 WORD = re.compile(r"[^\W\d_]+")
-FILED_RE = re.compile(r"(recommendation|optional) " + LQ + r"(.+?)" + RQ)
 OUTSIDE = "outside the policy"
+CONTRACT_WORDS = (SECTIONS + [h for s in SECTIONS for h in HEADERS[s]] + SOURCE_ROWS + TALLY_ROWS +
+                  ["none", "pasted", NIS, NO_REFS, "control", "intention"] + ATTRS +
+                  ["(collective)", "(unspecified)", "MUST NOT", "MUST", "WILL NOT", "WILL",
+                   "SHOULD NOT", "SHOULD", "MAY", "(imperative)", "(present)", "recommendation",
+                   "optional", "statement", "heading", OUTSIDE, REFUSAL_FORM, "or"])
 SPAN_RE = re.compile(r"L(\d+)(?:-L(\d+))?")
 SEPARATOR = re.compile(r"^\|(\s*:?-+:?\s*\|)+\s*$")
 RULE_LINE = re.compile(r"^(-{3,}|\*{3,}|_{3,})$")
@@ -125,6 +133,8 @@ CLAUSE_START = re.compile(r"[,;:][\"')\]]*\s+")
 DIGITS = re.compile(r"(?<![^\W_])[0-9]+(?![^\W_])")
 
 LEX = None
+C = None
+LEXICONS = []   # (lexicon, its contract words), English first
 
 
 # ---------------------------------------------------------------- text
@@ -300,12 +310,100 @@ def load_lexicon(path):
 def find_lexicon(register=None):
     """reference/lexicon.md in the repository; without that layout, lexicon.md beside the
     register, in the working directory, or beside this script."""
+    return find_beside(LEXICON, "lexicon.md", register)
+
+
+def find_lexicons(register=None):
+    """lexicon.md and every lexicon-*.md beside it, lexicon.md first."""
+    first = find_lexicon(register)
+    others = sorted(glob.glob(os.path.join(os.path.dirname(first), "lexicon-*.md")))
+    return [first] + others
+
+
+def find_beside(path, name, register=None):
+    """path in the repository; without that layout, name beside the register, in the working
+    directory, or beside this script."""
     here = os.path.dirname(os.path.abspath(__file__))
-    cands = [LEXICON]
+    cands = [path]
     if register:
-        cands.append(os.path.join(os.path.dirname(os.path.abspath(register)), "lexicon.md"))
-    cands += [os.path.join(os.getcwd(), "lexicon.md"), os.path.join(here, "lexicon.md")]
-    return next((p for p in cands if os.path.isfile(p)), LEXICON)
+        cands.append(os.path.join(os.path.dirname(os.path.abspath(register)), name))
+    cands += [os.path.join(os.getcwd(), name), os.path.join(here, name)]
+    return next((p for p in cands if os.path.isfile(p)), path)
+
+
+def load_contract(path):
+    """The table Contract words of the schema: {language: {English word: the language's word}}."""
+    try:
+        with open(path, encoding="utf-8") as fh:
+            secs = md_sections(fh.read())
+    except OSError as e:
+        raise LexiconError("cannot read %s: %s" % (path, e))
+    if "Contract words" not in secs:
+        raise LexiconError("no '## Contract words' section")
+    header, body = md_table(secs["Contract words"], "Contract words", "English")
+    out = dict((lang, {}) for lang in header)
+    for row in body:
+        if len(row) != len(header):
+            raise LexiconError("a row under '## Contract words' has %d cells, not %d"
+                               % (len(row), len(header)))
+        for lang, word in zip(header, row):
+            out[lang][row[0]] = word
+    missing = [w for w in CONTRACT_WORDS if w not in out["English"]]
+    if missing:
+        raise LexiconError("the table under '## Contract words' lacks %s" % ", ".join(missing))
+    return out
+
+
+class Contract(object):
+    """The register's fixed words in one language, and the patterns built from them."""
+
+    def __init__(self, language, words):
+        w = lambda k: words[k]
+        self.language = language
+        self.w = w
+        self.sections = dict((s, w(s)) for s in SECTIONS)
+        self.section_key = dict((w(s), s) for s in SECTIONS)
+        self.headers = dict((s, [w(h) for h in HEADERS[s]]) for s in SECTIONS)
+        self.source_rows = [w(r) for r in SOURCE_ROWS]
+        self.source_key = dict(zip(self.source_rows, SOURCE_ROWS))
+        self.tally_rows = [w(r) for r in TALLY_ROWS]
+        self.tally_key = dict(zip(self.tally_rows, TALLY_ROWS))
+        self.nis = w(NIS)
+        self.no_refs = w(NO_REFS)
+        self.none, self.pasted = w("none"), w("pasted")
+        self.control, self.intention = w("control"), w("intention")
+        self.attrs = [w(a) for a in ATTRS]
+        self.collective, self.unspecified = w("(collective)"), w("(unspecified)")
+        self.cls = {}
+        for c in TIER:
+            base, _, flag = c.partition(" (")
+            self.cls[c] = w(base) + (" " + w("(" + flag) if flag else "")
+        self.cls_key = dict((v, k) for k, v in self.cls.items())
+        self.force_re = re.compile(LQ + r"(.+?)" + RQ + r" (" +
+                                   "|".join(re.escape(self.cls[c]) for c in REGISTER_CLASSES) + r")")
+        self.filings = dict((f, w(f)) for f in ("recommendation", "optional", "statement",
+                                                "heading", OUTSIDE))
+        self.filed_re = re.compile(r"(%s|%s) " % (re.escape(w("recommendation")), re.escape(w("optional")))
+                                   + LQ + r"(.+?)" + RQ)
+        self.filing_key = dict((v, k) for k, v in self.filings.items())
+        form = w(REFUSAL_FORM)
+        head, rest = form.split(" `<path>`")
+        mid, end = rest.split("<languages>")
+        self.refusal = head.split(":")[0] + ":"
+        self.refusal_form = form
+        self.joiner = " %s " % w("or")
+        self.refusal_re = re.compile("^" + re.escape(head) + r"(?: `([^`\s][^`]*)`)?" + re.escape(mid) +
+                                     r"(%s(?:(?:, |%s)%s)*)" % (LANGUAGE_NAME, re.escape(self.joiner),
+                                                                LANGUAGE_NAME) + re.escape(end) + "$")
+        self.names = words
+
+    def show_status(self, t):
+        return self.control if not t else self.intention + ": " + ", ".join(self.w(a) for a in t)
+
+    def show_filed(self, f):
+        if f is None:
+            return "?"
+        return self.filings[f[0]] if f[1] is None else "%s %s%s%s" % (self.filings[f[0]], LQ, f[1], RQ)
 
 
 def ends_in_crowd(phrase):
@@ -409,15 +507,15 @@ class Cell(object):
 
 def parse_cell(text, allow_nis, suffix, where, errs):
     c = Cell(text)
-    if text == NIS:
+    if text == C.nis:
         if allow_nis:
             c.ok = c.nis = True
         else:
-            errs.append("%s: needs quotation(s), not 'not in source'" % where)
+            errs.append("%s: needs quotation(s), not '%s'" % (where, C.nis))
         return c
-    if text == "" or text.lower().rstrip(" .") == NIS or text.lower().startswith(NIS):
-        errs.append("%s: an empty field is written exactly 'not in source', found '%s'"
-                    % (where, clip(text, 40)))
+    if text == "" or text.lower().rstrip(" .") == C.nis.lower() or text.lower().startswith(C.nis.lower()):
+        errs.append("%s: an empty field is written exactly '%s', found '%s'"
+                    % (where, C.nis, clip(text, 40)))
         return c
     body = text
     if suffix and text.endswith(" " + suffix):
@@ -517,16 +615,17 @@ def read_section(name, content, errs):
         cur = None
         if not s or RULE_LINE.match(s):
             continue
-        if name == "Referred elsewhere" and s == NO_REFS:
+        if name == "Referred elsewhere" and s == C.no_refs:
             literal.append(ln)
             continue
-        errs.append("%s, line %d: text outside the table: '%s'" % (name, ln, clip(s, 50)))
+        errs.append("%s, line %d: text outside the table: '%s'" % (C.w(name), ln, clip(s, 50)))
     if not blocks:
         return None, literal
     if len(blocks) > 1:
-        errs.append("%s, line %d: a second table; a section holds one" % (name, blocks[1][0][0]))
+        errs.append("%s, line %d: a second table; a section holds one" % (C.w(name), blocks[1][0][0]))
     block = blocks[0]
-    want = HEADERS[name]
+    want = C.headers[name]
+    name = C.w(name)
     table = Table(name)
     hln, htext = block[0]
     hcells, _ = split_row(htext)
@@ -561,14 +660,14 @@ class Register(object):
 
 
 def parse_status(s):
-    if s == "control":
+    if s == C.control:
         return ()
-    if s.startswith("intention: "):
-        parts = s[len("intention: "):].split(", ")
-        if all(p in ATTRS for p in parts):
-            idx = [ATTRS.index(p) for p in parts]
+    if s.startswith(C.intention + ": "):
+        parts = s[len(C.intention) + 2:].split(", ")
+        if all(p in C.attrs for p in parts):
+            idx = [C.attrs.index(p) for p in parts]
             if idx == sorted(set(idx)):
-                return tuple(parts)
+                return tuple(ATTRS[i] for i in idx)
     return None
 
 
@@ -584,7 +683,7 @@ def status_of(owner, owner_coll, evidence, when, when_unspec):
 
 
 def show_status(t):
-    return "control" if not t else "intention: " + ", ".join(t)
+    return C.show_status(t)
 
 
 def parse_register(lines, errs):
@@ -600,16 +699,17 @@ def parse_register(lines, errs):
     cur = None
     for ln, text in lines:
         if text.startswith("## "):
-            name = text[3:].strip()
-            if name in SECTIONS and name not in sections:
+            written = text[3:].strip()
+            name = C.section_key.get(written)
+            if name and name not in sections:
                 sections[name] = []
                 order.append(name)
                 cur = sections[name]
-            elif name in SECTIONS:
-                errs.append("%s, line %d: section appears twice" % (name, ln))
+            elif name:
+                errs.append("%s, line %d: section appears twice" % (written, ln))
                 cur = []
             else:
-                errs.append("line %d: unexpected section '## %s'" % (ln, clip(name, 40)))
+                errs.append("line %d: unexpected section '## %s'" % (ln, clip(written, 40)))
                 cur = []
             continue
         if cur is None:
@@ -617,11 +717,11 @@ def parse_register(lines, errs):
         cur.append((ln, text))
     for name in SECTIONS:
         if name not in sections:
-            errs.append("%s: section '## %s' is missing" % (name, name))
+            errs.append("%s: section '## %s' is missing" % (C.w(name), C.w(name)))
     present = [n for n in SECTIONS if n in sections]
     if order != present:
         errs.append("sections out of order: found %s; the order is %s"
-                    % (", ".join(order), ", ".join(SECTIONS)))
+                    % (", ".join(C.w(n) for n in order), ", ".join(C.w(n) for n in SECTIONS)))
 
     tables = {}
     for name in SECTIONS:
@@ -631,16 +731,17 @@ def parse_register(lines, errs):
         table, literal = read_section(name, sections[name], errs)
         tables[name] = table
         if name == "Referred elsewhere":
+            ref = C.w(name)
             if table is not None and literal:
-                errs.append("Referred elsewhere, line %d: holds a table and '%s'; one or the other"
-                            % (literal[0], NO_REFS))
+                errs.append("%s, line %d: holds a table and '%s'; one or the other"
+                            % (ref, literal[0], C.no_refs))
             elif table is None and len(literal) != 1:
-                errs.append("Referred elsewhere: needs a '| Reference |' table or the single line '%s'"
-                            % NO_REFS)
+                errs.append("%s: needs a '| %s |' table or the single line '%s'"
+                            % (ref, C.w("Reference"), C.no_refs))
             elif table is not None and not table.rows:
-                errs.append("Referred elsewhere: the table has no rows; write '%s' instead" % NO_REFS)
+                errs.append("%s: the table has no rows; write '%s' instead" % (ref, C.no_refs))
         elif table is None:
-            errs.append("%s: no table" % name)
+            errs.append("%s: no table" % C.w(name))
     for name in ("Register", "Not rules"):
         t = tables[name]
         if t is None or any(cells is None for _, cells, _ in t.rows):
@@ -651,7 +752,7 @@ def parse_register(lines, errs):
         t = tables[name]
         if t is None:
             continue
-        cols = HEADERS[name]
+        cols = C.headers[name]
         for k, (ln, cells, raw) in enumerate(t.rows):
             for j, cell in enumerate(raw):
                 col = cols[j] if cells is not None else "cell %d" % (j + 1)
@@ -666,15 +767,16 @@ def parse_register(lines, errs):
     t = tables["Source"]
     if t is not None:
         names = [cells[0] for _, cells, _ in t.rows if cells is not None]
-        if names != SOURCE_ROWS:
-            errs.append("Source: rows must be %s, in that order; found %s"
-                        % (", ".join(SOURCE_ROWS), ", ".join(names) or "none"))
+        if names != C.source_rows:
+            errs.append("%s: rows must be %s, in that order; found %s"
+                        % (C.w("Source"), ", ".join(C.source_rows), ", ".join(names) or "none"))
         for ln, cells, _ in t.rows:
             if cells is None:
                 continue
-            field, entry = cells
-            where = "Source %s, line %d" % (field, ln)
-            if field == "Policy text" and entry == "none":
+            written, entry = cells
+            field = C.source_key.get(written, written)
+            where = "%s %s, line %d" % (C.w("Source"), written, ln)
+            if field == "Policy text" and entry == C.none:
                 reg.policy_spans = []
             elif field == "Policy text":
                 spans, bad = [], False
@@ -688,22 +790,22 @@ def parse_register(lines, errs):
                 if bad or not spans or any(a > b for a, b in spans) or any(
                         spans[i][1] >= spans[i + 1][0] for i in range(len(spans) - 1)):
                     errs.append("%s: must be one or more line spans in order, like 'L1-L57' or "
-                                "'L1-L40 + L52-L60', or 'none'; found '%s'" % (where, clip(entry, 40)))
+                                "'L1-L40 + L52-L60', or '%s'; found '%s'" % (where, C.none, clip(entry, 40)))
                 else:
                     reg.policy_spans = spans
             elif field == "Input":
                 m = re.match(r"^`([^`\s][^`]*)`$", entry)
-                if entry in ("pasted", "`pasted`"):
+                if entry in (C.pasted, "`%s`" % C.pasted):
                     reg.input_spec = ("pasted", None)
                 elif m and not os.path.isabs(m.group(1)) and not m.group(1).startswith("~"):
                     reg.input_spec = ("path", m.group(1))
                 else:
-                    errs.append("%s: must be a backticked relative path or 'pasted', found '%s'"
-                                % (where, clip(entry, 40)))
+                    errs.append("%s: must be a backticked relative path or '%s', found '%s'"
+                                % (where, C.pasted, clip(entry, 40)))
             else:
                 parse_cell(entry, True, None, where, errs)
-        if not any(cells is not None and cells[0] == "Input" for _, cells, _ in t.rows):
-            errs.append("Source: the Input row is missing")
+        if not any(cells is not None and cells[0] == C.w("Input") for _, cells, _ in t.rows):
+            errs.append("%s: the %s row is missing" % (C.w("Source"), C.w("Input")))
 
     # Register
     reg.rrows = []
@@ -721,7 +823,7 @@ def parse_register(lines, errs):
             rid, rule, force, addr, owner, ev, when, status = cells
             if rid != "R%d" % (k + 1):
                 errs.append("%s: ID must be R%d, found '%s'" % (r.label, k + 1, clip(rid, 12)))
-            r.rule = parse_cell(rule, False, None, r.label + " Rule", errs)
+            r.rule = parse_cell(rule, False, None, r.label + " " + C.w("Rule"), errs)
             if not r.rule.ok:
                 reg.cov_ok = False
             else:
@@ -732,21 +834,24 @@ def parse_register(lines, errs):
                 prev = (rid, last)
                 for q in r.rule.quotes:
                     reg.cov_quotes.append(("register", rid, q))
-            m = FORCE_RE.fullmatch(force)
+            m = C.force_re.fullmatch(force)
             if m and m.group(1).strip():
-                r.force = (m.group(1), m.group(2))
+                r.force = (m.group(1), C.cls_key[m.group(2)])
             else:
                 r.force = None
-                errs.append("%s Force: must be %sterm%s CLASS, CLASS one of %s; found '%s'"
-                            % (r.label, LQ, RQ, ", ".join(REGISTER_CLASSES), clip(force, 40)))
-            r.addr = parse_cell(addr, True, None, r.label + " Addressee", errs)
-            r.owner = parse_cell(owner, True, "(collective)", r.label + " Owner", errs)
-            r.evidence = parse_cell(ev, True, None, r.label + " Evidence", errs)
-            r.when = parse_cell(when, True, "(unspecified)", r.label + " When", errs)
+                errs.append("%s %s: must be %sterm%s CLASS, CLASS one of %s; found '%s'"
+                            % (r.label, C.w("Force"), LQ, RQ,
+                               ", ".join(C.cls[c] for c in REGISTER_CLASSES), clip(force, 40)))
+            col = lambda n: " " + C.w(n)
+            r.addr = parse_cell(addr, True, None, r.label + col("Addressee"), errs)
+            r.owner = parse_cell(owner, True, C.collective, r.label + col("Owner"), errs)
+            r.evidence = parse_cell(ev, True, None, r.label + col("Evidence"), errs)
+            r.when = parse_cell(when, True, C.unspecified, r.label + col("When"), errs)
             r.status = parse_status(status)
             if r.status is None:
-                errs.append("%s Status: must be 'control' or 'intention: ' with owner, evidence, when "
-                            "in that order; found '%s'" % (r.label, clip(status, 40)))
+                errs.append("%s %s: must be '%s' or '%s: ' with %s in that order; found '%s'"
+                            % (r.label, C.w("Status"), C.control, C.intention, ", ".join(C.attrs),
+                               clip(status, 40)))
 
     # Not rules
     reg.nrows = []
@@ -760,22 +865,24 @@ def parse_register(lines, errs):
             if not r.ok:
                 continue
             text, filed = cells
-            r.text = parse_cell(text, False, None, r.label + " Text", errs)
+            r.text = parse_cell(text, False, None, r.label + " " + C.w("Text"), errs)
             if not r.text.ok:
                 reg.cov_ok = False
             else:
                 for q in r.text.quotes:
-                    reg.cov_quotes.append(("notrules", "Not rules row %d" % (k + 1), q))
-            m = FILED_RE.fullmatch(filed)
-            if filed in ("statement", "heading", OUTSIDE):
-                r.filed = (filed, None)
+                    reg.cov_quotes.append(("notrules", "%s row %d" % (C.w("Not rules"), k + 1), q))
+            m = C.filed_re.fullmatch(filed)
+            f = C.filings
+            if C.filing_key.get(filed) in ("statement", "heading", OUTSIDE):
+                r.filed = (C.filing_key[filed], None)
             elif m and m.group(2).strip():
-                r.filed = (m.group(1), m.group(2))
+                r.filed = (C.filing_key[m.group(1)], m.group(2))
             else:
                 r.filed = None
-                errs.append("%s Filed as: must be 'recommendation %st%s', 'optional %st%s', "
-                            "'statement', 'heading' or '%s'; found '%s'"
-                            % (r.label, LQ, RQ, LQ, RQ, OUTSIDE, clip(filed, 40)))
+                errs.append("%s %s: must be '%s %st%s', '%s %st%s', "
+                            "'%s', '%s' or '%s'; found '%s'"
+                            % (r.label, C.w("Filed as"), f["recommendation"], LQ, RQ, f["optional"], LQ,
+                               RQ, f["statement"], f["heading"], f[OUTSIDE], clip(filed, 40)))
 
     # Referred elsewhere
     t = tables["Referred elsewhere"]
@@ -793,17 +900,18 @@ def parse_register(lines, errs):
     t = tables["Tally"]
     if t is not None:
         names = [cells[0] for _, cells, _ in t.rows if cells is not None]
-        if names != TALLY_ROWS:
-            errs.append("Tally: rows must be %s, in that order; found %s"
-                        % ("; ".join(TALLY_ROWS), "; ".join(names) or "none"))
+        if names != C.tally_rows:
+            errs.append("%s: rows must be %s, in that order; found %s"
+                        % (C.w("Tally"), "; ".join(C.tally_rows), "; ".join(names) or "none"))
         for ln, cells, _ in t.rows:
             if cells is None:
                 continue
+            key = C.tally_key.get(cells[0])
             if not re.match(r"^\d+$", cells[1]):
-                errs.append("Tally %s, line %d: value must be a whole number, found '%s'"
-                            % (cells[0], ln, clip(cells[1], 20)))
-            elif cells[0] in TALLY_ROWS and cells[0] not in reg.tally:
-                reg.tally[cells[0]] = (ln, int(cells[1]))
+                errs.append("%s %s, line %d: value must be a whole number, found '%s'"
+                            % (C.w("Tally"), cells[0], ln, clip(cells[1], 20)))
+            elif key and key not in reg.tally:
+                reg.tally[key] = (ln, int(cells[1]))
     reg.n_rules = len(t_rows(tables["Register"]))
     reg.n_not = len(t_rows(tables["Not rules"]))
     reg.has_register = tables["Register"] is not None
@@ -819,9 +927,14 @@ def row_label(section, k, raw):
     if section == "Register":
         rid = raw[0] if raw else ""
         return rid if re.match(r"^R\d+$", rid) else "Register row %d" % (k + 1)
-    if section == "Source" and raw and raw[0] in SOURCE_ROWS:
-        return "Source " + raw[0]
-    return "%s row %d" % (section, k + 1)
+    if section == "Source" and raw and raw[0] in C.source_rows:
+        return C.w("Source") + " " + raw[0]
+    return "%s row %d" % (C.w(section), k + 1)
+
+
+def src(field):
+    """A Source row's label in the register's language: «Source Input»."""
+    return C.w("Source") + " " + C.w(field)
 
 
 # ---------------------------------------------------------------- input
@@ -907,8 +1020,9 @@ class Result(object):
 
 
 def check_register(lines, input_override=None):
-    if any(text.startswith(REFUSAL) for _, text in lines):
+    if any(refusal_language(text) for _, text in lines):
         return check_refusal(lines, input_override)
+    select_language(lines)
     res = Result()
     err = res.errors
     reg = parse_register(lines, err["shape"])
@@ -925,8 +1039,8 @@ def check_register(lines, input_override=None):
         if reg.input_spec and reg.input_spec[0] == "path":
             want = os.path.realpath(input_override)
             if not any(os.path.realpath(p) == want for p in input_candidates(reg.input_spec[1])):
-                err["shape"].append("Source Input: names %s, but --input is %s"
-                                    % (reg.input_spec[1], res.input_shown))
+                err["shape"].append("%s: names %s, but --input is %s"
+                                    % (src("Input"), reg.input_spec[1], res.input_shown))
     elif reg.input_spec and reg.input_spec[0] == "path":
         input_path = resolve_input(reg.input_spec[1])
     lines_in = None
@@ -934,10 +1048,10 @@ def check_register(lines, input_override=None):
         try:
             lines_in = load_input(input_path)
         except (OSError, UnicodeDecodeError) as e:
-            err["trace"].append("Source Input: cannot read %s (%s)"
-                                % (res.input_shown, e.__class__.__name__))
+            err["trace"].append("%s: cannot read %s (%s)"
+                                % (src("Input"), res.input_shown, e.__class__.__name__))
     elif reg.input_spec and reg.input_spec[0] == "pasted":
-        err["trace"].append("Source Input: the input is 'pasted'; give its text with --input")
+        err["trace"].append("%s: the input is '%s'; give its text with --input" % (src("Input"), C.pasted))
     else:
         res.skip["trace"] = "no Input row to check against"
 
@@ -964,15 +1078,22 @@ def check_register(lines, input_override=None):
     return res
 
 
-def language_share(lines):
-    """(marker words, words) in the input."""
+def language_share(lines, lex=None):
+    """(marker words, words) in the input, by the markers of lex (default: the register's lexicon)."""
+    lex = lex or LEX
     words = WORD.findall(norm(" ".join(lines)).lower())
-    return sum(1 for w in words if w in LEX.markers), len(words)
+    return sum(1 for w in words if w in lex.markers), len(words)
 
 
-def show_share(markers, words):
+def show_share(markers, words, lex=None):
+    lex = lex or LEX
     return "%d of its %d words (%d%%) are %s marker words from the lexicon" % (
-        markers, words, round(100.0 * markers / words), LEX.language)
+        markers, words, round(100.0 * markers / words), lex.language)
+
+
+def in_language(lines, lex):
+    markers, words = language_share(lines, lex)
+    return words >= lex.fewest_words and markers >= lex.marker_share * words
 
 
 def gate_language(lines, errs):
@@ -980,10 +1101,34 @@ def gate_language(lines, errs):
     markers, words = language_share(lines)
     if words < LEX.fewest_words or markers >= LEX.marker_share * words:
         return
+    other = [lex for lex, _ in LEXICONS if lex is not LEX and in_language(lines, lex)]
+    if other:
+        errs.append("the input is not in %s: %s, below the %g%% the lexicon sets. It is in %s: "
+                    "its register is written with the %s contract words of reference/register-schema.md"
+                    % (LEX.language, show_share(markers, words), 100 * LEX.marker_share,
+                       other[0].language, other[0].language))
+        return
     errs.append("the input is not in %s: %s, below the %g%% the lexicon sets. A register of it "
                 "files every sentence as a statement and finds no rules, which says nothing "
                 "about the policy; it gets no register, only the refusal in rules/posture.md"
                 % (LEX.language, show_share(markers, words), 100 * LEX.marker_share))
+
+
+def select_language(lines):
+    """Set LEX and C to the language whose section names the register's '## ' headings use most;
+    on a tie, the first lexicon (English)."""
+    global LEX, C
+    best, count = LEXICONS[0], -1
+    for lex, contract in LEXICONS:
+        n = sum(1 for _, t in lines if t.startswith("## ") and t[3:].strip() in contract.section_key)
+        if n > count:
+            best, count = (lex, contract), n
+    LEX, C = best
+
+
+def refusal_language(text):
+    """The (lexicon, contract) whose refusal opens text, or None."""
+    return next(((lex, c) for lex, c in LEXICONS if text.startswith(c.refusal)), None)
 
 
 def check_refusal(lines, input_override):
@@ -991,30 +1136,35 @@ def check_refusal(lines, input_override):
     res = Result(["shape", "language"])
     err = res.errors
     found = None
+    global LEX, C
     for ln, text in lines:
         s = text.strip()
         if not s or (s.startswith("<!--") and s.endswith("-->")) or (
-                text.startswith("# ") and not s.startswith("# " + REFUSAL)):
+                text.startswith("# ") and not refusal_language(s[2:])):
             continue
-        if found is None and text.startswith(REFUSAL):
+        if found is None and refusal_language(text):
             found = (ln, text.rstrip())
+            LEX, C = refusal_language(text)
             continue
         err["shape"].append("line %d: a refusal is one line and nothing else; found '%s'"
                             % (ln, clip(s, 50)))
     if found is None:
         return res
     ln, text = found
-    m = REFUSAL_RE.match(text)
+    covered = [C.w(lex.language) for lex, _ in LEXICONS]
+    m = C.refusal_re.match(text)
     if not m:
-        err["shape"].append("line %d: the refusal must read 'No register: the input `<path>` is not "
-                            "in %s.' (no path for pasted text); found '%s'"
-                            % (ln, LEX.language, clip(text, 60)))
+        err["shape"].append("line %d: the refusal must read '%s' (no path for pasted text); found '%s'"
+                            % (ln, C.refusal_form.replace("<languages>", show_languages(covered)),
+                               clip(text, 60)))
         res.skip["language"] = "the refusal's form is broken"
         return res
-    named, langs = m.group(1), re.split(r", | or ", m.group(2))
-    if LEX.language not in langs:
-        err["language"].append("line %d: the refusal names %s, not %s, the language of the lexicon"
-                               % (ln, " or ".join(langs), LEX.language))
+    named, langs = m.group(1), re.split(", |" + re.escape(C.joiner), m.group(2))
+    missing = [l for l in covered if l not in langs]
+    if missing:
+        err["language"].append("line %d: the refusal names %s, not %s, the language%s of the lexicon%s"
+                               % (ln, C.joiner.join(langs), show_languages(covered),
+                                  "s" if len(covered) > 1 else "", "s" if len(covered) > 1 else ""))
     res.input_shown = named or "pasted"
     if input_override:
         res.input_shown = shown_path(input_override)
@@ -1032,12 +1182,18 @@ def check_refusal(lines, input_override):
     except (OSError, UnicodeDecodeError) as e:
         err["language"].append("cannot read the input %s (%s)" % (res.input_shown, e.__class__.__name__))
         return res
-    markers, words = language_share(lines_in)
-    if words >= LEX.fewest_words and markers >= LEX.marker_share * words:
-        err["language"].append("the input is in %s: %s, at least the %g%% the lexicon sets. It "
-                               "gets a register, not a refusal"
-                               % (LEX.language, show_share(markers, words), 100 * LEX.marker_share))
+    for lex, _ in LEXICONS:
+        markers, words = language_share(lines_in, lex)
+        if words >= lex.fewest_words and markers >= lex.marker_share * words:
+            err["language"].append("the input is in %s: %s, at least the %g%% the lexicon sets. It "
+                                   "gets a register, not a refusal"
+                                   % (lex.language, show_share(markers, words, lex), 100 * lex.marker_share))
     return res
+
+
+def show_languages(names):
+    """English, French or German: the names joined the way the refusal joins them."""
+    return names[0] if len(names) == 1 else ", ".join(names[:-1]) + C.joiner + names[-1]
 
 
 def gate_scope(reg, traced, errs, lines=None):
@@ -1066,9 +1222,9 @@ def gate_scope(reg, traced, errs, lines=None):
                        or LEX.responsibility_re.search(norm(lines[n - 1]))
                        for n in span):
                     continue
-                errs.append("%s Owner: %s cites a line that is neither the Rule's own (%s), a lead-in "
+                errs.append("%s %s: %s cites a line that is neither the Rule's own (%s), a lead-in "
                             "above it, nor a line with a responsibility word"
-                            % (r.label, q.show(), show_lines(allowed)))
+                            % (r.label, C.w("Owner"), q.show(), show_lines(allowed)))
         for name, c in (("Addressee", r.addr), ("Evidence", r.evidence), ("When", r.when)):
             if not c.ok or c.nis:
                 continue
@@ -1088,8 +1244,8 @@ def gate_edges(reg, ok, errs, lines):
         return
     n = len(lines)
     if reg.policy_spans and reg.policy_spans[-1][1] > n:
-        errs.append("Source Policy text: L%d is past the input's last line (L%d)"
-                    % (reg.policy_spans[-1][1], n))
+        errs.append("%s: L%d is past the input's last line (L%d)"
+                    % (src("Policy text"), reg.policy_spans[-1][1], n))
         return
     inside = set()
     for a, b in reg.policy_spans:
@@ -1100,13 +1256,13 @@ def gate_edges(reg, ok, errs, lines):
             for q in r.text.quotes:
                 outside_keys.add(q.key())
                 if ok(q) and set(range(q.start, q.end + 1)) & inside:
-                    errs.append("%s: %s is filed outside the policy but cites the Policy text"
-                                % (r.label, q.show()))
+                    errs.append("%s: %s is filed %s but cites the %s"
+                                % (r.label, q.show(), C.filings[OUTSIDE], C.w("Policy text")))
     for label, q in reg.all_quotes:
         if q.key() in outside_keys or not ok(q):
             continue
         if not set(range(q.start, q.end + 1)) <= inside:
-            errs.append("%s: %s cites a line outside the Policy text" % (label, q.show()))
+            errs.append("%s: %s cites a line outside the %s" % (label, q.show(), C.w("Policy text")))
     k = 1
     while k <= n:
         if k in inside or not lines[k - 1].strip():
@@ -1120,8 +1276,8 @@ def gate_edges(reg, ok, errs, lines):
             all(not lines[j - 1].strip() for j in range(end + 1, n + 1))
         opener = norm(lines[start - 1]).lower()
         if not touches and not any(s in opener for s in LEX.seams):
-            errs.append("Source Policy text: L%d-L%d lies outside it in the middle of the input, "
-                        "and L%d opens with no seam marker from the lexicon" % (start, end, start))
+            errs.append("%s: L%d-L%d lies outside it in the middle of the input, "
+                        "and L%d opens with no seam marker from the lexicon" % (src("Policy text"), start, end, start))
 
 
 def show_lines(lines):
@@ -1166,7 +1322,8 @@ def gate_force(reg, errs):
             if not at:
                 errs.append("%s: Force %s is not in the Rule text as a term of its own" % (r.label, shown))
             elif lcls != cls:
-                errs.append("%s: Force %s has class %s in the lexicon, not %s" % (r.label, shown, lcls, cls))
+                errs.append("%s: Force %s has class %s in the lexicon, not %s"
+                            % (r.label, shown, C.cls[lcls], C.cls[cls]))
             elif filed != "Register":
                 errs.append("%s: Force %s is filed in %s by the lexicon" % (r.label, shown, filed))
             elif "(imperative)" in cls and not any(p in sent or p in clause for p in at):
@@ -1197,7 +1354,7 @@ def gate_force(reg, errs):
                 best = (term, lcls)
         if best and TIER[best[1]] > TIER[cls]:
             errs.append("%s: the Rule text holds %s%s%s (%s), stronger than the Force class %s"
-                        % (r.label, LQ, best[0], RQ, best[1], cls))
+                        % (r.label, LQ, best[0], RQ, C.cls[best[1]], C.cls[cls]))
 
     for r in reg.nrows:
         if not r.ok or not r.text.ok:
@@ -1210,11 +1367,13 @@ def gate_force(reg, errs):
             t = norm(term_written).lower().strip()
             shown = LQ + term_written + RQ
             want = FILINGS[kind]
+            kind = C.filings[kind]
             if t not in LEX.terms:
                 errs.append("%s: %s %s is not a lexicon term" % (r.label, kind, shown))
             elif LEX.terms[t][0] not in want:
                 errs.append("%s: %s %s has class %s; %s needs %s"
-                            % (r.label, kind, shown, LEX.terms[t][0], kind, " or ".join(want)))
+                            % (r.label, kind, shown, C.cls[LEX.terms[t][0]], kind,
+                               " or ".join(C.cls[c] for c in want)))
             elif not any(h[2] == t for h in hits):
                 errs.append("%s: %s %s is not in the text as a term of its own" % (r.label, kind, shown))
         if r.filed and r.filed[0] == OUTSIDE:
@@ -1239,9 +1398,7 @@ def completes_lead_in(quotes, starts, pos):
 
 
 def show_filed(f):
-    if f is None:
-        return "?"
-    return f[0] if f[1] is None else "%s %s%s%s" % (f[0], LQ, f[1], RQ)
+    return C.show_filed(f)
 
 
 def join_quotes(quotes):
@@ -1265,18 +1422,21 @@ def gate_flags(reg, errs):
         if r.owner.ok and not r.owner.nis:
             coll = all(is_collective(q.norm) for q in r.owner.quotes)
             if coll and not r.owner.flag:
-                errs.append("%s Owner: every quotation is collective; add '(collective)'" % r.label)
+                errs.append("%s %s: every quotation is collective; add '%s'"
+                            % (r.label, C.w("Owner"), C.collective))
             elif r.owner.flag and not coll:
                 odd = [q for q in r.owner.quotes if not is_collective(q.norm)][0]
-                errs.append("%s Owner: '(collective)' set, but the head of %s ('%s') is not in "
-                            "the Collective list" % (r.label, odd.show(), owner_head(odd.norm)))
+                errs.append("%s %s: '%s' set, but the head of %s ('%s') is not in "
+                            "the Collective list" % (r.label, C.w("Owner"), C.collective, odd.show(),
+                                                     owner_head(odd.norm)))
         if r.when.ok and not r.when.nis:
             unspec = not any(has_timing(q.norm) for q in r.when.quotes)
             if unspec and not r.when.flag:
-                errs.append("%s When: no digit or timing word; add '(unspecified)'" % r.label)
+                errs.append("%s %s: no digit or timing word; add '%s'"
+                            % (r.label, C.w("When"), C.unspecified))
             elif r.when.flag and not unspec:
-                errs.append("%s When: '(unspecified)' set, but the text holds a digit or timing word"
-                            % r.label)
+                errs.append("%s %s: '%s' set, but the text holds a digit or timing word"
+                            % (r.label, C.w("When"), C.unspecified))
         computed[id(r)] = (coll, unspec)
     return computed
 
@@ -1297,8 +1457,8 @@ def gate_status(reg, computed, errs):
         if both is None or r.status is None:
             continue
         if r.status not in both:
-            errs.append("%s Status: written '%s', the cells give '%s'"
-                        % (r.label, show_status(r.status), show_status(both[1])))
+            errs.append("%s %s: written '%s', the cells give '%s'"
+                        % (r.label, C.w("Status"), show_status(r.status), show_status(both[1])))
 
 
 class _Unknown(Exception):
@@ -1358,8 +1518,8 @@ def gate_tally(reg, computed, errs):
             continue
         ln, value = reg.tally[name]
         if value not in options[name]:
-            errs.append("Tally %s, line %d: written %d, the register gives %d"
-                        % (name, ln, value, options[name][-1]))
+            errs.append("%s %s, line %d: written %d, the register gives %d"
+                        % (C.w("Tally"), C.w(name), ln, value, options[name][-1]))
 
 
 def gate_coverage(reg, lines, errs):
@@ -1553,7 +1713,8 @@ def main(argv=None):
     ap.add_argument("path", nargs="?", help="a register file (or a file of '# Example ' registers)")
     ap.add_argument("--input", help="the input text the register translates (required for 'pasted')")
     ap.add_argument("--selftest", action="store_true", help="run the fixtures in tests/fixtures/ only")
-    ap.add_argument("--lexicon", help="the lexicon to apply (default: reference/lexicon.md)")
+    ap.add_argument("--lexicon", help="the one lexicon to apply (default: reference/lexicon*.md, "
+                                      "chosen by the register's language)")
     ap.add_argument("-v", "--verbose", action="store_true", help="print each fixture's full report")
     args = ap.parse_args(argv)
     if args.selftest and args.path:
@@ -1565,14 +1726,27 @@ def main(argv=None):
 
     if args.lexicon and not os.path.isfile(args.lexicon):
         ap.error("--lexicon file not found: %s" % args.lexicon)
-    lexicon = args.lexicon or find_lexicon(args.path)
+    lexicons = [args.lexicon] if args.lexicon else find_lexicons(args.path)
+    schema = find_beside(SCHEMA, "register-schema.md", args.path)
 
-    global LEX
+    global LEX, C
     try:
-        LEX = load_lexicon(lexicon)
+        words = load_contract(schema)
     except LexiconError as e:
-        print("%s: %s" % (shown_path(lexicon), e))
+        print("%s: %s" % (shown_path(schema), e))
         return 2
+    for lexicon in lexicons:
+        try:
+            lex = load_lexicon(lexicon)
+        except LexiconError as e:
+            print("%s: %s" % (shown_path(lexicon), e))
+            return 2
+        if lex.language not in words:
+            print("%s: the language %s has no column under '## Contract words' in %s"
+                  % (shown_path(lexicon), lex.language, shown_path(schema)))
+            return 2
+        LEXICONS.append((lex, Contract(lex.language, words[lex.language])))
+    LEX, C = LEXICONS[0]
 
     tally = {"checked": 0, "passed": 0, "problems": 0}
     fixtures = None

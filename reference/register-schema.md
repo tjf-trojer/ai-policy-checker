@@ -137,3 +137,78 @@ section holds the single line `No references in source.`
 
 The rows, their names and their order are fixed. Every value is a count of rows in sections 2 and 3;
 Outside the policy counts the Not-rules rows filed that way.
+
+## Contract words
+
+A register is written in the language of its policy: its fixed words are those of that language's
+column below, and its quotations stay in the policy's own words. This page states every rule with
+the English words; each rule holds unchanged for the words beside them. Each lexicon names its
+column in its section Language, and `scripts/verify.py` reads this table.
+
+| English | German |
+|---|---|
+| Source | Quelle |
+| Register | Register |
+| Not rules | Keine Regeln |
+| Referred elsewhere | Verweise |
+| Tally | Zählung |
+| Field | Feld |
+| Entry | Eintrag |
+| Title | Titel |
+| Issued by | Herausgegeben von |
+| Date or version | Datum oder Version |
+| Policy text | Richtlinientext |
+| Input | Eingabe |
+| none | keiner |
+| pasted | eingefügt |
+| ID | ID |
+| Rule | Regel |
+| Force | Verbindlichkeit |
+| Addressee | Adressat |
+| Owner | Verantwortlich |
+| Evidence | Nachweis |
+| When | Zeitpunkt |
+| Status | Status |
+| not in source | nicht in der Quelle |
+| control | Kontrolle |
+| intention | Absicht |
+| owner | Verantwortlich |
+| evidence | Nachweis |
+| when | Zeitpunkt |
+| (collective) | (kollektiv) |
+| (unspecified) | (unbestimmt) |
+| MUST NOT | DARF NICHT |
+| MUST | MUSS |
+| WILL NOT | WIRD NICHT |
+| WILL | WIRD |
+| SHOULD NOT | SOLL NICHT |
+| SHOULD | SOLL |
+| MAY | KANN |
+| (imperative) | (Imperativ) |
+| (present) | (Präsens) |
+| Text | Text |
+| Filed as | Abgelegt als |
+| recommendation | Empfehlung |
+| optional | Option |
+| statement | Feststellung |
+| heading | Überschrift |
+| outside the policy | ausserhalb der Richtlinie |
+| Reference | Verweis |
+| No references in source. | Keine Verweise in der Quelle. |
+| Count | Posten |
+| Value | Wert |
+| Rules | Regeln |
+| Controls | Kontrollen |
+| Intentions | Absichten |
+| Owner named, not collective | Verantwortlich benannt, nicht kollektiv |
+| Evidence named | Nachweis benannt |
+| When named, not unspecified | Zeitpunkt benannt, nicht unbestimmt |
+| Outside the policy | Ausserhalb der Richtlinie |
+| No register: the input `<path>` is not in <languages>. | Kein Register: Die Eingabe `<path>` ist nicht auf <languages>. |
+| or | oder |
+| English | Englisch |
+| German | Deutsch |
+
+German fixed words keep the Swiss «ss»: «ausserhalb», never «außerhalb». The force class
+`(present)` is the present-tense rule of [`rules/force.md`](../rules/force.md); the English lexicon
+declares none, so an English register never holds it.
