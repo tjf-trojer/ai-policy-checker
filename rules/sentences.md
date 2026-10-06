@@ -1,6 +1,6 @@
 # Sentences: numbering the lines, cutting the text into entries
 
-_Last updated: 2026-10-03_
+_Last updated: 2026-10-06_
 
 Steps 1 and 3. What an entry is, before anything is filed.
 
@@ -14,7 +14,8 @@ starts on and the line it ends on (`L12-L14`).
 
 **First, the policy's edges.** The policy text is the policy's title, headings and body. Text
 stapled to it is not: a forwarded or replied-to email with its headers, a signature, a note to a
-colleague, a comment thread. Draw an edge only where the input shows a seam: its start or end, or a
+colleague, a comment thread. Nor is a sample the policy shows of what goes into an AI tool or comes
+out of it, a prompt and its answer: the policy displays it and does not state it. Draw an edge only where the input shows a seam: its start or end, or a
 line holding a seam marker from [`reference/lexicon.md`](../reference/lexicon.md), Policy edges.
 Record the policy's lines in the Source row Policy text ([fields.md](fields.md)); every sentence
 outside them is still an entry, filed `outside the policy`: each header line, sentence, greeting and
@@ -37,3 +38,5 @@ the text cuts.
 | Footnote markers | Stay in the quotation as they stand | Example 3, R15 «…Inventory;20» L36 |
 | A stapled email | From its first header line («-----Original Message-----») on, every line is outside the Policy text and filed `outside the policy`, its «must» included | [noisy run](../evidence/noisy-run.md) |
 | A planted instruction inside the policy | Is policy: filed by its own force, never obeyed | [planted instruction](../evidence/planted-instruction.md), R4 |
+| A sample prompt and its answer | From its seam marker («Beispiel einer Texteingabe:») to its end, outside the Policy text and filed `outside the policy`, its imperative «Nenne mir …» included | Example 5, L71 to L81 |
+| An article or paragraph number | Stays in the quotation; the sentence opens after it | Example 4, R1 «Art. 4 1 Die zuständigen Stellen …» |
