@@ -106,24 +106,59 @@ class LexiconByPath(unittest.TestCase):
 class PastedRefusal(unittest.TestCase):
     """The refusal of a pasted input is checked against the text given with --input."""
 
-    def check(self, policy):
+    def check(self, policy, line="No register: the input is not in English or German."):
         tmp = tempfile.mkdtemp()
         try:
             path = os.path.join(tmp, "reply.md")
             with open(path, "w", encoding="utf-8") as fh:
-                fh.write("No register: the input is not in English.\n")
+                fh.write(line + "\n")
             return run([VERIFY, path, "--input", os.path.join(ROOT, policy)], ROOT)
         finally:
             shutil.rmtree(tmp)
 
+    def test_french(self):
+        rc, out = self.check("tests/language/politique-ia.txt")
+        self.assertEqual(rc, 0, out)
+
+    def test_french_in_german(self):
+        rc, out = self.check("tests/language/politique-ia.txt",
+                             "Kein Register: Die Eingabe ist nicht auf Englisch oder Deutsch.")
+        self.assertEqual(rc, 0, out)
+
+    def test_one_language_missing(self):
+        rc, out = self.check("tests/language/politique-ia.txt",
+                             "No register: the input is not in English.")
+        self.assertEqual(rc, 1, out)
+        self.assertIn("not English or German", out)
+
     def test_german(self):
         rc, out = self.check("tests/language/ki-richtlinie.txt")
-        self.assertEqual(rc, 0, out)
+        self.assertEqual(rc, 1, out)
+        self.assertIn("the input is in German", out)
 
     def test_english(self):
         rc, out = self.check("tests/planted/acme-ai-use-policy.txt")
         self.assertEqual(rc, 1, out)
         self.assertIn("It gets a register, not a refusal", out)
+
+
+class LanguageByRegister(unittest.TestCase):
+    """A German register is checked with the German lexicon, chosen by its section names."""
+
+    REG = os.path.join(ROOT, "tests", "language", "ki-richtlinie-register.md")
+
+    def test_auto(self):
+        rc, out = run([VERIFY, self.REG], ROOT)
+        self.assertEqual(rc, 0, out)
+
+    def test_lexicon_named(self):
+        rc, out = run([VERIFY, self.REG, "--lexicon", os.path.join(ROOT, "reference", "lexicon-de.md")], ROOT)
+        self.assertEqual(rc, 0, out)
+
+    def test_wrong_lexicon(self):
+        rc, out = run([VERIFY, self.REG, "--lexicon", os.path.join(ROOT, "reference", "lexicon.md")], ROOT)
+        self.assertEqual(rc, 1, out)
+        self.assertRegex(out, r"shape +FAIL")
 
 
 def snapshot(folder):

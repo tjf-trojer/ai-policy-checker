@@ -34,26 +34,35 @@ advice, or drop a sentence. The register does not change. Say in one line of you
 register, which cell the request would fill and that the policy does not state it. A policy that
 states it is a new input and gets a new register.
 
-## An input that is not an English policy
+## An input that is not a policy, or in another language
 
 An email, a slide, a note with no policy in it: Policy text is `none`, every sentence is filed
 `outside the policy`, and the register holds no rules. Do not refuse, and do not make a policy of
 it.
 
-A text in a language no lexicon covers gets no register. No term of the lexicon would match it, and
-a register of it would report no rules where the policy may hold many. In place of the register,
+A policy is translated in its own language: an English policy with
+[`reference/lexicon.md`](../reference/lexicon.md), a German one with
+[`reference/lexicon-de.md`](../reference/lexicon-de.md), and its register takes that language's
+fixed words from the schema's [Contract words](../reference/register-schema.md#contract-words). A
+German policy gets a German register, «nicht in der Quelle» where English writes `not in source`;
+its quotations stay as the policy wrote them. A policy is in the language whose lexicon's marker
+words it holds in at least the share the lexicon sets; an English policy that quotes a sentence in
+German is in English and gets an English register.
+
+A text in a language no lexicon covers gets no register. No term of a lexicon would match it, and a
+register of it would report no rules where the policy may hold many. In place of the register,
 deliver this one line:
 
 ```
-No register: the input `<path>` is not in English.
+No register: the input `<path>` is not in English or German.
 ```
 
 `<path>` is the input as the Source row Input would give it; for pasted text, leave out the path
 and its backticks. Name every language a lexicon in [`reference/`](../reference/) covers, as its
-section Language names it, joined by `, ` and a last ` or `. `scripts/verify.py` passes this line
-only for an input not in the lexicon's language, and fails a register of one; it tells by the
-marker words in the lexicon. An English policy that quotes a sentence in another language is in
-English and gets its register.
+section Language names it, joined by `, ` and a last ` or `. Asked in German, give the line in
+German, from the same table: `Kein Register: Die Eingabe `<path>` ist nicht auf Englisch oder
+Deutsch.` `scripts/verify.py` passes the line only for an input in no lexicon's language, and fails
+a register of one; it tells by the marker words in the lexicons.
 
 ## When the words cannot settle a call
 

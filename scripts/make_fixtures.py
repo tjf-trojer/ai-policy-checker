@@ -211,7 +211,7 @@ def fixtures():
     f["french-policy-as-statements"] = ("language", statements("tests/language/politique-ia.txt"))
     # language: an English policy refused as if it were in another language
     f["english-policy-refused"] = ("language", sub(
-        read("tests/language/ki-richtlinie-refusal.md"), "`tests/language/ki-richtlinie.txt`",
+        read("tests/language/politique-ia-refusal.md"), "`tests/language/politique-ia.txt`",
         "`tests/language/ai-note-with-german-quote.txt`"))
     return f
 

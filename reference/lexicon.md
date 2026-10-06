@@ -5,8 +5,9 @@ _Last updated: 2026-10-06_
 Five sections of lists for one language. The translator applies them as written and
 `scripts/verify.py` reads them from this file, or from the one its `--lexicon` names. A list that is
 wrong for one policy is wrong for all of them, and it changes here. A lexicon for another language
-is a file with the same sections and tables and its own words in them; the register it fills is
-the same.
+is a file beside this one with the same sections and tables and its own words in them, such as
+[`lexicon-de.md`](lexicon-de.md); the register it fills has the same contract, written in that
+language's [contract words](register-schema.md#contract-words).
 
 A term matches as whole words, in any case. The longest term wins: `must not` before `must`,
 `should never` before `should`, `is not permitted` before `permitted`.
@@ -233,6 +234,11 @@ holding a seam marker.
 | forwarded message |
 | wrote: |
 | reply all |
+| prompt: |
+| answer: |
+
+The last two open a sample of what goes into an AI tool or comes out of it, which a policy may show
+and does not state.
 
 An Owner quoted from a line other than the rule's own and not from a lead-in above it must come from
 a line holding one of these words:

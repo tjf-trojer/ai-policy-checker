@@ -4,8 +4,9 @@ _Last updated: 2026-10-06_
 
 Every translation is one register with five sections, in this order, whatever the policy looks
 like. `scripts/verify.py` fails a register that breaks anything on this page. An input in a
-language the lexicon does not cover is not translated: it gets the one-line refusal in
-[`rules/posture.md`](../rules/posture.md) instead.
+language no lexicon covers is not translated: it gets the one-line refusal in
+[`rules/posture.md`](../rules/posture.md) instead. The words below are English; a register in
+another language writes the same contract in that language's words, [Contract words](#contract-words).
 
 | # | Heading | Holds |
 |---|---|---|

@@ -211,6 +211,46 @@ def md_table(lines, where, name):
     raise LexiconError("no table with a '%s' column under '## %s'" % (name, where))
 
 
+def optional_table(lines, where, name):
+    """Like md_table, or None where the section holds no such table: a feature the lexicon may leave
+    out."""
+    try:
+        return md_table(lines, where, name)
+    except LexiconError:
+        return None
+
+
+def words_of(lines, where, name):
+    """The non-empty cells of the one-column table name, normalised and lower-cased; [] without it."""
+    t = optional_table(lines, where, name)
+    if t is None:
+        return []
+    i = column(t[0], name, where)
+    return [norm(r[i]).strip("`").strip().lower() for r in t[1] if r[i].strip("`- ")]
+
+
+def parse_entry(cls, filed, forced, where):
+    if cls not in TIER:
+        raise LexiconError("unknown class '%s' for %s" % (cls, where))
+    forced = forced.lower()
+    if forced not in ("yes", "no", "opening"):
+        raise LexiconError("unknown Forced value '%s' for %s" % (forced, where))
+    return (cls, filed, forced)
+
+
+def parse_negated(cell, where):
+    """A Negated cell: '', 'none', or a class with ', forced'."""
+    cell = cell.strip()
+    if cell in ("", "-", "\u2014"):
+        return None
+    if cell.lower() == "none":
+        return "none"
+    cls, _, flag = cell.partition(",")
+    cls = cls.strip()
+    return parse_entry(cls, "Register" if TIER.get(cls, 0) >= 2 else "Not rules",
+                       "yes" if flag.strip().lower() == "forced" else "no", where)
+
+
 def column(header, name, where):
     if name not in header:
         raise LexiconError("table under '## %s' has no column '%s'" % (where, name))
@@ -245,20 +285,30 @@ def load_lexicon(path):
     if not lex.markers:
         raise LexiconError("the Marker word table under '## Language' is empty")
 
-    header, body = md_table(secs["Force"], "Force", "Term")
+    force = secs["Force"]
+    header, body = md_table(force, "Force", "Term")
     it, ic, ifi, ifo = [column(header, n, "Force") for n in ("Term", "Class", "Filed in", "Forced")]
+    ineg = header.index("Negated") if "Negated" in header else None
     lex.terms = {}
+    lex.negated = {}
+    lex.zu_entry = lex.present_entry = None
     for row in body:
         term = row[it].strip("`").strip()
-        if not term or term[0] in "_*":
+        if not term:
             continue
-        cls = row[ic]
-        if cls not in TIER:
-            raise LexiconError("unknown class '%s' for term '%s'" % (cls, term))
-        forced = row[ifo].lower()
-        if forced not in ("yes", "no", "opening"):
-            raise LexiconError("unknown Forced value '%s' for term '%s'" % (row[ifo], term))
-        lex.terms[norm(term).lower()] = (cls, row[ifi], forced)
+        where = "term '%s'" % term
+        entry = parse_entry(row[ic], row[ifi], row[ifo], where)
+        neg = parse_negated(row[ineg], where) if ineg is not None else None
+        if term[0] in "_*":
+            # a form, not a word: the lexicon's tables below say how it is found
+            if "\u00abzu\u00bb" in term:
+                lex.zu_entry, lex.zu_negated = entry, neg
+            elif "(present)" in entry[0]:
+                lex.present_entry, lex.present_negated = entry, neg
+            continue
+        lex.terms[norm(term).lower()] = entry
+        if neg is not None:
+            lex.negated[norm(term).lower()] = neg
     if not lex.terms:
         raise LexiconError("the Force table holds no terms")
     lex.term_re = words_re(lex.terms)
@@ -269,6 +319,39 @@ def load_lexicon(path):
     lex.joiner_re = re.compile(r"(?:" + "|".join(r"\s+".join(re.escape(w) for w in j.split())
                                                 for j in joiners) + r")\s+",
                                re.IGNORECASE) if joiners else None
+    lex.joiners = set(joiners)
+
+    # what a lexicon may add for its language; English uses none of it
+    neg = optional_table(force, "Force", "Negation word")
+    lex.negation_re, lex.neg_anywhere = None, set()
+    if neg:
+        iw = column(neg[0], "Negation word", "Force")
+        ib = column(neg[0], "Before the verb", "Force")
+        words = [norm(r[iw]).strip().lower() for r in neg[1] if r[iw].strip()]
+        lex.negation_re = words_re(words) if words else None
+        lex.neg_anywhere = set(norm(r[iw]).strip().lower() for r in neg[1] if r[ib].strip().lower() == "yes")
+    if lex.negated and not lex.negation_re:
+        raise LexiconError("terms have a Negated class but '## Force' has no Negation word table")
+    lex.markers_extra = [re.compile(r"\s+".join(
+        re.escape(w).replace(re.escape("<n>"), r"\d{1,3}[a-z]?") for w in m.split()) + r"\s+")
+        for m in (r[0] for r in (optional_table(force, "Force", "Opening marker") or ([], []))[1])
+        if m.strip("`- ")]
+    lex.followers = set(w for w in (r[0].strip() for r in (
+        optional_table(force, "Force", "Imperative follower") or ([], []))[1]) if w)
+    lex.carriers = set(words_of(force, "Force", "Carrier"))
+    lex.inf_endings = tuple(e.lstrip("-") for e in words_of(force, "Force", "Infinitive ending"))
+    if lex.zu_entry and not (lex.carriers and lex.inf_endings):
+        raise LexiconError("the «zu» infinitive needs the Carrier and Infinitive ending tables")
+    lex.directive_re = None
+    if lex.present_entry:
+        directive = words_of(force, "Force", "Directive word")
+        dets = words_of(force, "Force", "Determiner")
+        lex.not_verbs = set(words_of(force, "Force", "Not a present-tense verb"))
+        actors = words_of(force, "Force", "Actor")
+        if not (directive and dets and actors):
+            raise LexiconError("the present tense needs the Directive word, Determiner and Actor tables")
+        lex.directive_re = words_re(directive)
+        lex.actors = actors
 
     coll = secs["Collective owners"]
     header, body = md_table(coll, "Collective owners", "Collective")
@@ -283,6 +366,16 @@ def load_lexicon(path):
     i = column(header, "Participle ending", "Collective owners")
     lex.participle_endings = tuple(norm(r[i]).strip("`").strip().lstrip("-").lower()
                                    for r in body if r[i].strip("`- "))
+    t = optional_table(coll, "Collective owners", "Setting")
+    settings = dict((r[0].strip().lower(), r[1].strip().lower()) for r in t[1]) if t else {}
+    lex.compounds = settings.get("compounds") == "yes"
+    if lex.present_entry:
+        actors = sorted(set(lex.actors + lex.collective), key=len, reverse=True)
+        # an actor is a whole word: with compounds, «Die Weiterleitung» would end in «leitung»
+        lex.present_re = re.compile(
+            r"(?i:%s)\s+(?:[a-z\u00df-\u00ff][\w-]*\s+){0,2}(?i:%s)\s+(?P<verb>[a-z\u00df-\u00ff]+)(?![\w-])"
+            % ("|".join(re.escape(d) for d in words_of(secs["Force"], "Force", "Determiner")),
+               "|".join(r"\s+".join(re.escape(w) for w in a.split()) for a in actors)))
 
     header, body = md_table(secs["Timing words"], "Timing words", "Kind")
     ik, iw = column(header, "Kind", "Timing words"), column(header, "Words", "Timing words")
@@ -294,6 +387,8 @@ def load_lexicon(path):
         else:
             timing += [w.strip().lower() for w in row[iw].split(",") if w.strip()]
     lex.timing_re = words_re(timing) if timing else None
+    vague = words_of(secs["Timing words"], "Timing words", "Unspecified phrase")
+    lex.vague_re = words_re(vague) if vague else None
 
     edges = secs["Policy edges"]
     header, body = md_table(edges, "Policy edges", "Seam marker")
@@ -407,7 +502,11 @@ class Contract(object):
 
 
 def ends_in_crowd(phrase):
-    return any(phrase == c or phrase.endswith(" " + c) for c in LEX.collective)
+    if any(phrase == c or phrase.endswith(" " + c) for c in LEX.collective):
+        return True
+    # a compound whose last part is a crowd: «Verwaltungsmitarbeitende»
+    last = phrase.split(" ")[-1] if phrase else ""
+    return LEX.compounds and any(" " not in c and last.endswith(c) for c in LEX.collective)
 
 
 def owner_head(text):
@@ -416,7 +515,7 @@ def owner_head(text):
     kept = []
     for tok in norm(text).lower().split():
         bare = re.sub(r"^\W+|\W+$", "", tok)
-        if bare in LEX.cut_words:
+        if bare in LEX.cut_words and kept:
             break
         if LEX.participle_endings and bare.endswith(LEX.participle_endings) and kept \
                 and ends_in_crowd(" ".join(kept)):
@@ -432,14 +531,127 @@ def is_collective(text):
 
 def has_timing(text):
     t = norm(text)
+    if LEX.vague_re:
+        t = LEX.vague_re.sub(" ", t)
     if LEX.digit and DIGITS.search(t):
         return True
     return bool(LEX.timing_re and LEX.timing_re.search(t))
 
 
+CLAUSE_BOUND = re.compile(r"[,;:]|[.!?](?=[\"')\]]*(?:\s|$))")
+WORD_TOKEN = re.compile(r"[^\W\d_][\w\u2011-]*")
+
+
+def clause_of(text, start, end):
+    """The bounds of the clause holding text[start:end]: from the last , ; : or sentence end
+    before it to the first after it."""
+    left = 0
+    for m in CLAUSE_BOUND.finditer(text, 0, start):
+        left = m.end()
+    m = CLAUSE_BOUND.search(text, end)
+    return left, (m.start() if m else len(text))
+
+
+def negated(text, start, end, verb=None):
+    """True when a negation word of the lexicon negates text[start:end] in its clause. verb is the
+    finite verb's span (default: the term's own). A word the lexicon marks 'before the verb' counts
+    anywhere in the clause («Keine Daten dürfen …»); any other only after the verb, or anywhere
+    when the verb closes the clause («… nicht übernommen werden dürfen»), so that «nicht
+    zugängliche Daten … können» negates the adjective, not the modal."""
+    if not LEX.negation_re:
+        return False
+    a, b = clause_of(text, start, end)
+    vs, ve = verb or (start, end)
+    closes = not WORD_TOKEN.search(text, ve, b)
+    for m in LEX.negation_re.finditer(text, a, b):
+        if start <= m.start() < end:
+            continue
+        if m.start() >= ve or closes or norm(m.group(0)).lower() in LEX.neg_anywhere:
+            return True
+    return False
+
+
 def scan_terms(text):
-    """Lexicon terms in text, longest first, each character used once."""
-    return [(m.start(), m.end(), norm(m.group(0)).lower()) for m in LEX.term_re.finditer(text)]
+    """Force terms in text: (start, end, term, (class, filed in, forced)). Lexicon terms match
+    longest first, each character used once; a term with a Negated class takes it when a negation
+    word stands in its clause, and one negated to 'none' is no term. An infinitive with «zu» that
+    the lexicon declares counts too."""
+    hits = []
+    for m in LEX.term_re.finditer(text):
+        term = norm(m.group(0)).lower()
+        entry = LEX.terms[term]
+        if term in LEX.negated and negated(text, m.start(), m.end()):
+            entry = LEX.negated[term]
+            if entry == "none":
+                continue
+        hits.append((m.start(), m.end(), term, entry))
+    if LEX.zu_entry:
+        hits += zu_infinitives(text)
+        hits.sort()
+    return hits
+
+
+def zu_infinitives(text):
+    """Infinitives with «zu» in a clause that holds a carrier («ist», «sind», «hat», «haben»):
+    «zu prüfen», or «zu» inside a separable verb («anzupassen»). One counts where it closes the
+    clause, stands right before the carrier that closes it or before a joining word, or opens the
+    clause («Zu berücksichtigen sind»)."""
+    out = []
+    bounds = [0] + [m.end() for m in CLAUSE_BOUND.finditer(text)] + [len(text)]
+    for a, b in zip(bounds, bounds[1:]):
+        toks = [(m.start(), m.end(), m.group(0)) for m in WORD_TOKEN.finditer(text, a, b)]
+        low = [t[2].lower() for t in toks]
+        if not any(w in LEX.carriers for w in low):
+            continue
+        n = len(toks)
+        for i, (s, e, w) in enumerate(toks):
+            if low[i] == "zu" and i + 1 < n:
+                inf = toks[i + 1][2]
+                if not (inf[0].islower() and inf.endswith(LEX.inf_endings)) or inf.lower() in LEX.cut_words:
+                    continue
+                first, last, span = i, i + 1, (s, toks[i + 1][1])
+            elif re.match(r"^[a-z\u00df-\u00ff]{2,}zu[a-z\u00df-\u00ff]{2,}$", w) and w.endswith(LEX.inf_endings):
+                first, last, span = i, i, (s, e)
+            else:
+                continue
+            closes = last == n - 1 or (last == n - 2 and low[n - 1] in LEX.carriers)
+            joined = last + 1 < n and low[last + 1] in LEX.joiners
+            if closes or joined or first == 0:
+                entry = LEX.zu_entry
+                carrier = next(t for t, w in zip(toks, low) if w in LEX.carriers)
+                if LEX.zu_negated and negated(text, span[0], span[1], carrier[:2]):
+                    entry = LEX.zu_negated
+                if entry != "none":
+                    out.append((span[0], span[1], norm(text[span[0]:span[1]]).lower(), entry))
+    return out
+
+
+def present_verbs(text, starts):
+    """(start, end, verb, class) for each sentence that opens with an actor of the lexicon and a
+    verb in the present tense: «Die Angestellten prüfen …». The class is the lexicon's, or its
+    Negated class when a negation word stands in the verb's clause."""
+    if not LEX.present_entry:
+        return []
+    sent, _ = openings(text, starts)
+    out = []
+    for p in sorted(sent):
+        m = LEX.present_re.match(text, p)
+        if not m:
+            continue
+        verb = m.group("verb")
+        if verb in LEX.not_verbs or verb in LEX.cut_words or verb in LEX.joiners:
+            continue
+        cls = LEX.present_entry[0]
+        if LEX.present_negated and LEX.present_negated != "none" and negated(text, m.start("verb"), m.end("verb")):
+            cls = LEX.present_negated[0]
+        out.append((m.start("verb"), m.end("verb"), verb, cls))
+    return out
+
+
+def binding_terms(hits):
+    """The hits that bind or permit: every class but WILL and WILL NOT, which German also writes as
+    the passive's auxiliary."""
+    return [h for h in hits if h[3][0] not in ("WILL", "WILL NOT")]
 
 
 def openings(text, starts):
@@ -453,6 +665,8 @@ def openings(text, starts):
         sent.add(p)
         for _ in range(3):
             m = MARKER.match(text, p)
+            if not m or m.end() == p:
+                m = next((x for x in (r.match(text, p) for r in LEX.markers_extra) if x), None)
             if not m or m.end() == p:
                 break
             p = m.end()
@@ -693,6 +907,7 @@ def parse_register(lines, errs):
     reg.cov_quotes = []     # (origin, label, Quote) for coverage
     reg.input_spec = None   # ("path", p) or ("pasted", None)
     reg.policy_spans = None
+    reg.title_text = ""
 
     sections = {}
     order = []
@@ -803,7 +1018,9 @@ def parse_register(lines, errs):
                     errs.append("%s: must be a backticked relative path or '%s', found '%s'"
                                 % (where, C.pasted, clip(entry, 40)))
             else:
-                parse_cell(entry, True, None, where, errs)
+                c = parse_cell(entry, True, None, where, errs)
+                if field == "Title" and c.ok and not c.nis:
+                    reg.title_text = " ".join(q.norm for q in c.quotes)
         if not any(cells is not None and cells[0] == C.w("Input") for _, cells, _ in t.rows):
             errs.append("%s: the %s row is missing" % (C.w("Source"), C.w("Input")))
 
@@ -832,8 +1049,8 @@ def parse_register(lines, errs):
                     errs.append("%s: its rule ends on L%d, before %s's L%d; rows run in input order"
                                 % (r.label, last, prev[0], prev[1]))
                 prev = (rid, last)
-                for q in r.rule.quotes:
-                    reg.cov_quotes.append(("register", rid, q))
+                for i, q in enumerate(r.rule.quotes):
+                    reg.cov_quotes.append((lead_origin("register", r.rule.quotes, i), rid, q))
             m = C.force_re.fullmatch(force)
             if m and m.group(1).strip():
                 r.force = (m.group(1), C.cls_key[m.group(2)])
@@ -869,8 +1086,9 @@ def parse_register(lines, errs):
             if not r.text.ok:
                 reg.cov_ok = False
             else:
-                for q in r.text.quotes:
-                    reg.cov_quotes.append(("notrules", "%s row %d" % (C.w("Not rules"), k + 1), q))
+                for i, q in enumerate(r.text.quotes):
+                    reg.cov_quotes.append((lead_origin("notrules", r.text.quotes, i),
+                                           "%s row %d" % (C.w("Not rules"), k + 1), q))
             m = C.filed_re.fullmatch(filed)
             f = C.filings
             if C.filing_key.get(filed) in ("statement", "heading", OUTSIDE):
@@ -917,6 +1135,14 @@ def parse_register(lines, errs):
     reg.has_register = tables["Register"] is not None
     reg.has_not = tables["Not rules"] is not None
     return reg
+
+
+def lead_origin(origin, quotes, i):
+    """A lead-in quoted before its item is told apart: a list may file some items as rules and
+    others not, so its lead-in stands in both sections, and only its items must not."""
+    if i < len(quotes) - 1 and quotes[i].norm.rstrip().endswith(":"):
+        return origin + " lead-in"
+    return origin
 
 
 def t_rows(table):
@@ -1306,9 +1532,28 @@ def gate_trace(reg, lines, errs, traced):
                         "on its last" % (label, q.show(), real))
 
 
+OPENING = "(a sentence start, a list item, or after a comma, semicolon or colon)"
+PRESENT = ("MUST (present)", "MUST NOT (present)")
+IMPERATIVE = ("MUST (imperative)", "MUST NOT (imperative)")
+
+
+def outside_policy(reg, quotes):
+    """True when every quotation lies outside the Policy text: scope's business, not force's."""
+    if not reg.policy_spans:
+        return False
+    inside = set()
+    for x, y in reg.policy_spans:
+        inside.update(range(x, y + 1))
+    return all(not set(range(q.start, q.end + 1)) & inside for q in quotes)
+
+
+def is_directive(reg):
+    return bool(LEX.directive_re and LEX.directive_re.search(reg.title_text))
+
+
 def gate_force(reg, errs):
     for r in reg.rrows:
-        if not r.ok or not r.rule.ok or r.force is None:
+        if not r.ok or not r.rule.ok or r.force is None or outside_policy(reg, r.rule.quotes):
             continue
         text, starts = join_quotes(r.rule.quotes)
         hits = scan_terms(text)
@@ -1316,22 +1561,27 @@ def gate_force(reg, errs):
         term_written, cls = r.force
         t = norm(term_written).lower().strip()
         shown = LQ + term_written + RQ
-        if t in LEX.terms:
-            lcls, filed, _ = LEX.terms[t]
-            at = [h[0] for h in hits if h[2] == t]
+        own = [h for h in hits if h[2] == t]
+        if t in LEX.terms or own:
+            fit = [h for h in own if h[3][0] == cls] or own
+            lcls, filed, _ = fit[0][3] if fit else LEX.terms[t]
+            at = [h[0] for h in fit]
             if not at:
                 errs.append("%s: Force %s is not in the Rule text as a term of its own" % (r.label, shown))
             elif lcls != cls:
-                errs.append("%s: Force %s has class %s in the lexicon, not %s"
-                            % (r.label, shown, C.cls[lcls], C.cls[cls]))
+                why = "" if t not in LEX.terms or lcls == LEX.terms[t][0] else \
+                    " where a negation word stands in its clause"
+                errs.append("%s: Force %s has class %s in the lexicon%s, not %s"
+                            % (r.label, shown, C.cls[lcls], why, C.cls[cls]))
             elif filed != "Register":
                 errs.append("%s: Force %s is filed in %s by the lexicon" % (r.label, shown, filed))
             elif "(imperative)" in cls and not any(p in sent or p in clause for p in at):
-                errs.append("%s: Force %s does not stand at an opening (a sentence start, a list item, "
-                            "or after a comma, semicolon or colon)" % (r.label, shown))
-        elif cls != "MUST (imperative)":
-            errs.append("%s: Force %s is not a lexicon term; only a MUST (imperative) verb phrase "
-                        "may come from outside the lexicon" % (r.label, shown))
+                errs.append("%s: Force %s does not stand at an opening %s" % (r.label, shown, OPENING))
+        elif cls in PRESENT:
+            check_present(reg, r, text, starts, hits, t, cls, shown, errs)
+        elif cls != "MUST (imperative)" and not (cls == "MUST NOT (imperative)" and LEX.negation_re):
+            errs.append("%s: Force %s is not a lexicon term; only a %s verb phrase "
+                        "may come from outside the lexicon" % (r.label, shown, C.cls["MUST (imperative)"]))
         elif LEX.term_re.match(t):
             errs.append("%s: Force %s opens with the lexicon term %s%s%s; the Force cell quotes that term"
                         % (r.label, shown, LQ, LEX.term_re.match(t).group(0), RQ))
@@ -1340,14 +1590,23 @@ def gate_force(reg, errs):
             if not at:
                 errs.append("%s: Force %s does not occur in the Rule text" % (r.label, shown))
             elif not any(p in sent or p in clause for p in at):
-                errs.append("%s: Force %s does not stand at an opening (a sentence start, a list item, "
-                            "or after a comma, semicolon or colon)" % (r.label, shown))
+                errs.append("%s: Force %s does not stand at an opening %s" % (r.label, shown, OPENING))
             elif all(completes_lead_in(r.rule.quotes, starts, p) for p in at):
                 errs.append("%s: Force %s opens an item whose lead-in carries its own force term; the "
                             "item completes the lead-in and takes that force" % (r.label, shown))
+            elif LEX.followers and (len(t.split()) < 2 or term_written.split()[-1] not in LEX.followers):
+                errs.append("%s: Force %s is no imperative of this lexicon: a verb that opens the sentence "
+                            "and is followed by %s" % (r.label, shown, " or ".join(
+                                LQ + f + RQ for f in sorted(LEX.followers))))
+            elif LEX.negation_re:
+                p = next(p for p in at if p in sent or p in clause)
+                want = "MUST NOT (imperative)" if negated(text, p, p + len(t)) else "MUST (imperative)"
+                if want != cls:
+                    errs.append("%s: Force %s has class %s here, not %s"
+                                % (r.label, shown, C.cls[want], C.cls[cls]))
         best = None
-        for p, _, term in hits:
-            lcls, _, forced = LEX.terms[term]
+        for p, _, term, entry in hits:
+            lcls, _, forced = entry
             if forced == "opening" and p not in sent and p not in clause:
                 continue
             if best is None or TIER[lcls] > TIER[best[1]]:
@@ -1368,24 +1627,60 @@ def gate_force(reg, errs):
             shown = LQ + term_written + RQ
             want = FILINGS[kind]
             kind = C.filings[kind]
-            if t not in LEX.terms:
+            own = [h for h in hits if h[2] == t]
+            classes = [h[3][0] for h in own] or ([LEX.terms[t][0]] if t in LEX.terms else [])
+            if not classes:
                 errs.append("%s: %s %s is not a lexicon term" % (r.label, kind, shown))
-            elif LEX.terms[t][0] not in want:
+            elif not any(c in want for c in classes):
                 errs.append("%s: %s %s has class %s; %s needs %s"
-                            % (r.label, kind, shown, C.cls[LEX.terms[t][0]], kind,
+                            % (r.label, kind, shown, C.cls[classes[0]], kind,
                                " or ".join(C.cls[c] for c in want)))
-            elif not any(h[2] == t for h in hits):
+            elif not own:
                 errs.append("%s: %s %s is not in the text as a term of its own" % (r.label, kind, shown))
         if r.filed and r.filed[0] == OUTSIDE:
             continue
-        for p, e, term in hits:
-            forced = LEX.terms[term][2]
+        caught = False
+        for p, e, term, entry in hits:
+            forced = entry[2]
             if forced == "yes" or (forced == "opening" and p in sent):
                 if ends_in_question(text, e):
                     continue
                 errs.append("%s: holds the forced term %s%s%s; its sentence is a rule, not '%s'"
                             % (r.label, LQ, text[p:e], RQ, show_filed(r.filed)))
+                caught = True
                 break
+        if not caught and is_directive(reg) and not binding_terms(hits):
+            for p, e, verb, cls in present_verbs(text, starts):
+                if not ends_in_question(text, e):
+                    errs.append("%s: opens with an actor and the present-tense verb %s%s%s in a directive; "
+                                "its sentence is a rule of class %s, not '%s'"
+                                % (r.label, LQ, text[p:e], RQ, C.cls[cls], show_filed(r.filed)))
+                    break
+
+
+def check_present(reg, r, text, starts, hits, t, cls, shown, errs):
+    """A rule filed by the present tense: the lexicon declares it, the policy is a directive, the
+    verb follows an actor that opens the sentence, and no force term stands in the sentence."""
+    if not LEX.present_entry:
+        errs.append("%s: Force %s has class %s, but the lexicon declares no present-tense rule"
+                    % (r.label, shown, C.cls[cls]))
+        return
+    if not is_directive(reg):
+        errs.append("%s: Force %s has class %s, which only a directive carries; the Source Title "
+                    "holds none of the lexicon's directive words" % (r.label, shown, C.cls[cls]))
+        return
+    binding = binding_terms(hits)
+    if binding:
+        errs.append("%s: the Rule text holds the force term %s%s%s; a sentence with a force term is "
+                    "filed by it, not by its tense" % (r.label, LQ, binding[0][2], RQ))
+        return
+    match = [x for x in present_verbs(text, starts) if x[2] == t]
+    if not match:
+        errs.append("%s: Force %s is not the verb that follows an actor of the lexicon opening the "
+                    "sentence" % (r.label, shown))
+    elif cls not in [x[3] for x in match]:
+        errs.append("%s: Force %s has class %s here, not %s"
+                    % (r.label, shown, C.cls[match[0][3]], C.cls[cls]))
 
 
 def completes_lead_in(quotes, starts, pos):
@@ -1523,7 +1818,7 @@ def gate_tally(reg, computed, errs):
 
 
 def gate_coverage(reg, lines, errs):
-    cov = {"register": {}, "notrules": {}}
+    cov = {"register": {}, "notrules": {}, "register lead-in": {}, "notrules lead-in": {}}
     for origin, label, q in reg.cov_quotes:
         pos, _, occ = locate(lines, q)
         if not occ:
