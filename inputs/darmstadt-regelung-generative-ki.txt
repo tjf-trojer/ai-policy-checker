@@ -1,0 +1,101 @@
+Regierungspräsidium Darmstadt
+
+Regierungspräsidium Darmstadt . 64278 Darmstadt
+
+An alle Mitarbeiterinnen und Mitarbeiter
+
+im Hause
+
+Regelung zum Umgang mit im Internet verfügbaren Systemen der generativen Künstlichen Intelligenz im Regierungspräsidium Darmstadt
+
+8. Oktober 2025
+
+Präambel
+
+Generative Künstliche Intelligenz (generative Kl) ist eine Technologie, die aus einer Vielzahl von Daten neue Inhalte wie Texte, Bilder, Videos etc. erzeugen kann. Dies geschieht durch das Training mit vorhandenen Datensätzen und solchen Daten, die durch Interaktion mit Kl-Werkzeugen eingegeben und anschließend verknüpft werden, um neue Ergebnisse zu erzeugen. Generative Kl bietet enorme Potenziale, stellt die Nutzerinnen und Nutzer aber auch vor Herausforderungen in der Anwendung und im Umgang mit den Ergebnissen.
+
+Mit generativer Kl ist durch die Beschäftigten bewusst und sensibel umzugehen. Wenn sie die Assistenzsysteme und die damit verbundene moderne Technologie im Arbeitsalltag nutzen, ist durch sie zu überprüfen, ob sie das Ergebnis annehmen, ablehnen oder ihrerseits überarbeiten und anpassen.
+
+Die Nutzung von im Internet verfügbaren generativen Kl-Systemen für den dienstlichen Gebrauch ist grundsätzlich und im Rahmen der geltenden Bestimmungen1 zulässig und gewinnt zunehmend an Bedeutung für eine moderne und effiziente Landesverwaltung.
+
+Die vorliegende Regelung für die dienstliche Nutzung generativer Kl-Systeme erfordert eine fortlaufende Evaluation und Aktualisierung, um sowohl den technischen Fortschritt als auch künftige Regelungen des Gesetzgebers zu berücksichtigen. Eine erste Evaluierung soll sechs Monate nach Bekanntmachung erfolgen.
+
+1. Ziel / Zweck
+
+(1) Die Nutzung von Kl-Systemen ist für eine moderne und effiziente Verwaltungsarbeit zunehmend unverzichtbar. Neben dienstlich bereitgestellten Kl-Systemen können im Regierungspräsidium Darmstadt daher ebenfalls im Internet verfügbare generative Kl-Systeme für spezifische Anwendungsfälle (z. B. stilistische Überarbeitung, Bildgenerierung) genutzt werden.
+
+(2) Das Regierungspräsidium Darmstadt verfolgt mit dieser Regelung das Ziel, den Beschäftigten einen klaren Handlungsrahmen zur verantwortungsvollen und rechtssicheren dienstlichen Nutzung von im Internet verfügbaren generativen Kl-Systemen aufzuzeigen.
+
+2. Eigenverantwortung
+
+(1) Dienstliche Entscheidungen sind auch weiterhin von Menschen zu treffen.
+
+(2) Beim Einsatz von generativen Kl-Systemen muss daher darauf geachtet werden, dass die Ergebnisse kritisch überprüft und auf inhaltliche Richtigkeit und ethische Aspekte (wie z. B. Gleichbehandlung, Antidiskriminierung etc.) überprüft werden, bevor sie in eigene Entscheidungsprozesse einfließen. Dies nicht zuletzt auch deshalb, da generative Kl-Systeme keine „Wissensbibliotheken“ sind, sondern anhand algorithmischer Modelle wahrscheinlichkeitsbasiert arbeiten und die Ergebnisse nicht unreflektiert übernommen werden dürfen.
+
+(3) Die Verantwortung für generierte Inhalte tragen weiterhin und unvermindert die Nutzerinnen und Nutzer. Es liegt in ihrer Verantwortung, die inhaltliche Korrektheit der Ergebnisse zu überprüfen.
+
+(4) Um die Beschäftigten im Sinne der Eigenverantwortung zur Nutzung von Kl-Systemen zu befähigen und ihnen ein ausreichendes Maß an Kl-Kompetenz (gern. Art. 4 KI-VO) zu vermitteln, werden durch den Dienstherrn zielgruppenspezifische Angebote (Schulungen, Informationsmaterialien etc.) bereitgestellt.
+
+3. Geltungsbereich
+
+(1) Diese Regelung gilt für im Internet verfügbare generative Kl-Systeme.
+
+(2) Sonstige durch den Dienstherrn eigens konzipierte oder beschaffte Kl-Systeme sind von dieser Regelung nicht erfasst.
+
+(3) Diese Reglung gilt für alle Beschäftigten des Regierungspräsidium Darmstadt, sowie externe Dienstleister, die im Auftrag des Regierungspräsidiums Darmstadt generative KI einsetzen oder KI-gestützte Prozesse nutzen.
+
+4. Zulässigkeit der Nutzung
+
+(1) Die dienstliche Nutzung von im Internet verfügbaren generativen Kl-Systemen ist im Regierungspräsidium Darmstadt im Rahmen der geltenden Vorschriften2 grundsätzlich zulässig, sie unterliegt jedoch spezifischen ergänzenden Restriktionen.
+
+(2) Mittels einer Positivliste werden den Beschäftigten geprüfte Kl-Systeme für spezifische Anwendungsfälle empfohlen, welche genutzt werden dürfen.
+
+(3) Kl-Systeme, bei denen Bedenken, insbesondere im Hinblick auf Datenschutz und Informationssicherheit, bestehen, werden hingegen auf einer Negativliste geführt (siehe MAP unter Service > Regelungen > Regelungen zum Umgang mit KI). Der Einsatz dieser KI-Systeme ist grundsätzlich untersagt.
+
+(4) Neue KI-Systeme, welche weder auf Positiv- noch auf Negativliste geführt werden, sind vor Nutzung per KI-Antrag an das Dezernat I 11 (siehe MAP unter Service > Formulare > Formulare zum Umgang mit KI) auf Einhaltung der Informationssicherheitsanforderungen und datenschutzrechtliche Belange zu prüfen und werden nach positiver Bewertung in die Positivliste und bei Ablehnung in die Negativliste aufgenommen.
+
+(5) Positiv- und Negativliste (siehe MAP unter Service > Regelungen > Regelungen zum Umgang mit KI) werden fortlaufend evaluiert, an den Bedarf der Beschäftigten und den Stand der Technik angepasst.
+
+5. Rechtsnormen
+
+Die Nutzung generativer Kl-Systeme unterliegt den jeweils gültigen Regelungen des Unionsrechts (v. a. DS-GVO, KI-VO) sowie Bundes- und Landesrecht. Es wird besonders auf das Verbot nach Art. 5 KI-VO hingewiesen. Darüber hinaus wird auf die in Punkt 2 geregelte Eigenverantwortung der Beschäftigten verwiesen.
+
+6. Datenschutz
+
+(1) Die Eingabe von personenbezogenen Daten (s. Art. 4 Zf. 1 DSGVO), Betriebs- und Geschäftsgeheimnissen (s. § 1 Abs. 1 GeschGehG) sowie schutzbedürftigen oder sicherheitsrelevanten Informationen ist nicht zulässig.
+
+(2) Sofern externe Dienstleister eingesetzt werden und personenbezogene Daten im Auftrag des Regierungspräsidium Darmstadts verarbeiten (s.g. Auftragsdatenverarbeitung), ist diese Reglung in die Auftragsverarbeitungsvereinbarung aufzunehmen.
+
+7. Urheberrecht
+
+(1) Bei Texteingaben in Kl-Systeme sind die Regelungen des Urheberrechts zu beachten.
+
+(2) Urheberrechtlich geschützte Inhalte Dritter dürfen nicht ohne Genehmigung in KI-Systemen verarbeitet werden. Eingaben dürfen keine geschützten Texte, Bilder oder Medien enthalten. Der Kl-basierte Output (Ergebnis) ist keine geistig-schöpferische Leistung und ist nicht durch das Urheberrecht geschützt.
+
+(3) Weiterhin ist zu berücksichtigen, dass Kl-Systeme auch beim Zusammenstellen des Outputs Urheberrechte verletzen können, beispielsweise durch Verwendung urheberrechtlich geschützter Daten. Bei der Weiterverarbeitung KI-generierter Outputs ist besondere Sorgfalt geboten. Gegebenenfalls ist zu prüfen, ob geschützte Ergebnisse mit Quellenangaben versehen oder Nutzungsrechte eingeholt werden müssen.
+
+8. Kennzeichnungspflicht
+
+(1) In Abhängigkeit von Umfang und generiertem Ergebnis (Text, Bild, Präsentation, etc.) ist seitens der Beschäftigten im Einzelfall zu überprüfen, ob eine Kennzeichnung der mittels Kl erstellten Inhalte geboten erscheint, z. B. „Dieser Text [Bild etc.] wurde unter Zuhilfenahme eines generativen Kl-Systems erstellt und menschlich auf seine Richtigkeit, Vollständigkeit und Übereinstimmung mit ethischen Grundsätzen überprüft“. Dies dient auch zur Absicherung der Beschäftigten, da der von Kl-Systemen generierte Output möglicherweise urheberrechtlich geschützte Daten enthält.
+
+(2) Wird ein Output vollständig oder überwiegend durch ein KI-System erzeugt, erweckt jedoch den Eindruck von einem Menschen verfasst worden zu sein, ist dies grundsätzlich kennzeichnungspflichtig. Wird das Ergebnis hingegen maßgeblich durch eine menschliche Bearbeiterin bzw. einen menschlichen Bearbeiter geprägt, während das KI-System lediglich als Hilfsmittel dient, entfällt die Kennzeichnungspflicht (z.B. KI-generierter Entwurf, redaktionelle Überarbeitung eines Schreibens). Ebenso sind rein vorbereitende Maßnahmen (z.B. Recherche, Textzusammenfassung), welche lediglich internen Zwecken dienen, nicht kennzeichnungspflichtig.
+
+(3) „Prompts“ (Eingaben) können je nach Bedeutung für den Vorgang, insbesondere bei kennzeichnungspflichtigen Erzeugnissen im Sinne des Abs. 2, zusammen mit den jeweiligen Ausgaben des Kl-Systems Teil des aktenrelevanten Handelns darstellen und sind in diesen Fällen mit dem Gesamtvorgang aktenkundig zu machen.
+
+9. Accounts und Einstellungen
+
+(1) Bei der Nutzung von generativen Kl-Systemen im Rahmen der dienstlichen Tätigkeit sind nur die dienstlich zur Verfügung gestellte technische Ausstattung sowie die dienstlichen E-Mail-Accounts (z. B. Funktions-Accounts) zu nutzen. Die Verwendung privater E-Mail-Accounts wird untersagt. Sofern weitere Daten (z. B. Telefon- bzw. Mobilfunknummern) bei der Registrierung erforderlich sind, dürfen ausschließlich die dienstlichen Daten genutzt werden.
+
+(2) Die private Nutzung von erstellten dienstlichen Accounts ist nicht zulässig.
+
+(3) Der Abschluss kostenpflichtiger Abonnements ist grundsätzlich untersagt.
+
+(4) Die Verwendung der Daten zu Trainingszwecken und das Speichern der Daten für einen späteren Aufruf ist den generativen Kl-Systemen nach Möglichkeit zu untersagen bzw. entsprechende Funktionen sind zu deaktivieren.
+
+gez. Dr. Stefan Fuhrmann
+
+Regierungsvizepräsident
+
+1 vgl. Richtlinie zur Nutzung von E-Mail- und Internetdiensten in der Hessischen Landesverwaltung, StAnz. 2012, S. 526, geändert durch Verwaltungsvorschrift vom 31.10.2023 (StAnz. 2023, S. 1458) in der jeweils geltenden Fassung; Dienstvereinbarung zur E-Mail-, Internet-, Intranet-Nutzung des Regierungspräsidiums Darmstadt in der jeweils geltenden Fassung
+
+2 Ebd.

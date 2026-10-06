@@ -5,8 +5,8 @@
                                        then each input in inputs/ rebuilt from its original and
                                        compared byte for byte, then each reference excerpt matched
                                        word for word, in order, against its original
-  python3 scripts/sources.py --pdf     also re-extract the two PDF text layers and compare them
-                                       with the shipped ones (needs PyMuPDF)
+  python3 scripts/sources.py --pdf     also re-extract every PDF text layer and compare it with
+                                       the shipped one (needs PyMuPDF)
   python3 scripts/sources.py --fetch   also download every original again and compare hashes
                                        (needs a network; a living page may have changed since;
                                        the AI Act text has no download a script can make)
@@ -43,6 +43,31 @@ ORIGINALS = [
      "https://www.whitehouse.gov/wp-content/uploads/2025/02/M-25-21-Accelerating-Federal-Use-of-AI-through-Innovation-Governance-and-Public-Trust.pdf"),
     ("inputs/originals/omb-m-25-21.textlayer.txt",
      "dfefba3cf6fb338910f38028e397f520d82b5e4df9d768a557bd9123bf268f7d", None),
+    ("inputs/originals/zuerich-strb-2025-2281-beilage-1.pdf",
+     "baea5c7cb0e36eac01ecc872d602c4e92a0d5590b92fe158016aaade736e2a11",
+     "https://www.stadt-zuerich.ch/content/dam/web/de/politik-verwaltung/politik-recht/stadtratsbeschluesse/2025/08/stzh-strb-2025-2281-beilage-1.pdf"),
+    ("inputs/originals/zuerich-strb-2025-2281-beilage-1.blocks.txt",
+     "6328166dcdec5e9ccbccdec6b0a0fd583dc48b052d653fe80cced290fa9154be", None),
+    ("inputs/originals/appenzell-ki-werkzeuge-richtlinie-v2.pdf",
+     "9ab504b5b173c848319eeb28e9f072bc4c8531e13a2ad015b13515af3478a66c",
+     "https://www.ai.ch/themen/staat-und-recht/digitale-verwaltung/ki-werkzeuge/dokument/verzeichnis-algorithmischer-systeme-appenzell-i-rh/download"),
+    ("inputs/originals/appenzell-ki-werkzeuge-richtlinie-v2.blocks.txt",
+     "ad2b189e8c0ec2163a1d9897c7485ab114ffde8019edfd43ce19edf25a316ac5", None),
+    ("inputs/originals/darmstadt-regelung-generative-ki-r4.pdf",
+     "78005081e141609b810c1e71410e3bd1f36d8923153e0cdef8abed26c6618f4d",
+     "https://rp-darmstadt.hessen.de/sites/rp-darmstadt.hessen.de/files/2026-03/regelung_zum_umgang_mit_generativer_ki_r_4.pdf"),
+    ("inputs/originals/darmstadt-regelung-generative-ki-r4.blocks.txt",
+     "bb56e122f5f2ce95976256449e6f46fb1c32c533a7af94a656b1d3cbd40480c8", None),
+    ("inputs/originals/darmstadt-hausverfuegung-8.pdf",
+     "933febd338880bc2fb21751cae3afa4fd2e9533f0a18916081a7e1b9f10f7ad7",
+     "https://rp-darmstadt.hessen.de/sites/rp-darmstadt.hessen.de/files/2026-03/hv_regelungzum_umgang_mit_generativer_ki_8.pdf"),
+    ("inputs/originals/darmstadt-hausverfuegung-8.blocks.txt",
+     "43e9593aeeafdfc8df4b1000e1cb5e034efe9cde3764478df41a894736220c9e", None),
+    ("inputs/originals/st-gallen-leitlinien-chatgpt.pdf",
+     "1ee9abb5837cf03946a68e854f7e23e449fd52187d61a8ca2c29401f3f9b9ac3",
+     "https://www.sg.ch/content/dam/sgch/sicherheit/datenschutz/SK_Leitlinien_ueber_die_Verwendung_von_ChatGPT_und_aehnlichen_Systemen_in_der_Verwaltung.pdf"),
+    ("inputs/originals/st-gallen-leitlinien-chatgpt.blocks.txt",
+     "d512e7b29af4397c46b890c645cccdb7b33b4348e469f7dc0cd62c2ee54d42fc", None),
     ("reference/sources/originals/nist-ai-100-1.pdf",
      "7576edb531d9848825814ee88e28b1795d3a84b435b4b797d3670eafdc4a89f1",
      "https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.100-1.pdf"),
@@ -55,11 +80,15 @@ ORIGINALS = [
      "https://www.rfc-editor.org/rfc/rfc2119.txt"),
 ]
 
+# a .textlayer.txt is PyMuPDF's text of each page; a .blocks.txt is its text blocks with their
+# positions, which the German inputs need to put margin titles and boxes where the page shows them
 TEXT_LAYERS = [
     ("inputs/originals/omb-m-25-21.pdf", "inputs/originals/omb-m-25-21.textlayer.txt"),
     ("reference/sources/originals/nist-ai-100-1.pdf",
      "reference/sources/originals/nist-ai-100-1.textlayer.txt"),
-]
+] + [("inputs/originals/%s.pdf" % n, "inputs/originals/%s.blocks.txt" % n) for n in (
+    "zuerich-strb-2025-2281-beilage-1", "appenzell-ki-werkzeuge-richtlinie-v2",
+    "darmstadt-regelung-generative-ki-r4", "darmstadt-hausverfuegung-8", "st-gallen-leitlinien-chatgpt")]
 
 
 def path(rel):
@@ -224,11 +253,168 @@ def build_omb():
     return head + text
 
 
+# ------------------------------------------------------------------ the German inputs, from block layers
+
+def blocks(rel):
+    """Pages of blocks from a block layer: [[(x0, y0, x1, y1, [lines])]]."""
+    pages = []
+    for line in read(rel).rstrip("\n").split("\n"):
+        if line.startswith("=====PAGE "):
+            pages.append([])
+        elif re.match(r"^@[\d.]+ [\d.]+ [\d.]+ [\d.]+$", line):
+            pages[-1].append(tuple(float(v) for v in line[1:].split()) + ([],))
+        else:
+            pages[-1][-1][4].append(line)
+    return pages
+
+
+def reading_order(page, margin=None):
+    """A page's blocks top to bottom; a margin title before the body block beside it."""
+    return sorted(page, key=lambda b: (round(b[1]), 0 if margin and margin(b) else 1))
+
+
+def unwrap(lines):
+    """Join wrapped lines with a space. A line-end hyphen before a lower-case letter divides a word
+    and goes with the break («ge-» + «nerativen»); before anything else it belongs to the word and
+    stays, and the lines join without a space («KI-» + «Werkzeuge»)."""
+    out = ""
+    for line in lines:
+        s = line.strip()
+        if not s:
+            continue
+        if out and re.search(r"[^\W\d_]-$", out):
+            out = out[:-1] + s if s[0].islower() else out + s
+        else:
+            out = out + " " + s if out else s
+    return out
+
+
+def paragraphs(lines, starts, alone=None, heading=None, own=None):
+    """Paragraphs from lines. A blank line ends one; a line that starts matches begins one; a line
+    that own matches is one by itself; a line that alone matches (a bare number) is joined to the
+    line after it, and if heading matches it, that heading takes one more line opening in lower
+    case (a wrapped heading) and ends."""
+    out, cur, pending, closed = [], [], None, False
+
+    def flush():
+        if cur:
+            out.append(cur[0] + " " + unwrap(cur[1:]) if len(cur) > 1 and alone and alone.match(cur[0])
+                       else unwrap(cur))
+
+    for line in lines:
+        s = line.strip()
+        if not s:
+            flush()
+            cur, closed = [], False
+        elif alone and alone.match(s):
+            flush()
+            cur, pending, closed = [], s, False
+        elif pending is not None:
+            cur, closed, pending = [pending, s], bool(heading and heading.match(pending)), None
+        elif cur and closed and s[0].islower():
+            cur.append(s)
+            flush()
+            cur, closed = [], False
+        elif own and own.match(s):
+            flush()
+            cur = [s]
+            flush()
+            cur, closed = [], False
+        elif not cur or closed or starts.match(s):
+            flush()
+            cur, closed = [s], False
+        else:
+            cur.append(s)
+    flush()
+    return out
+
+
+SEPARATOR = re.compile(r"^ {20,}$")   # the rule above a page's footnotes
+PAGE = re.compile(r"^\d[/-]\d\s*$")    # a page number: «1/3», «1-3»
+
+
+def build_zuerich():
+    body, notes = [], []
+    for page in blocks("inputs/originals/zuerich-strb-2025-2281-beilage-1.blocks.txt"):
+        art = [b for b in page if b[4] and b[4][0].startswith("Art.")]
+        left, right = min(b[0] for b in art), max(b[2] for b in art)
+        margin = lambda b: b[0] > right or b[2] < left
+        foot = False
+        for b in reading_order(page, margin):
+            if b[4] and SEPARATOR.match(b[4][0]):
+                foot = True
+            elif margin(b):
+                body += [""] + b[4] + [""]
+            else:
+                (notes if foot else body).extend(l for l in b[4] if not PAGE.match(l))
+    paras = paragraphs(body, re.compile(r"^(Art\. \d+|\d (?=[A-ZÄÖÜ])|[a-h]\. |[A-D]\. |STRB)"),
+                       re.compile(r"^[a-h]\.$"))
+    return "\n\n".join([paras[0] + " " + paras[1]] + paras[2:] +
+                       paragraphs(notes, re.compile(r"^\d "))) + "\n"
+
+
+def build_st_gallen():
+    body, notes = [], []
+    for page in blocks("inputs/originals/st-gallen-leitlinien-chatgpt.blocks.txt"):
+        foot = False
+        for b in reading_order(page):
+            for l in b[4]:
+                if SEPARATOR.match(l):
+                    foot = True
+                elif not PAGE.match(l):
+                    (notes if foot else body).append(l)
+    paras = paragraphs(body, re.compile(r"^– "), re.compile(r"^\d(\.\d)*\.?\s*$"),
+                       re.compile(r"^\d(\.\d)*\s*$"), re.compile(r"^(Beispiel einer Texteingabe:|Antwort:)\s*$"))
+    return "\n\n".join(paras + paragraphs(notes, re.compile(r"^$"), re.compile(r"^\d\s*$"))) + "\n"
+
+
+def build_appenzell():
+    number, body = None, []
+    for page in blocks("inputs/originals/appenzell-ki-werkzeuge-richtlinie-v2.blocks.txt"):
+        for b in reading_order(page):
+            if b[1] > 780:      # the footer: the document number and the page
+                number = number or b[4][0].strip()
+            elif b[1] > 40:     # below the running head of pages 2 and 3
+                body += b[4] + [""]
+    return "\n\n".join([number] + paragraphs(body, re.compile(r"^▪"), re.compile(r"^▪\s*$"))) + "\n"
+
+
+def build_darmstadt():
+    body, notes = [], []
+    for page in blocks("inputs/originals/darmstadt-regelung-generative-ki-r4.blocks.txt"):
+        for b in reading_order(page):
+            text = [l for l in b[4] if l.strip()]
+            if b[1] > 720 and text and re.match(r"^\d ", text[0]):    # a footnote at the foot of the page
+                notes.append(unwrap(text))
+            else:
+                body += b[4]
+    starts = re.compile(r"^(\(\d\) |\d\. [A-ZÄÖÜ]|Präambel|gez\.|Regierungsvizepräsident|im Hause|"
+                        r"Regierungspräsidium Darmstadt \.|\d+\. Oktober)")
+    return "\n\n".join(paragraphs(body, starts) + notes) + "\n"
+
+
+def build_darmstadt_order():
+    out = []
+    for b in reading_order(blocks("inputs/originals/darmstadt-hausverfuegung-8.blocks.txt")[0]):
+        lines = [l.strip() for l in b[4] if l.strip()]
+        if lines and lines[0].startswith("Az:"):
+            out += lines[:2] + [" ".join(lines[2:])]
+        elif lines:
+            out.append(unwrap(lines))
+    i = out.index("An alle")
+    return "\n\n".join(out[:i] + [" ".join(out[i:i + 3])] + out[i + 3:]) + "\n"
+
+
 INPUTS = [
     ("inputs/uk-civil-service-generative-ai-guidance.txt", build_uk_guidance),
     ("inputs/uk-generative-ai-framework-governance.txt", build_uk_framework),
     ("inputs/wikipedia-bot-policy.txt", build_wikipedia),
     ("inputs/omb-m-25-21-section-3.txt", build_omb),
+    ("inputs/zuerich-ki-richtlinie.txt", build_zuerich),
+    ("inputs/appenzell-ki-richtlinie.txt", build_appenzell),
+    ("inputs/darmstadt-regelung-generative-ki.txt", build_darmstadt),
+    ("inputs/darmstadt-hausverfuegung.txt", build_darmstadt_order),
+    ("inputs/st-gallen-leitlinien-chatgpt.txt", build_st_gallen),
 ]
 
 
@@ -309,7 +495,12 @@ def main(argv=None):
         print("text layers, re-extracted with PyMuPDF %s" % fitz.VersionBind)
         for pdf, layer in TEXT_LAYERS:
             doc = fitz.open(path(pdf))
-            text = "\n".join("=====PAGE %d\n" % (i + 1) + p.get_text() for i, p in enumerate(doc))
+            if layer.endswith(".blocks.txt"):
+                text = "".join("=====PAGE %d\n" % (i + 1) + "".join(
+                    "@%.1f %.1f %.1f %.1f\n%s\n" % (b[:4] + (b[4].rstrip("\n"),)) for b in p.get_text("blocks"))
+                    for i, p in enumerate(doc))
+            else:
+                text = "\n".join("=====PAGE %d\n" % (i + 1) + p.get_text() for i, p in enumerate(doc))
             good = text == read(layer)
             ok &= good
             print("  %s  %s" % ("ok  " if good else "FAIL", layer))

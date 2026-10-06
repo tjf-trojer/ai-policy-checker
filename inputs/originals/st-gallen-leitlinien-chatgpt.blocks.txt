@@ -1,0 +1,231 @@
+=====PAGE 1
+@85.1 29.3 88.0 41.1
+ 
+@85.1 40.5 85.4 42.3
+       
+@85.1 803.4 570.0 815.2
+ 
+ 
+1/3 
+@85.1 83.9 521.3 223.6
+Leitlinien über die Verwendung von ChatGPT und ähnlichen  
+Systemen in der Verwaltung1 
+ 
+ 
+1 
+Was sind ChatGPT und ähnliche Systeme? 
+ChatGPT ist ein computerbasiertes Programm, das menschenähnliche Texte erzeugen kann. 
+Es nutzt künstliche Intelligenz (KI)2, um aufgrund von Mustern und Daten Antworten auf Text-
+eingaben zu generieren. Nebst ChatGPT gibt es auch weitere textverarbeitende KI-Systeme. 
+Bekannte Anwendungen sind z.B. das Übersetzungsprogramm DeepL oder DALL-E, das aus 
+Textbeschreibungen Bilder erstellen kann. 
+@85.1 224.8 533.1 539.6
+ 
+Diese Systeme sind für die Öffentlichkeit meist kostenfrei zugänglich und können für verschie-
+dene Aufgaben eingesetzt werden, z.B. für die Erstellung eines Berichts oder einer Zusammen-
+fassung. Nebst der Textgenerierung können gewisse KI-Anwendungen auch Codeblöcke aus-
+geben oder Bilder erzeugen. Der Fokus der vorliegenden Leitlinien liegt indessen auf textverar-
+beitenden KI-Systemen. 
+ 
+Eine vertiefte Auseinandersetzung zum Umgang mit KI in der Staatsverwaltung erfolgt im Rah-
+men der Bearbeitung des Auftrags zur Erarbeitung einer KI-Strategie, den der Kantonsrat in der 
+Sommersession 2023 mit dem Kantonsratsbeschluss über die Rechnung 2022 (33.23.01) erteilt 
+hat.  
+ 
+ 
+2 
+Welche Chancen und Risiken stellen sich? 
+Chancen: ChatGPT und andere textverarbeitende KI-Systeme bergen hohes Potenzial, da sie 
+Menschen Arbeit abnehmen können, die sonst sehr viel Zeit in Anspruch nimmt. Informationen 
+können schnell und effizient erlangt werden, was die Entscheidungsfindung erleichtern kann. 
+Zudem können Texte leicht in verschiedene Sprachen übersetzt werden, strukturiert oder ver-
+ständlicher formuliert werden. 
+ 
+Risiken: Durch die Nutzung solcher Systeme stellen sich indessen auch Risiken: 
+– Die Nachvollziehbarkeit und Transparenz der Textausgaben ist nicht gewährleistet. 
+– Antworten können falsch, irrelevant oder nicht werteneutral sein. 
+– Geheime und vertrauliche Daten könnten entgegen der Vorgaben der Informationssicherheit 
+@85.1 540.7 524.5 578.6
+und des Datenschutzes3 an Dritte weitergegeben werden. Die eingegebenen Daten werden 
+teilweise für die Weiterentwicklung dieser Systeme verwendet. 
+– Die Verwendung KI-basierter Textgeneratoren kann auch urheberrechtlich problematisch 
+@85.1 580.0 531.4 716.7
+sein, wenn nicht die nötigen Rechte erworben wurden. 
+ 
+ 
+3 
+Wie dürfen ChatGPT und ähnliche Systeme bei der Arbeit 
+verwendet werden? 
+Die Mitarbeitenden der Verwaltung können ChatGPT und andere textverarbeitende KI-Systeme 
+grundsätzlich unter Beachtung der geltenden rechtlichen Vorgaben im Arbeitsalltag verwenden. 
+Es ist wichtig, solche Systeme mit der notwendigen Umsicht und Vorsicht nutzen. Betreffend 
+die Texteingabe und die anschliessende Verwendung der Textausgaben gelten folgende Leitli-
+nien: 
+ 
+@85.1 722.9 530.9 780.4
+                                                   
+1  
+Verabschiedet vom Vorstand der Vereinigung St.Galler Gemeindepräsidentinnen und Gemeindepräsidenten am 
+31. August 2023 und von der Regierung des Kantons St.Gallen am 5. September 2023. 
+2  
+Vgl. die Definition des Kompetenznetzwerks für künstliche Intelligenz des Bundes: https://cnai.swiss/.  
+3  
+Datenschutzgesetz (sGS 142.1; abgekürzt DSG) und Verordnung über die Informatiksicherheit (sGS 142.21). 
+=====PAGE 2
+@85.1 29.3 88.0 106.2
+ 
+ 
+ 
+ 
+ 
+ 
+@85.1 105.6 85.4 106.7
+ 
+@85.1 803.4 570.0 815.2
+ 
+ 
+2/3 
+@85.1 106.7 519.6 202.4
+3.1 
+Leitlinien für die Texteingabe 
+3.1.1 
+Schutz von geheimen und vertraulichen Daten 
+Geheime und vertrauliche Daten dürfen nicht an ChatGPT und ähnliche Systeme weitergege-
+ben werden. Dies umfasst insbesondere: 
+ 
+1. 
+durch das Datenschutzgesetz (sGS 142.1; abgekürzt DSG) geschützte Daten: 
+ 
+@107.8 203.6 524.4 215.4
+– Personendaten (Art. 1 Bst. a DSG), d.h. Angaben, die sich auf eine bestimmte oder be-
+@107.8 216.7 529.1 280.4
+stimmbare natürliche Person beziehen. Ausnahme: Entsprechende Eingaben können 
+erfolgen, wenn diese vorab anonymisiert bzw. pseudonymisiert werden und damit keine 
+Rückschlüsse auf natürliche Personen möglich sind.4 
+ 
+– besonders schützenswerte Personendaten (Art. 1 Bst. b DSG), d.h. Angaben über: 
+@119.2 281.6 515.0 293.4
+– religiöse, weltanschauliche sowie politische Ansichten und Tätigkeiten. Ausgenom-
+@107.8 294.7 529.6 423.5
+men sind Angaben über die Mitgliedschaft bei einer Religionsgemeinschaft, einer Or-
+ganisation oder einer politischen Partei, wenn die betroffene Person diese selbst be-
+kannt gegeben hat oder für ein öffentliches Amt kandidiert; 
+– Gesundheit, Intimsphäre und ethnische Zugehörigkeit; 
+– genetische Daten; 
+– biometrische Daten, die eine natürliche Person eindeutig identifizieren; 
+– Leistungen und Massnahmen der sozialen Hilfe; 
+– strafrechtliche sowie disziplinarische Verfahren und Sanktionen. 
+ 
+– Persönlichkeitsprofile (Art. 1 Bst. d DSG), d.h. eine Zusammenstellung von Personenda-
+@107.8 424.7 521.6 462.5
+ten, welche die Beurteilung der Persönlichkeit einer natürlichen Person erlaubt. 
+ 
+– Profiling (Art. 1 dbis DSG), d.h. jede Art der automatisierten Bearbeitung von Personen-
+@85.1 463.7 519.8 527.4
+daten, die darin besteht, dass diese Daten verwendet werden, um bestimmte persönli-
+che Aspekte, die sich auf eine natürliche Person beziehen, zu bewerten.5 
+ 
+2. 
+durch eine Geheimhaltungspflicht geschützte Daten: 
+ 
+@107.8 528.5 527.6 540.5
+– dem (allgemeinen) Amtsgeheimnis unterstehende Daten.6 Das Amtsgeheimnis umfasst 
+@107.8 541.7 529.7 631.4
+nur die Informationen, die gemäss dem Öffentlichkeitsgesetz (sGS 140.2) nicht zugäng-
+lich sind. Es handelt sich dabei um Daten, die ihrer Natur nach geheim sind, d.h. sie 
+sind nur einem beschränkten Personenkreis bekannt, sie sind nicht allgemein zugäng-
+lich, es bestehen berechtigte (öffentliche oder private) Geheimhaltungsinteressen sowie 
+ein Wille des Arbeitgebers an ihrer Geheimhaltung. 
+ 
+– besonderen (Berufs-)Geheimnissen unterstehende Daten (z.B. Arztgeheimnis, Anwalts-
+@107.8 632.6 319.4 670.5
+geheimnis, Steuergeheimnis). 
+ 
+– vertraglich ausdrücklich geschützte Daten. 
+@85.1 682.8 531.7 780.9
+                                                   
+4  
+Die Eingabe von besonders schützenswerten Personendaten, Persönlichkeitsprofilen und Profiling ist auch in 
+anonymisierter bzw. pseudonymisierter Form aufgrund des hohen Schutzbedarfs der Daten und der Rück-
+schlussgefahr auf eine natürliche Person nicht zulässig. 
+5  
+Dies betrifft insbesondere Aspekte bezüglich Arbeitsleistung, wirtschaftlicher Lage, Gesundheit, persönlicher 
+Vorlieben, Interessen, Zuverlässigkeit, Verhalten, Aufenthaltsort oder um Ortswechsel dieser natürlichen Person 
+zu analysieren oder vorherzusagen. 
+6  
+Art. 67 des Personalgesetzes (sGS 143.1) i.V.m. Art. 3a des Staatsverwaltungsgesetzes (sGS 140.1) und 
+Art. 99 des Gemeindegesetzes (sGS 151.2) sowie Art. 320 des Schweizerischen Strafgesetzbuchs (SR 311.0). 
+=====PAGE 3
+@85.1 29.3 88.0 106.2
+ 
+ 
+ 
+ 
+ 
+ 
+@85.1 105.6 85.4 106.7
+ 
+@85.1 803.4 570.0 815.2
+ 
+ 
+3/3 
+@85.1 107.6 532.9 264.3
+3.1.2 
+Gezielter Einsatz und korrekte Anwendung 
+Die Eingabe von ganzen Dokumenten der Verwaltung oder längeren Textabschnitten daraus 
+(«copy paste») in solche Systeme (z.B. zur Übersetzung) ist ohne eine vorgängige Prüfung des 
+Inhalts nicht zulässig. Es muss vor einer Texteingabe überprüft werden, ob ein Text vertrauliche 
+oder geheime Daten enthält und ob die entsprechenden Inhalte bzw. bestimmte Begriffe weg-
+gelassen oder umformuliert werden können (vgl. vorstehend Abschnitt 3.1.1). 
+ 
+ChatGPT und ähnliche Systeme eignen sich lediglich für einfache, standardmässige Anfragen. 
+Sie eignen sich nicht für die Bearbeitung von komplexen oder kreativen Aufträgen. Um qualita-
+tiv gute Antworten zu erzielen, sollten klare und spezifische Fragestellungen gewählt werden, 
+ohne zu viel über den Arbeitgeber preiszugeben. 
+ 
+@85.1 418.1 526.1 511.0
+ 
+ 
+3.2 
+Leitlinien für die Verwendung von Textausgaben 
+Bei der Verwendung von generierten Textausgaben durch ChatGPT oder ähnlichen Systemen 
+gilt Folgendes: 
+ 
+– Kritische Prüfung: Ein generierter Text und die darin enthaltenen Informationen sind kritisch 
+@85.1 512.2 531.5 550.0
+auf Qualität und Korrektheit zu prüfen.  
+ 
+– Vergleich mit anderen Quellen: Um die Genauigkeit einer Textausgabe sicherzustellen, sollte 
+@85.1 551.2 526.7 589.0
+ein Vergleich mit anderen, zuverlässigen Quellen vorgenommen werden. 
+ 
+– Sachgerechte Anpassung: Von einer direkten Übernahme von generierten Textpassagen ist 
+@85.1 590.2 525.0 653.9
+abzusehen, insbesondere, wenn eine Quellenangabe erforderlich wäre. Textausgaben sind 
+folglich sachgerecht anzupassen und an die jeweils geltenden Schreibweisungen (insbeson-
+dere kantonale Schreibweisungen) anzugleichen. 
+ 
+– Objektivität: Die gemachten Aussagen von ChatGPT und ähnlichen Systemen sind unter 
+@85.1 655.2 524.7 692.9
+Umständen nicht werteneutral. Es muss geprüft werden, ob ein Text diskriminierend wirkt.  
+ 
+– Urheberrecht: Das Urheberrecht (v.a. das eidgenössische Urheberrechtsgesetz [SR 231.1]) 
+@85.1 694.2 512.2 731.9
+ist zu beachten. Es kann vorkommen, dass Text aus unterschiedlichen Quellen generiert 
+wurde, für die aber nicht die erforderlichen urheberrechtlichen Rechte erworben wurden.  
+ 
+@92.5 271.2 551.8 346.3
+Beispiel einer Texteingabe: 
+Nenne mir die drei wichtigsten Punkte, die den Kanton St.Gallen als modernen und zukunftsgerichteten Kanton 
+beschreiben, und gib eine kurze Erklärung. 
+ 
+Antwort: 
+– Bildung und Forschung: Fokus auf erstklassige Bildungseinrichtungen wie Universität St.Gallen (HSG) und 
+@92.5 349.4 533.5 372.3
+Fachhochschulen, die zur Innovationskraft des Kantons beitragen. 
+– Wirtschaftliche Diversifikation und Innovation: Vielfältige Wirtschaftsstruktur von traditionellen bis modernen 
+@92.5 375.4 546.3 398.3
+Branchen, Förderung von Unternehmertum und enge Wissenschaft-Industrie-Kooperation. 
+– Nachhaltige Entwicklung und Lebensqualität: Betonung von Umweltschutz, erneuerbaren Energien, und Förde-
+@103.9 401.2 326.2 411.3
+rung eines aktiven Lebensstils für hohe Lebensqualität. 

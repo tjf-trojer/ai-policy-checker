@@ -1,0 +1,87 @@
+AI 013.12-476.4.1.2-1450793
+
+Richtlinie der Standeskommission zur Nutzung von generativen KI-Werkzeugen
+
+vom 19. Mai 2026
+
+1 Ausgangslage
+
+Generative KI-Werkzeuge sind online verfügbare Anwendungen, welche basierend auf einer Eingabe mit generativer Künstlicher Intelligenz (KI) automatisch Texte, Bilder, Programmcodes und andere Datenformate als Ausgabe generieren. Claude, ChatGPTund Microsoft Copilot sind Beispiele von öffentlich zugänglichen generativen KI-Werkzeugen.
+
+Die Mitarbeitenden der kantonalen Verwaltung Appenzell I.Rh. können öffentlich zugängliche generative KI-Werkzeuge unter Beachtung der geltenden rechtlichen Vorgaben im Arbeitsalltag verwenden. Aktuell werden keine durch das Amt für Informatik betriebene generative KI-Werkzeuge zur Verfügung gestellt. Im Umgang mit generativen KI-Werkzeugen ist Vorsicht geboten. Die Richtlinie gilt als Mindeststandard für die Nutzung von generativen KI-Werkzeugen - unabhängig davon, ob Gratis- oder Bezahlversionen verwendet werden.
+
+2 Richtlinie
+
+Die Richtlinie ist auf die Nutzung von generativen KI-Werkzeugen zur Erstellung von Texten in der Verwaltung und für Verwaltungsmitarbeitende ausgerichtet. Die Grundsätze gelten sinngemäss für alle Arten von generativen KI-Werkzeugen.
+
+2.1 Nutzung von generativen KI-Werkzeugen
+
+Generative KI-Werkzeuge eignen sich vorwiegend als Arbeitshilfe zum persönlichen Gebrauch, beispielsweise
+
+▪ um eine Zusammenfassung von öffentlich zugänglichen Informationen zu erstellen,
+
+▪ um Ideen zu einem allgemeinen Thema zu finden,
+
+▪ als Formulierungshilfe für allgemeine eigene Texte ohne Personendaten und vertrauliche Inhalte.
+
+Für viele Verwaltungsaufgaben sind generative KI-Werkzeuge nicht geeignet. Auf den Einsatz von generativen KI-Werkzeugen ist in folgenden Fällen zu verzichten:
+
+▪ Beim Vorbereiten von rechtsverbindlichen Entscheiden.
+
+▪ Beim Erarbeiten von Arbeitsdokumenten auf der Basis von verwaltungsinternen Informationen.
+
+▪ Im Austausch mit der Bevölkerung, beispielsweise bei der Beantwortung von Anfragen, sofern es sich nicht um öffentlich zugängliche Informationen handelt.
+
+2.2 Eingabe von Informationen im Eingabefeld
+
+Werden generative KI-Werkzeuge genutzt, ist bei der Eingabe von Informationen (prompt) auf Folgendes zu achten:
+
+▪ Die Eingabe darf keine Personendaten enthalten.
+
+▪ Die Eingabe darf keine als intern oder vertraulich klassifizierten Informationen enthalten.
+
+▪ Die Eingabe darf keine Information enthalten, die einer Organisationseinheit zugeordnet werden kann. Dazu gehören beispielsweise Amtsbezeichnungen, interne Kennungen oder Aktenzeichen.
+
+2.3 Weiterverwendung der Ergebnisse
+
+Die Verantwortung für den mit generativen KI-Werkzeugen erstellten Inhalt kann nicht an die Maschine delegiert werden. Der Mensch trifft die Entscheidungen.
+
+Die Ausgabe eines generativen KI-Werkzeugs basiert auf Wahrscheinlichkeitsberechnungen, was bedeutet, dass das Ergebnis nur rechnerisch wahrscheinlich und nicht zwingend inhaltlich korrekt ist. Bei der Weiterverwendung der Ergebnisse von generativen KI-Werkzeugen ist daher Folgendes zu beachten:
+
+▪ Generierte Texte und die darin enthaltenen Informationen sind kritisch auf Qualität und Korrektheit zu prüfen.
+
+▪ Um die Richtigkeit eines Ergebnisses sicherzustellen, sollte ein Vergleich mit anderen, zuverlässigen Quellen vorgenommen werden.
+
+▪ Generierte Texte sind sachlich anzupassen und an die jeweils geltenden Schreibweisungen anzugleichen. Insbesondere sind das Manual und die einschlägigen kantonalen Merkblätter zu berücksichtigen.
+
+▪ Die Ergebnisse von generativen KI-Werkzeugen sind oft nicht neutral oder enthalten Wertungen. Die Texte sind kritisch zu prüfen und zu bereinigen. Insbesondere ist zu prüfen, ob ein Text diskriminierend wirkt.
+
+▪ Die Ergebnisse von generativen KI-Werkzeugen basieren auf bestehenden Texten. Diese können urheberrechtlich geschützt sein.
+
+2.4 Rechtliche Vorgaben
+
+Bei der Nutzung von generativen KI-Werkzeugen sind die allgemeinen rechtlichen Vorgaben bezüglich Vertraulichkeit, Informationssicherheit und Datenschutz zu beachten.
+
+Zu berücksichtigen sind insbesondere:
+
+▪ der Schutz von Personendaten (siehe Datenschutz-, Informations- und Archivgesetz, DIAG, GS 172.800, und Art. 13 Bundesverfassung, SR 101),
+
+▪ die Sicherheit von Daten,
+
+▪ die Wahrung des Amtsgeheimnisses (siehe Schweizerisches Strafgesetzbuch, SR 311.0),
+
+▪ personalrechtliche Pflichten (siehe Personalverordnung, PeV, GS 172.310),
+
+▪ spezifische Vorgaben über die Nutzung von Informatikmitteln (siehe Standeskommissionsbeschluss über die Informatiknutzung, GS 172.315),
+
+▪ bestehende Urheberrechte (Urheberrechtsgesetz, SR 231.1).
+
+2.5 Meldepflicht bei Fehlern
+
+Stellen Mitarbeitende fest, dass bei der Nutzung eines generativen KI‑Werkzeugs gegen diese Richtlinie verstossen wurde oder ein Fehler passiert ist (z. B. unzulässige Eingabe von Informationen oder fehlerhafte Weiterverwendung von Ergebnissen), ist dies dem Amt für Informatik zu melden.
+
+Ziel der Meldung ist es, mögliche Auswirkungen soweit möglich zu begrenzen und aus dem Vorfall zu lernen.
+
+3 Empfehlung
+
+Beim Einsatz von generativen KI-Werkzeugen wird die Verwendung von Microsoft Copilot mit Unternehmensdatenschutz empfohlen. Eine im Intranet aufgeschaltete Anleitung erläutert den Anmeldevorgang.

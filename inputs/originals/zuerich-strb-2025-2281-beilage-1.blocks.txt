@@ -1,0 +1,230 @@
+=====PAGE 1
+@85.0 27.0 414.1 39.3
+ 
+ 
+@85.0 43.8 88.1 56.1
+ 
+@85.0 60.6 88.1 72.9
+ 
+@85.0 772.1 414.1 784.5
+ 
+ 
+ 
+1/3 
+@85.0 789.2 88.1 801.5
+ 
+@85.0 153.8 397.5 170.8
+Richtlinie über die Nutzung von generativer 
+@85.0 173.9 350.8 191.0
+künstlicher Intelligenz (KI-Richtlinie) 
+@85.0 198.2 91.2 210.4
+  
+@85.0 216.4 269.8 228.7
+STRB Nr. 2281 vom 20. August 2025 
+@85.0 234.4 88.1 246.7
+ 
+@85.0 251.9 265.4 266.4
+A. Allgemeine Bestimmungen 
+@85.0 273.3 407.5 299.5
+Art. 1 Diese Richtlinie regelt den Umgang mit Werkzeugen der ge-
+nerativen künstlichen Intelligenz (KI-Werkzeuge).  
+@85.0 305.2 88.1 317.5
+ 
+@85.0 323.0 408.7 349.2
+Art. 2 Diese Richtlinie gilt für die Verwendung von KI-Werkzeugen 
+in der Stadtverwaltung, die: 
+@103.0 354.9 399.4 367.2
+a. durch verwaltungsexterne Anbietenden (Anbietende) zur 
+@103.0 368.8 292.4 395.1
+Verfügung gestellt werden; 
+b. über das Internet zugänglich sind.  
+@85.0 400.5 88.1 412.8
+ 
+@85.0 418.5 405.6 472.6
+Art. 3 KI-Werkzeuge sind Computeranwendungen, die auf der 
+Grundlage von Eingaben und Fragestellungen (sogenannte 
+Prompts) eigenständig Texte, Bilder, Videos oder Nachrichten ge-
+nerieren.  
+@85.0 478.3 88.1 490.6
+ 
+@85.0 495.7 411.5 522.3
+Art. 4 1 Die zuständigen Stellen setzen die Angestellten über diese 
+Richtlinie in Kenntnis.   
+@85.0 527.6 387.3 554.2
+2 Die Angestellten registrieren sich für die Verwendung der KI-
+Werkzeuge mit ihrer geschäftlichen E-Mail-Adresse. 
+@85.0 559.6 404.4 600.1
+3 Die Angestellten schränken die Verwertung der Daten und Infor-
+mationen durch die Anbietenden der KI-Werkzeuge so weit wie 
+möglich ein. 
+@85.0 605.5 88.1 617.8
+ 
+@85.0 623.3 334.3 637.8
+B. Eingabe von Daten und Informationen  
+@85.0 644.7 408.1 670.9
+Art. 5 Die Eingabe von öffentlich zugänglichen Daten und Informa-
+tionen in KI-Werkzeuge ist zulässig.   
+@85.0 676.4 88.1 688.7
+ 
+@85.0 694.0 398.7 720.6
+Art. 6 1 Die Eingabe von öffentlich nicht zugänglichen Daten und 
+Informationen in KI-Werkzeuge ist verboten.  
+@85.0 725.7 310.9 738.4
+2 Verboten ist insbesondere die Eingabe von:  
+@425.5 273.2 471.3 282.1
+Gegenstand 
+@425.5 322.9 486.0 331.8
+Geltungsbereich 
+@425.5 418.5 478.3 427.3
+KI-Werkzeuge 
+@425.5 496.3 475.2 505.1
+Registrierung 
+@425.5 644.6 494.4 662.6
+Dateneingabe  
+a. Zulässige Daten 
+@425.5 694.3 503.8 712.3
+b. Unzulässige Daten 
+ 
+=====PAGE 2
+@184.4 772.1 202.8 784.5
+2/3 
+@184.4 789.2 187.5 801.5
+ 
+@202.4 142.2 501.2 154.5
+a. Personendaten gemäss dem Bundesgesetz über den Da-
+@202.4 155.8 502.3 196.3
+tenschutz (Datenschutzgesetz, DSG)1 und dem Gesetz 
+über die Information und den Datenschutz (IDG)2; 
+b. intern, vertraulich oder streng vertraulich klassifizierten In-
+@202.4 197.9 498.8 223.9
+formationen;  
+c. durch eine Geheimhaltungspflicht geschützten sensiblen 
+@220.4 225.5 296.9 251.7
+Informationen.  
+ 
+@184.4 257.4 507.5 283.7
+Art. 7 Öffentlich nicht zugängliche Daten und Informationen kön-
+nen in KI-Werkzeuge ausnahmsweise eingegeben werden, wenn: 
+@202.4 289.4 503.2 315.6
+a. sie vollständig anonymisiert worden sind; und 
+b. ein Verstoss gegen datenschutzrechtliche Bestimmungen 
+@220.4 317.2 506.1 329.5
+oder andere Rechtnormen ausgeschlossen werden kann.  
+@184.4 335.0 187.5 347.3
+ 
+@184.4 352.6 514.0 379.2
+Art. 8 1 KI-Werkzeuge können verwendet werden, wenn dafür 
+keine unzulässigen Daten und Informationen eingegeben werden.   
+@184.4 384.5 416.5 397.2
+2 Sie können insbesondere verwendet werden:  
+@202.4 402.7 502.6 415.0
+a. für die Erstellung von Zusammenfassungen von veröffent-
+@202.4 416.6 509.6 442.8
+lichten Texten;  
+b. als Einstiegshilfe in einen Themenbereich in sinngemässer 
+@202.4 444.4 498.7 484.6
+Anwendung von elektronischen Suchmaschinen oder Le-
+xika;  
+c. für die Formulierung von Texten, Bildern, Videos oder 
+@202.4 486.2 412.0 526.4
+Nachrichten;  
+d. für die Erstellung von Software-Codes; 
+e. für die Erstellung von Präsentationen. 
+@184.4 531.8 188.1 546.3
+ 
+@184.4 553.0 509.4 579.2
+Art. 9 KI-Werkzeuge dürfen insbesondere nicht verwendet werden 
+für:  
+@202.4 584.9 506.1 597.2
+a. die Bearbeitung von laufenden, nicht veröffentlichten politi-
+@202.4 598.8 505.4 639.0
+schen Geschäften;  
+b. die Vorbereitung von rechtsverbindlichen Entscheiden;  
+c. die Erarbeitung von Arbeitsdokumenten basierend auf ver-
+@202.4 640.6 509.7 666.8
+waltungsinternen Informationen;  
+d. das Zusammenfassen von Dokumenten eines Vernehmlas-
+@202.4 668.4 402.6 694.7
+sungsverfahrens;  
+e. die Übersetzung von Lebensläufen;   
+@184.4 705.7 331.0 718.0
+                                               
+@184.4 722.7 187.5 735.0
+ 
+@184.4 740.0 356.0 751.6
+1 vom 25. September 2020, SR 235.1. 
+@184.4 755.6 340.4 767.2
+2 vom 12. Februar 2007, LS 170.4. 
+@56.7 257.4 124.7 275.6
+c. Anonymisierung 
+ 
+@56.7 352.9 149.1 370.9
+Anwendungsbereiche 
+a. Zulässige Verwendung 
+@56.7 553.2 158.5 562.0
+b. Unzulässige Verwendung 
+=====PAGE 3
+@85.0 772.1 414.1 784.5
+ 
+ 
+ 
+3/3 
+@85.0 789.2 88.1 801.5
+ 
+@103.0 142.2 405.0 182.4
+f. 
+die unveränderte Eingabe von Anfragen aus der Bevölke-
+rung, Wirtschaft oder Politik; 
+g. die Eingabe von bestehenden Software-Codes zur Fehler-
+@103.0 184.0 406.6 223.9
+beseitigung oder Überprüfung, soweit Urheberrechte von  
+Dritten verletzt werden können;  
+h. die Weiterverwendung von generativen Ergebnissen ohne 
+@121.0 225.5 240.3 251.7
+inhaltliche Überprüfung. 
+ 
+@85.0 257.2 377.3 271.7
+C. Überprüfung und Verwendung der Ergebnisse 
+@85.0 278.6 405.6 304.8
+Art. 10 Die Angestellten prüfen die Ergebnisse der KI-Werkzeuge 
+auf deren Richtigkeit und Vollständigkeit.  
+@85.0 310.3 88.1 322.6
+ 
+@85.0 327.9 405.9 368.4
+Art. 11 1 Die Verwendung der Ergebnisse der KI-Werkzeuge wird 
+offengelegt, sofern die Ergebnisse ohne wesentliche Änderungen 
+übernommen werden. 
+@85.0 373.7 403.7 400.4
+2 Ergebnisse dürfen insbesondere nicht verwendet werden, wenn 
+sie: 
+@103.0 405.8 402.0 446.0
+a. erkennbar falsche Informationen enthalten;   
+b. Diskriminierungen und Vorurteile enthalten;  
+c. gegen das Bundesgesetz über das Urheberrecht und ver-
+@121.0 447.2 373.8 473.8
+wandte Schutzrechte (Urheberrechtsgesetz, URG)3 
+verstossen. 
+@85.0 479.5 88.1 491.8
+ 
+@85.0 497.0 213.3 511.5
+D. Rechtliche Folgen 
+@85.0 518.4 394.4 544.6
+Art. 12 Die Angestellten tragen allfällige haftungsrechtliche und 
+personalrechtliche Folgen für:  
+@103.0 550.3 391.5 576.6
+a. die unzulässige Eingabe von Daten und Informationen; 
+b. die unzulässige Verwendung von Ergebnissen. 
+@85.0 582.0 88.1 594.3
+ 
+@85.0 721.3 231.6 733.6
+                                               
+@85.0 738.1 88.1 750.4
+ 
+@85.0 755.6 237.6 767.2
+3 vom 9. Oktober 1992, SR 231.1. 
+@425.5 278.5 472.1 287.3
+Überprüfung 
+@425.5 328.2 472.5 337.0
+Verwendung 
+@425.5 518.3 491.8 527.2
+Rechtliche Folgen 

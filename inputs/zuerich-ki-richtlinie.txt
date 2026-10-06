@@ -1,0 +1,127 @@
+Richtlinie über die Nutzung von generativer künstlicher Intelligenz (KI-Richtlinie) STRB Nr. 2281 vom 20. August 2025
+
+A. Allgemeine Bestimmungen
+
+Gegenstand
+
+Art. 1 Diese Richtlinie regelt den Umgang mit Werkzeugen der generativen künstlichen Intelligenz (KI-Werkzeuge).
+
+Geltungsbereich
+
+Art. 2 Diese Richtlinie gilt für die Verwendung von KI-Werkzeugen in der Stadtverwaltung, die:
+
+a. durch verwaltungsexterne Anbietenden (Anbietende) zur Verfügung gestellt werden;
+
+b. über das Internet zugänglich sind.
+
+KI-Werkzeuge
+
+Art. 3 KI-Werkzeuge sind Computeranwendungen, die auf der Grundlage von Eingaben und Fragestellungen (sogenannte Prompts) eigenständig Texte, Bilder, Videos oder Nachrichten generieren.
+
+Registrierung
+
+Art. 4 1 Die zuständigen Stellen setzen die Angestellten über diese Richtlinie in Kenntnis.
+
+2 Die Angestellten registrieren sich für die Verwendung der KI-Werkzeuge mit ihrer geschäftlichen E-Mail-Adresse.
+
+3 Die Angestellten schränken die Verwertung der Daten und Informationen durch die Anbietenden der KI-Werkzeuge so weit wie möglich ein.
+
+B. Eingabe von Daten und Informationen
+
+Dateneingabe
+
+a. Zulässige Daten
+
+Art. 5 Die Eingabe von öffentlich zugänglichen Daten und Informationen in KI-Werkzeuge ist zulässig.
+
+b. Unzulässige Daten
+
+Art. 6 1 Die Eingabe von öffentlich nicht zugänglichen Daten und Informationen in KI-Werkzeuge ist verboten.
+
+2 Verboten ist insbesondere die Eingabe von:
+
+a. Personendaten gemäss dem Bundesgesetz über den Datenschutz (Datenschutzgesetz, DSG)1 und dem Gesetz über die Information und den Datenschutz (IDG)2;
+
+b. intern, vertraulich oder streng vertraulich klassifizierten Informationen;
+
+c. durch eine Geheimhaltungspflicht geschützten sensiblen Informationen.
+
+c. Anonymisierung
+
+Art. 7 Öffentlich nicht zugängliche Daten und Informationen können in KI-Werkzeuge ausnahmsweise eingegeben werden, wenn:
+
+a. sie vollständig anonymisiert worden sind; und
+
+b. ein Verstoss gegen datenschutzrechtliche Bestimmungen oder andere Rechtnormen ausgeschlossen werden kann.
+
+Anwendungsbereiche
+
+a. Zulässige Verwendung
+
+Art. 8 1 KI-Werkzeuge können verwendet werden, wenn dafür keine unzulässigen Daten und Informationen eingegeben werden.
+
+2 Sie können insbesondere verwendet werden:
+
+a. für die Erstellung von Zusammenfassungen von veröffentlichten Texten;
+
+b. als Einstiegshilfe in einen Themenbereich in sinngemässer Anwendung von elektronischen Suchmaschinen oder Lexika;
+
+c. für die Formulierung von Texten, Bildern, Videos oder Nachrichten;
+
+d. für die Erstellung von Software-Codes;
+
+e. für die Erstellung von Präsentationen.
+
+b. Unzulässige Verwendung
+
+Art. 9 KI-Werkzeuge dürfen insbesondere nicht verwendet werden für:
+
+a. die Bearbeitung von laufenden, nicht veröffentlichten politischen Geschäften;
+
+b. die Vorbereitung von rechtsverbindlichen Entscheiden;
+
+c. die Erarbeitung von Arbeitsdokumenten basierend auf verwaltungsinternen Informationen;
+
+d. das Zusammenfassen von Dokumenten eines Vernehmlassungsverfahrens;
+
+e. die Übersetzung von Lebensläufen;
+
+f. die unveränderte Eingabe von Anfragen aus der Bevölkerung, Wirtschaft oder Politik;
+
+g. die Eingabe von bestehenden Software-Codes zur Fehlerbeseitigung oder Überprüfung, soweit Urheberrechte von Dritten verletzt werden können;
+
+h. die Weiterverwendung von generativen Ergebnissen ohne inhaltliche Überprüfung.
+
+C. Überprüfung und Verwendung der Ergebnisse
+
+Überprüfung
+
+Art. 10 Die Angestellten prüfen die Ergebnisse der KI-Werkzeuge auf deren Richtigkeit und Vollständigkeit.
+
+Verwendung
+
+Art. 11 1 Die Verwendung der Ergebnisse der KI-Werkzeuge wird offengelegt, sofern die Ergebnisse ohne wesentliche Änderungen übernommen werden.
+
+2 Ergebnisse dürfen insbesondere nicht verwendet werden, wenn sie:
+
+a. erkennbar falsche Informationen enthalten;
+
+b. Diskriminierungen und Vorurteile enthalten;
+
+c. gegen das Bundesgesetz über das Urheberrecht und verwandte Schutzrechte (Urheberrechtsgesetz, URG)3 verstossen.
+
+D. Rechtliche Folgen
+
+Rechtliche Folgen
+
+Art. 12 Die Angestellten tragen allfällige haftungsrechtliche und personalrechtliche Folgen für:
+
+a. die unzulässige Eingabe von Daten und Informationen;
+
+b. die unzulässige Verwendung von Ergebnissen.
+
+1 vom 25. September 2020, SR 235.1.
+
+2 vom 12. Februar 2007, LS 170.4.
+
+3 vom 9. Oktober 1992, SR 231.1.
