@@ -16,7 +16,7 @@ text. Eight gates run on each register:
   flags     "(collective)" and "(unspecified)" are set exactly where the
             lexicon says
   status    each status follows from the Owner, Evidence and When cells
-  tally     the seven counts follow from the Register and Not rules sections
+  tally     the eight counts follow from the Register and Not rules sections
   coverage  every letter and digit of the input sits inside a Rule or
             Not-rules quotation, no text is quoted as both, and no lead-in
             (an entry ending in a colon) stands alone unless headings follow it

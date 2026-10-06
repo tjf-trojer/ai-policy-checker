@@ -1,13 +1,14 @@
 # Checking: the tally, the script, the check by hand
 
-_Last updated: 2026-10-03_
+_Last updated: 2026-10-06_
 
 Step 7. A register is finished when it passes.
 
 ## Count
 
 Fill the tally from the rows: rules, controls, intentions, owners named and not collective,
-evidence named, moments named and not unspecified, not rules.
+evidence named, moments named and not unspecified, not rules, and the not rules filed outside the
+policy.
 
 ## Run the checker
 

@@ -1,6 +1,6 @@
 # Notices: third-party text and its licences
 
-_Last updated: 2026-10-03_
+_Last updated: 2026-10-06_
 
 This repository's own files are MIT ([`LICENSE`](LICENSE)). The texts below are other people's,
 under their own terms. None of their authors endorses this repository.
@@ -16,7 +16,7 @@ under their own terms. None of their authors endorses this repository.
 | `tests/planted/acme-ai-use-policy.txt` | Written for this repository. The organisation and its policy are invented | MIT, like the repository's own files |
 | `tests/noisy/wikipedia-bot-policy-stapled-email.txt` | `inputs/wikipedia-bot-policy.txt` with an email appended; the email, its sender and its recipients are invented for this repository | CC BY-SA 4.0 for the Wikipedia text, like its source |
 
-Changes, the same kind for all three: markup converted to plain text, one paragraph or list item
+Changes, the same kind for all four: markup converted to plain text, one paragraph or list item
 per line with a blank line between; a heading's level shown by leading `#` marks; omitted passages
 marked `[...]` on a line of their own. Wording, spelling and errors are unchanged.
 
