@@ -65,7 +65,8 @@ Usage:
                                                   of choosing by the register's language
 
 A Source Input path is looked up from the working directory first, then from the
-repository root; --input, when given, must name the same file.
+repository root, then in tests/noisy/ (the adversarial runs' inputs, under the names their sessions
+were given); --input, when given, must name the same file.
 
 Exit status is 0 only when every register passes and every fixture fails in the
 gate it declares and in no other.
@@ -1191,13 +1192,16 @@ def src(field):
 # ---------------------------------------------------------------- input
 
 def input_candidates(named):
-    """Where a Source Input path may point: the working directory first, then the repository."""
-    return [os.path.join(os.getcwd(), named), os.path.join(ROOT, named)]
+    """Where a Source Input path may point: the working directory first, then the repository, then
+    tests/noisy/, where the inputs of the adversarial runs keep the names their sessions knew."""
+    return [os.path.join(os.getcwd(), named), os.path.join(ROOT, named),
+            os.path.join(ROOT, "tests", "noisy", named)]
 
 
 def resolve_input(named):
     cands = input_candidates(named)
-    return next((p for p in cands if os.path.isfile(p)), cands[-1])
+    return next((p for p in cands if os.path.isfile(p)), cands[1])
+
 
 
 def load_input(path):

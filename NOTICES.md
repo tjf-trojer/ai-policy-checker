@@ -19,6 +19,7 @@ under their own terms. None of their authors endorses this repository.
 | `inputs/st-gallen-leitlinien-chatgpt.txt` | "Leitlinien über die Verwendung von ChatGPT und ähnlichen Systemen in der Verwaltung", adopted by the board of the Vereinigung St.Galler Gemeindepräsidentinnen und Gemeindepräsidenten on 31 August 2023 and by the Regierung des Kantons St.Gallen on 5 September 2023. <https://www.sg.ch/content/dam/sgch/sicherheit/datenschutz/SK_Leitlinien_ueber_die_Verwendung_von_ChatGPT_und_aehnlichen_Systemen_in_der_Verwaltung.pdf>, retrieved 6 October 2026 | No copyright: an official enactment, URG Art. 5 para. 1 lit. a. Confidence medium-high: guidelines adopted by the cantonal government, whose binding force on the administration is weaker than a directive's |
 | `tests/planted/acme-ai-use-policy.txt` | Written for this repository. The organisation and its policy are invented | MIT, like the repository's own files |
 | `tests/language/ki-richtlinie.txt`, `tests/language/politique-ia.txt`, `tests/language/ai-note-with-german-quote.txt` | Written for this repository, in German, French and English. The organisations and their policies are invented | MIT, like the repository's own files |
+| `tests/noisy/appenzell-degraded.txt`, `tests/noisy/appenzell-noisy.txt` | `inputs/appenzell-ki-richtlinie.txt` with lines cut out, and with an email appended; the email, its sender and its recipients are invented for this repository | No copyright for the Appenzell text, as above; MIT for the email |
 | `tests/noisy/wikipedia-bot-policy-stapled-email.txt` | `inputs/wikipedia-bot-policy.txt` with an email appended; the email, its sender and its recipients are invented for this repository | CC BY-SA 4.0 for the Wikipedia text, like its source |
 
 The licence basis of the German inputs is the exemption of official texts from copyright, not a
@@ -73,7 +74,8 @@ CC BY-SA 4.0, like the text it quotes. Each file in `tests/fixtures/` is a copy 
 example with one defect planted by `scripts/make_fixtures.py`, and carries that example's source and
 licence; so does `evidence/noisy-run-register.md`. The three fixtures generated from
 `tests/language/` are MIT, like their inputs. Examples 4 and 5 and the fixtures generated from them
-quote the Zürich and St. Gallen texts, which are free of copyright as stated above.
+quote the Zürich and St. Gallen texts, and the German cold-run registers in `evidence/` the Appenzell
+and Darmstadt texts, which are free of copyright as stated above.
 
 ## Originals, and how to check them
 
