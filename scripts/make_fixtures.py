@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 """Write tests/fixtures/: copies of the worked registers, each with one planted defect.
 
-  python3 scripts/make_fixtures.py
+  python3 scripts/make_fixtures.py          replace every .md file in tests/fixtures/
+  python3 scripts/make_fixtures.py --help   print this and write nothing
 
 Every fixture keeps its derived fields (status, tally) consistent with the defect, so that it fails
 in exactly the check its first line names; `python3 scripts/verify.py` fails unless it does. The
 fixtures are generated from examples.md and evidence/noisy-run-register.md, never edited by hand:
 change a worked register, then run this again.
 """
+import argparse
 import os
 import re
 import sys
@@ -181,7 +183,9 @@ def fixtures():
     return f
 
 
-def main():
+def main(argv=None):
+    argparse.ArgumentParser(prog="make_fixtures.py", description=__doc__,
+                            formatter_class=argparse.RawDescriptionHelpFormatter).parse_args(argv)
     os.makedirs(OUT, exist_ok=True)
     for old in os.listdir(OUT):
         if old.endswith(".md"):

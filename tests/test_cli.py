@@ -65,5 +65,35 @@ class InputOutsideTheRepository(unittest.TestCase):
         self.assertIn("names my-policy.txt, but --input is", out)
 
 
+def snapshot(folder):
+    out = {}
+    for base, _, files in os.walk(folder):
+        for f in files:
+            st = os.stat(os.path.join(base, f))
+            out[os.path.join(base, f)] = (st.st_size, st.st_mtime_ns)
+    return out
+
+
+class HelpWritesNothing(unittest.TestCase):
+    """--help prints the usage and exits; it never runs the script's work."""
+
+    def check(self, script, needle):
+        before = snapshot(os.path.join(ROOT, "tests"))
+        rc, out = run([os.path.join(ROOT, "scripts", script), "--help"], tempfile.gettempdir())
+        self.assertEqual(rc, 0, out)
+        self.assertIn("usage: " + script, out)
+        self.assertIn(needle, out)
+        self.assertNotIn("RESULT", out)
+        self.assertEqual(before, snapshot(os.path.join(ROOT, "tests")))
+
+    def test_make_fixtures(self):
+        self.check("make_fixtures.py", "planted defect")
+
+    def test_sources(self):
+        self.check("sources.py", "--fetch")
+        self.assertNotIn("originals\n", run([os.path.join(ROOT, "scripts", "sources.py"), "-h"],
+                                            ROOT)[1])
+
+
 if __name__ == "__main__":
     unittest.main()

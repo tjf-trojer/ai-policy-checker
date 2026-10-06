@@ -16,6 +16,7 @@ not rebuilt: their line breaks and paragraph numbers were set by hand, and the m
 every word of each line stands in the original in the same order. Exit status 0 only when
 everything holds.
 """
+import argparse
 import hashlib
 import html
 import json
@@ -276,7 +277,12 @@ def match_excerpt(rel, original):
 
 # ------------------------------------------------------------------ run
 
-def main(argv):
+def main(argv=None):
+    ap = argparse.ArgumentParser(prog="sources.py", description=__doc__,
+                                 formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--pdf", action="store_true", help="also re-extract the PDF text layers (needs PyMuPDF)")
+    ap.add_argument("--fetch", action="store_true", help="also download every original again (needs a network)")
+    args = ap.parse_args(argv)
     ok = True
     print("originals")
     for rel, want, _ in ORIGINALS:
@@ -298,7 +304,7 @@ def main(argv):
         print("  %s  %s: %d lines%s" % ("ok  " if not missing else "FAIL", rel, n,
               "" if not missing else ", not found in order: " + ", ".join("L%d" % m for m in missing)))
 
-    if "--pdf" in argv:
+    if args.pdf:
         import fitz
         print("text layers, re-extracted with PyMuPDF %s" % fitz.VersionBind)
         for pdf, layer in TEXT_LAYERS:
@@ -308,7 +314,7 @@ def main(argv):
             ok &= good
             print("  %s  %s" % ("ok  " if good else "FAIL", layer))
 
-    if "--fetch" in argv:
+    if args.fetch:
         print("originals, downloaded again")
         for rel, want, url in ORIGINALS:
             if not url:
@@ -326,4 +332,4 @@ def main(argv):
 
 
 if __name__ == "__main__":
-    sys.exit(main(sys.argv[1:]))
+    sys.exit(main())
