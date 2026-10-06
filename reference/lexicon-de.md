@@ -131,8 +131,7 @@ modal. «kann» and «können» of possibility («Antworten können falsch … s
 **Negated.** German puts «nicht» or «kein» away from its verb: «KI-Werkzeuge dürfen insbesondere
 nicht verwendet werden», «Die Eingabe darf keine Personendaten enthalten», «… nicht unreflektiert
 übernommen werden dürfen». A term with a Negated class takes that class when a negation word below
-stands in its clause: between the last comma, semicolon, colon or sentence end before the term and
-the first after it. «darf» becomes MUST NOT and forced, «soll» SHOULD NOT; `none` means the negated
+stands in its clause ([Clauses](#clauses), below). «darf» becomes MUST NOT and forced, «soll» SHOULD NOT; `none` means the negated
 term binds nothing and is no term at all: «kann nicht delegiert werden» is a statement, and
 «muss nicht» frees, it does not oblige. The Force cell quotes the modal as written with its
 negated class: `«dürfen» DARF NICHT`. Where the negation follows the verb directly, the two-word
@@ -156,12 +155,49 @@ verb (the modal; for the infinitive with «zu», its carrier; for the present te
 anywhere when that verb closes the clause («… die Ergebnisse nicht unreflektiert übernommen werden
 dürfen»). A word marked `yes` counts anywhere in the clause: «Keine Personendaten dürfen …».
 
+### Clauses
+
+The negation above and the infinitive with «zu» below look inside a clause: the text between the
+last comma, semicolon, colon or sentence end before a word and the first after it. Two marks bound
+nothing. The full stop of an abbreviation below ends no sentence: «(z. B. Funktions-Accounts) zu
+nutzen» stays in the clause of its «sind». A comma with one capitalised word between it and the next
+comma or joining word joins a list of nouns, not clauses: «… sind die … Vorgaben bezüglich
+Vertraulichkeit, Informationssicherheit und Datenschutz zu beachten.» is one clause. Every other
+comma bounds one: in «Ziel der Meldung ist es, mögliche Auswirkungen … zu begrenzen» two words
+follow it, and the infinitive stands in a clause of its own with no carrier; in «… ist abzusehen,
+insbesondere, wenn …» the word is not capitalised. Spaces inside an abbreviation are optional:
+«z. B.» is also «z.B.».
+
+| Abbreviation |
+|---|
+| z. B. |
+| d. h. |
+| u. a. |
+| v. a. |
+| s. g. |
+| bzw. |
+| etc. |
+| usw. |
+| vgl. |
+| ggf. |
+| evtl. |
+| inkl. |
+| ca. |
+| s. |
+| gem. |
+| Art. |
+| Abs. |
+| Nr. |
+| Bst. |
+| Ziff. |
+| lit. |
+
 ### Infinitive with «zu»
 
 «sein» or «haben» with an infinitive with «zu» obliges: «Generierte Texte … sind kritisch … zu
-prüfen.», «Auf den Einsatz … ist in folgenden Fällen zu verzichten:». A clause holding a carrier
-below and an infinitive with «zu» has the term of class MUST, forced; with a negation word in the
-clause, MUST NOT. The term is the infinitive with its «zu» as written: «zu prüfen», or one word
+prüfen.», «Auf den Einsatz … ist in folgenden Fällen zu verzichten:». A clause ([Clauses](#clauses)) holding
+a carrier below and an infinitive with «zu» has the term of class MUST, forced; with a negation word
+in the clause, MUST NOT. The term is the infinitive with its «zu» as written: «zu prüfen», or one word
 where a separable verb takes «zu» inside, «anzupassen», «abzusehen». It counts where it closes the
 clause, stands right before the carrier that closes it («… zu prüfen ist»), stands before a joining
 word («zu prüfen und zu bereinigen»), or opens the clause («Zu berücksichtigen sind insbesondere:»).
@@ -284,6 +320,7 @@ list item. `<n>` is a number of up to three digits, with a letter after it or no
 | sowie |
 | aber |
 | dann |
+| bzw. |
 
 **Known gaps**, filed as statements until this lexicon changes: an instruction in the infinitive
 («Keine Personendaten eingeben.»), the familiar imperative («Gib keine Personendaten ein.»), an

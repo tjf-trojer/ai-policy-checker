@@ -319,7 +319,8 @@ def load_lexicon(path):
     lex.joiner_re = re.compile(r"(?:" + "|".join(r"\s+".join(re.escape(w) for w in j.split())
                                                 for j in joiners) + r")\s+",
                                re.IGNORECASE) if joiners else None
-    lex.joiners = set(joiners)
+    # a joining word written with its full stop («bzw.») is the word without it among the tokens
+    lex.joiners = set(j.rstrip(".") for j in joiners)
 
     # what a lexicon may add for its language; English uses none of it
     neg = optional_table(force, "Force", "Negation word")
@@ -338,6 +339,13 @@ def load_lexicon(path):
         if m.strip("`- ")]
     lex.followers = set(w for w in (r[0].strip() for r in (
         optional_table(force, "Force", "Imperative follower") or ([], []))[1]) if w)
+    abbrevs = words_of(force, "Force", "Abbreviation")
+    lex.abbrev_re = re.compile(r"(?<![^\W\d_])(?:" + "|".join(
+        r"\s*".join(re.escape(p) for p in a.replace(" ", "").replace(".", ". ").split())
+        for a in sorted(abbrevs, key=len, reverse=True)) + r")", re.IGNORECASE) if abbrevs else None
+    lex.list_comma_re = re.compile(
+        r",\s+[A-Z\u00c0-\u00de][\w\u2011-]*\s*(?:,|(?i:%s)(?!\w))"
+        % "|".join(re.escape(j) for j in sorted(lex.joiners, key=len, reverse=True))) if lex.joiners else None
     lex.carriers = set(words_of(force, "Force", "Carrier"))
     lex.inf_endings = tuple(e.lstrip("-") for e in words_of(force, "Force", "Infinitive ending"))
     if lex.zu_entry and not (lex.carriers and lex.inf_endings):
@@ -542,14 +550,31 @@ CLAUSE_BOUND = re.compile(r"[,;:]|[.!?](?=[\"')\]]*(?:\s|$))")
 WORD_TOKEN = re.compile(r"[^\W\d_][\w\u2011-]*")
 
 
+def clause_marks(text):
+    """The marks that bound a clause, as the lexicon's Clauses defines them: a comma, semicolon,
+    colon or sentence end, except the full stop of an abbreviation of the lexicon («z. B.») and a
+    comma with one capitalised word between it and the next comma or joining word («Vertraulichkeit,
+    Informationssicherheit und Datenschutz»), which joins a list of nouns. Only the German lexicon's
+    negation and «zu» infinitive look inside clauses; English never calls this."""
+    skip = set()
+    if LEX.abbrev_re:
+        for m in LEX.abbrev_re.finditer(text):
+            skip.update(range(m.start(), m.end()))
+    return [m for m in CLAUSE_BOUND.finditer(text) if m.start() not in skip
+            and not (LEX.list_comma_re and LEX.list_comma_re.match(text, m.start()))]
+
+
 def clause_of(text, start, end):
-    """The bounds of the clause holding text[start:end]: from the last , ; : or sentence end
+    """The bounds of the clause holding text[start:end]: from the last mark of clause_marks
     before it to the first after it."""
-    left = 0
-    for m in CLAUSE_BOUND.finditer(text, 0, start):
-        left = m.end()
-    m = CLAUSE_BOUND.search(text, end)
-    return left, (m.start() if m else len(text))
+    left, right = 0, len(text)
+    for m in clause_marks(text):
+        if m.end() <= start:
+            left = m.end()
+        elif m.start() >= end:
+            right = m.start()
+            break
+    return left, right
 
 
 def negated(text, start, end, verb=None):
@@ -597,7 +622,7 @@ def zu_infinitives(text):
     clause, stands right before the carrier that closes it or before a joining word, or opens the
     clause («Zu berücksichtigen sind»)."""
     out = []
-    bounds = [0] + [m.end() for m in CLAUSE_BOUND.finditer(text)] + [len(text)]
+    bounds = [0] + [m.end() for m in clause_marks(text)] + [len(text)]
     for a, b in zip(bounds, bounds[1:]):
         toks = [(m.start(), m.end(), m.group(0)) for m in WORD_TOKEN.finditer(text, a, b)]
         low = [t[2].lower() for t in toks]
