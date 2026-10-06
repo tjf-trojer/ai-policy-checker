@@ -17,6 +17,7 @@ SHOULD and MAY go to Not rules.
 | A "will" that describes | The schema, `statement` | Example 1, «A generative AI tool, such as a LLM, will answer your question…» L51 |
 | A "may" of possibility | The schema, `statement`; a "may" that permits is `optional` | Example 2: «…stronger methods of verification may be required.» L39 is a statement; «Bot operators may wish to redirect…» L23 is optional |
 | An imperative opening a main clause | The lexicon, Imperatives | Example 1, R6 «…, do not input…»; R8 «Therefore, be aware…» |
+| An item under a lead-in | The entry is the lead-in and the item together ([sentences.md](sentences.md), a list under a lead-in), filed by the strongest term in either. A lead-in's «zu beachten:» makes a rule of an item that holds only a «sollte», or no term at all; an item's own term outranks a weaker lead-in | `inputs/appenzell-ki-richtlinie.txt` L49 + L53 and L49 + L57, met by the [German cold runs](../evidence/cold-run-de.md); Example 5, R4 |
 | An item that completes its lead-in | The lexicon, Imperatives | `inputs/uk-generative-ai-framework-governance.txt` L39 + L41: «The inventory should be regularly kept up to date with the following details:» + «Describe each system’s purpose…» is a recommendation ([cold run 3](../evidence/cold-run.md)) |
 | "do not" inside a clause | The lexicon, Forced | Example 3, footnote 23 «…so long as they do not conflict…», a recommendation by its «encouraged» |
 | A verb that points or asks | The lexicon, Imperatives | Example 2, «Note that high-speed…» L15; Example 1, «…please contact…» L7 |

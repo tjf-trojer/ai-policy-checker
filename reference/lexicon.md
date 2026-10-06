@@ -218,8 +218,8 @@ check, so they carry the flag.
 
 ## Policy edges
 
-Text stapled to a policy is not the policy: a forwarded or replied-to email, a signature, a note to
-a colleague. The register's Policy text row says which lines are the policy. A block of lines
+Text stapled to a policy is not the policy: a forwarded or replied-to email with its signature, a
+note to a colleague. The register's Policy text row says which lines are the policy. A block of lines
 outside it that sits in the middle of the input, not at its start or end, must open on a line
 holding a seam marker.
 

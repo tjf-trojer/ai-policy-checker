@@ -49,7 +49,7 @@ Policy text spans and the input's path. The envelope never states a fact about t
 ```
 
 **Policy text** marks where the policy ends and anything stapled to it begins: a forwarded or
-replied-to email, a signature, a note to a colleague. Every quotation in the register cites lines
+replied-to email with its signature, a note to a colleague. Every quotation in the register cites lines
 inside it, except the quotations of entries filed `outside the policy`, which cite lines outside it.
 A block outside it in the middle of the input opens on a line holding a seam marker from the
 lexicon. With nothing stapled on, the Policy text is the whole input.

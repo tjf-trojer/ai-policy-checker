@@ -128,6 +128,11 @@ like "will", and like "will" the translator reads them: «Die Verwendung … wir
 modal. «kann» and «können» of possibility («Antworten können falsch … sein») are statements, as
 "may" of possibility is.
 
+**Left out.** «geboten» is no term. It obliges in a statute («gesetzlich geboten»), advises in the
+stock phrase «Im Umgang mit … ist Vorsicht geboten», and weighs in «ob eine Kennzeichnung … geboten
+erscheint»; a term holds for every policy, so the word stays out and its sentences are statements,
+the reading that claims less ([rules/posture.md](../rules/posture.md)).
+
 **Negated.** German puts «nicht» or «kein» away from its verb: «KI-Werkzeuge dürfen insbesondere
 nicht verwendet werden», «Die Eingabe darf keine Personendaten enthalten», «… nicht unreflektiert
 übernommen werden dürfen». A term with a Negated class takes that class when a negation word below
@@ -324,8 +329,11 @@ list item. `<n>` is a number of up to three digits, with a letter after it or no
 
 **Known gaps**, filed as statements until this lexicon changes: an instruction in the infinitive
 («Keine Personendaten eingeben.»), the familiar imperative («Gib keine Personendaten ein.»), an
-adjective of duty in «-pflichtig» («ist … kennzeichnungspflichtig»), and a present-tense duty whose
-verb comes before its actor («Bei Fragen wenden sich die Angestellten an …»).
+adjective of duty in «-pflichtig» («ist … kennzeichnungspflichtig»), a present-tense duty whose
+verb comes before its actor («Bei Fragen wenden sich die Angestellten an …»), and a responsibility
+sentence that puts its object first («Die Verantwortung für generierte Inhalte tragen weiterhin …
+die Nutzerinnen und Nutzer»), which «tragen die Verantwortung» does not match. Its responsibility
+word still lets it give another rule its owner ([rules/fields.md](../rules/fields.md)).
 
 ## Collective owners
 
