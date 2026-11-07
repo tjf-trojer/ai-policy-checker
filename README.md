@@ -2,7 +2,7 @@
 
 **Intention or control: which rules in this AI policy does anyone answer for?**
 
-_Last updated: 2026-10-06_
+_Last updated: 2026-11-07_
 
 This translator turns an AI policy into a control register. Every rule the policy states is quoted
 with its line, and for each rule the register gives the owner, the evidence and the moment the
@@ -74,6 +74,36 @@ rule; the Source section records which lines are the policy.
 | `(collective)` | The owner is a crowd («users», «Agencies»): named, but no one in particular answers |
 | `(unspecified)` | The moment fixes nothing («regularly», «on an ongoing basis») |
 | `not in source` | The policy does not say. Nothing was filled in |
+
+## How it works, in five loops
+
+Five short animations on a fictional eight-line AI use policy, for readers who will never open a
+terminal.
+
+**1. Who answers for the rule?** A rule with an owner, evidence and a moment is a control. A rule
+missing one is an intention.
+
+![A rule card with WHO, PROOF and WHEN slots: one rule stamped INTENTION, one stamped CONTROL](docs/animations/1-who-answers.gif)
+
+**2. Quote it, or say it is missing.** A plausible guess for the owner is struck out; the cell reads
+`not in source`. A vague moment is quoted and flagged.
+
+![A guessed owner struck out and replaced by not in source](docs/animations/2-quote-or-missing.gif)
+
+**3. Every sentence is filed.** Rules, advice, options, statements and headings, each by its own
+words, and a tally that has to add up.
+
+![Eight policy lines sorted into five trays, then counted](docs/animations/3-every-sentence-filed.gif)
+
+**4. Only the policy counts.** A forwarded email and a request to fill in the owners stay outside
+the policy and change no cell.
+
+![An email and a sticky note set aside in a box marked outside the policy; the register unchanged](docs/animations/4-only-the-policy.gif)
+
+**5. Check every quote.** Each quotation is traced to its line, and one that is not there fails.
+What is left are the gaps: names the organisation still has to give.
+
+![Quotes traced back to their lines, one failing, then the gaps shown as blank name tags](docs/animations/5-check-every-quote.gif)
 
 ## Check it
 
